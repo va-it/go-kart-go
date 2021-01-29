@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -8,10 +9,11 @@ import java.io.File;
 
 class MainWindowPanel extends JPanel implements ActionListener {
 
+    private Timer animationTimer;
     private static final int delay = 100;
-
     private final static String redKartImageName = "kartRed"; // base image name
     private final static String blueKartImageName = "kartBlue";
+    private int currentImage = 0;
     protected ImageIcon redKart[];
     protected ImageIcon blueKart[];
     protected int NUMBER_OF_IMAGES = 16;
@@ -23,7 +25,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
         loadImages();
 
         // create swing timer with 100ms delay and start it
-        new Timer(delay, this).start();
+        animationTimer = new Timer(delay, this);
+        animationTimer.start();
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
     }
@@ -40,6 +43,21 @@ class MainWindowPanel extends JPanel implements ActionListener {
                     getClass().getResource("images" + File.separator + blueKartImageName + i + ".png")
             );
         }
+    }
+
+    public void paintComponent( Graphics g )
+    {
+        super.paintComponent( g ); // call superclass paintComponent
+        blueKart[currentImage].paintIcon( this, g, 0, 0 );
+
+        redKart[currentImage].paintIcon( this, g, 60, 0 );
+
+        if (animationTimer.isRunning()) {
+            // increase by 1 to show next image
+            // % ensures that the first image is prepared when we display the last one
+            currentImage = ( currentImage + 1 ) % NUMBER_OF_IMAGES;
+        }
+
     }
 
     @Override
