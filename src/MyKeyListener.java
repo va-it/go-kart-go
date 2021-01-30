@@ -14,14 +14,15 @@ public class MyKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         char keyChar = e.getKeyChar();
+        int player = 2;
         switch( keyChar ) {
             case 'w':
                 System.out.println("BLUE UP");
-                myPanel.speedPlusBlue();
+                myPanel.speedPlus(player);
                 break;
             case 's':
                 System.out.println("BLUE DOWN");
-                myPanel.speedMinusBlue();
+                myPanel.speedMinus(player);
                 break;
             case 'a':
                 System.out.println("BLUE LEFT");
@@ -35,12 +36,13 @@ public class MyKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
+        int player = 1;
         switch( keyCode ) {
             case KeyEvent.VK_UP:
-                myPanel.speedPlusRed();
+                myPanel.speedPlus(player);
                 break;
             case KeyEvent.VK_DOWN:
-                myPanel.speedMinusRed();
+                myPanel.speedMinus(player);
                 break;
             case KeyEvent.VK_LEFT:
                 System.out.println("RED LEFT");

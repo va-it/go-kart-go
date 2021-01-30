@@ -12,9 +12,9 @@ class MainWindowPanel extends JPanel implements ActionListener {
     private final static String blueKartImageName = "kartBlue";
     private int blueKartImageIndex = 12;
     private int redKartImageIndex = 12;
-    private int blueKartXPosition = 430;
+    private int blueKartXPosition = 425;
     private int blueKartYPosition = 500;
-    private int redKartXPosition = 430;
+    private int redKartXPosition = 425;
     private int redKartYPosition = 550;
     protected int NUMBER_OF_IMAGES = 16;
     protected ImageIcon redKart[];
@@ -81,27 +81,44 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         Color white = Color.white;
         g.setColor(white);
-        g.drawLine(425, 500, 425, 600); // start line
+        g.fillRect(417, 501, 9, 99); // start line
+        // === checkerboard ===
+        g.setColor(black);
+        for(int i = 0; i<=99; i+=6) {
+            g.fillRect(417, 501 + i, 3, 3);
+            g.fillRect(423, 501 + i, 3, 3);
+        }
+        for(int i = 0; i<=93; i+=6) {
+            g.fillRect(420, 504 + i, 3, 3);
+        }
+        // ====================
 
         Color green = Color.green;
         g.setColor(green);
         g.fillRect(150, 200, 550, 300); // grass
     }
 
-    public void speedPlusBlue() {
-        blueKartXPosition -= 10;
+    public void speedPlus(int player) {
+        switch (player) {
+            case 1:
+                redKartXPosition -= 10;
+                break;
+            case 2:
+                blueKartXPosition -= 10;
+                break;
+        }
     }
 
-    public void speedPlusRed() {
-        redKartXPosition -= 10;
-    }
+    public void speedMinus(int player) {
+        switch (player) {
+            case 1:
+                redKartXPosition += 10;
+                break;
+            case 2:
+                blueKartXPosition += 10;
+                break;
+        }
 
-    public void speedMinusBlue() {
-        blueKartXPosition += 10;
-    }
-
-    public void speedMinusRed() {
-        redKartXPosition += 10;
     }
 
     @Override
