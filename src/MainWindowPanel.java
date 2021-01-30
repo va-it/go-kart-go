@@ -79,7 +79,7 @@ class MainWindowPanel extends JPanel implements ActionListener {
             blueKartXPosition = getXPosition(blueKartImageIndex, blueKartXPosition, blueKartSpeed);
             blueKartYPosition = getYPosition(blueKartImageIndex, blueKartYPosition, blueKartSpeed);
 
-            blueKart[blueKartImageIndex].paintIcon(this, g,blueKartXPosition, blueKartYPosition);
+            blueKart[blueKartImageIndex].paintIcon(this, g, blueKartXPosition, blueKartYPosition);
 
             redKartXPosition = getXPosition(redKartImageIndex, redKartXPosition, redKartSpeed);
             redKartYPosition = getYPosition(redKartImageIndex, redKartYPosition, redKartSpeed);
@@ -102,54 +102,29 @@ class MainWindowPanel extends JPanel implements ActionListener {
     }
 
     public int getXPosition(int imageIndex, int xPosition, int speed) {
+        // multiple cases as shown in docs:
+        // https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
         switch (imageIndex) {
-            case 0:
-                xPosition = xPosition;
-                break;
-            case 1:
+            case 1: case 7:
                 xPosition = (xPosition + ((speed*25)/100)); // + 25%
                 break;
-            case 2:
-                xPosition = (xPosition + ((speed*42)/100)); // + 40%
+            case 2: case 6:
+                xPosition = (xPosition + ((speed*42)/100)); // + 42%
                 break;
-            case 3:
+            case 3: case 4: case 5:
                 xPosition = (xPosition + ((speed*50)/100)); // + 50%
                 break;
-            case 4:
-                xPosition = (xPosition + ((speed*50)/100)); // should be 100% but it's weird
-                break;
-            case 5:
-                xPosition = (xPosition + ((speed*50)/100)); // + 50%
-                break;
-            case 6:
-                xPosition = (xPosition + ((speed*42)/100)); // + 40%
-                break;
-            case 7:
-                xPosition = (xPosition + ((speed*25)/100)); // + 25%
-                break;
-            case 8:
-                xPosition = xPosition;
-                break;
-            case 9:
+            case 9: case 15:
                 xPosition = (xPosition - ((speed*25)/100)); // - 25%
                 break;
-            case 10:
-                xPosition = (xPosition - ((speed*42)/100)); // - 40%
+            case 10: case 14:
+                xPosition = (xPosition - ((speed*42)/100)); // - 42%
                 break;
-            case 11:
+            case 11: case 12: case 13:
                 xPosition = (xPosition - ((speed*50)/100)); // - 50%
                 break;
-            case 12:
-                xPosition = (xPosition - ((speed*50)/100)); // should be 100% but it's weird
-                break;
-            case 13:
-                xPosition = (xPosition - ((speed*50)/100)); // - 50%
-                break;
-            case 14:
-                xPosition = (xPosition - ((speed*42)/100)); // - 40%
-                break;
-            case 15:
-                xPosition = (xPosition - ((speed*25)/100)); // - 25%
+            default:
+                // 0 and 8, no change in position
                 break;
         }
         return xPosition;
@@ -157,53 +132,26 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
     public int getYPosition(int imageIndex, int yPosition, int speed) {
         switch (imageIndex) {
-            case 0:
+            case 0: case 1: case 15:
                 yPosition = (yPosition - ((speed*50)/100)); // should be 100% but it's weird
                 break;
-            case 1:
-                yPosition = (yPosition - ((speed*50)/100)); // - 50%
+            case 2: case 14:
+                yPosition = (yPosition - ((speed*42)/100)); // - 42%
                 break;
-            case 2:
-                yPosition = (yPosition - ((speed*42)/100)); // - 40%
-                break;
-            case 3:
+            case 3: case 13:
                 yPosition = (yPosition - ((speed*25)/100)); // - 25%
                 break;
-            case 4:
-                yPosition = yPosition;
-                break;
-            case 5:
+            case 5: case 11:
                 yPosition = (yPosition + ((speed*25)/100)); // + 25%
                 break;
-            case 6:
-                yPosition = (yPosition + ((speed*42)/100)); // + 40%
+            case 6: case 10:
+                yPosition = (yPosition + ((speed*42)/100)); // + 42%
                 break;
-            case 7:
+            case 7: case 8: case 9:
                 yPosition = (yPosition + ((speed*50)/100)); // + 50%
                 break;
-            case 8:
-                yPosition = (yPosition + ((speed*50)/100)); // should be - 100% but it's weird
-                break;
-            case 9:
-                yPosition = (yPosition + ((speed*50)/100)); // + 50%
-                break;
-            case 10:
-                yPosition = (yPosition + ((speed*42)/100)); // + 40%
-                break;
-            case 11:
-                yPosition = (yPosition + ((speed*25)/100)); // + 25%
-                break;
-            case 12:
-                yPosition = yPosition;
-                break;
-            case 13:
-                yPosition = (yPosition - ((speed*25)/100)); // - 25%
-                break;
-            case 14:
-                yPosition = (yPosition - ((speed*42)/100)); // - 40%
-                break;
-            case 15:
-                yPosition = (yPosition - ((speed*50)/100)); // - 50%
+            default:
+                //4 and 12, no change in position
                 break;
         }
         return yPosition;

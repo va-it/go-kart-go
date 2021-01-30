@@ -14,7 +14,7 @@ public class MyKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         char keyChar = e.getKeyChar();
-        int player = 2;
+        int player = 2; // blue
         switch( keyChar ) {
             case 'w':
                 myPanel.speedPlus(player);
@@ -34,7 +34,7 @@ public class MyKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        int player = 1;
+        int player = 1; // red
         switch( keyCode ) {
             case KeyEvent.VK_UP:
                 myPanel.speedPlus(player);
