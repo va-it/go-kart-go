@@ -7,7 +7,7 @@ import java.io.File;
 class MainWindowPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
-    private static final int delay = 100;
+    private static final int delay = 50;
     private final static String redKartImage = "kartRed";
     private final static String blueKartImage = "kartBlue";
 
@@ -41,6 +41,9 @@ class MainWindowPanel extends JPanel implements ActionListener {
     protected ImageIcon[] redKart;
     protected ImageIcon[] blueKart;
 
+    JLabel redKartSpeedLabel = new JLabel();
+    JLabel blueKartSpeedLabel = new JLabel();
+
     public MainWindowPanel() {
         super();
 
@@ -69,7 +72,6 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g); // call superclass paintComponent
 
-
         if (animationTimer.isRunning()) {
 
             renderTrack(g);
@@ -83,19 +85,72 @@ class MainWindowPanel extends JPanel implements ActionListener {
             redKartYPosition = getYPosition(redKartImageIndex, redKartYPosition, redKartSpeed);
 
             redKart[redKartImageIndex].paintIcon(this, g, redKartXPosition, redKartYPosition);
-        }
 
+            printSpeedInformation();
+        }
+    }
+
+    public void printSpeedInformation() {
+        redKartSpeedLabel.setText("Red speed: " + redKartSpeed);
+        blueKartSpeedLabel.setText("Blue speed: " + blueKartSpeed);
+
+        redKartSpeedLabel.setBounds(50, 50, 100, 30);
+        blueKartSpeedLabel.setBounds(200, 50, 100, 30);
+
+        add(redKartSpeedLabel);
+        add(blueKartSpeedLabel);
     }
 
     public int getXPosition(int imageIndex, int xPosition, int speed) {
-        if (imageIndex == 0 || imageIndex == 8) {
-            xPosition = xPosition;
-        } else {
-            if (imageIndex == 4 || (imageIndex >= 1 && imageIndex <= 3) || (imageIndex >= 5 && imageIndex <= 7) ){
-                xPosition = xPosition + (speed/3);
-            } else {
-                xPosition = xPosition - (speed/3);
-            }
+        switch (imageIndex) {
+            case 0:
+                xPosition = xPosition;
+                break;
+            case 1:
+                xPosition = (xPosition + ((speed*25)/100)); // + 25%
+                break;
+            case 2:
+                xPosition = (xPosition + ((speed*42)/100)); // + 40%
+                break;
+            case 3:
+                xPosition = (xPosition + ((speed*50)/100)); // + 50%
+                break;
+            case 4:
+                xPosition = (xPosition + ((speed*50)/100)); // should be 100% but it's weird
+                break;
+            case 5:
+                xPosition = (xPosition + ((speed*50)/100)); // + 50%
+                break;
+            case 6:
+                xPosition = (xPosition + ((speed*42)/100)); // + 40%
+                break;
+            case 7:
+                xPosition = (xPosition + ((speed*25)/100)); // + 25%
+                break;
+            case 8:
+                xPosition = xPosition;
+                break;
+            case 9:
+                xPosition = (xPosition - ((speed*25)/100)); // - 25%
+                break;
+            case 10:
+                xPosition = (xPosition - ((speed*42)/100)); // - 40%
+                break;
+            case 11:
+                xPosition = (xPosition - ((speed*50)/100)); // - 50%
+                break;
+            case 12:
+                xPosition = (xPosition - ((speed*50)/100)); // should be 100% but it's weird
+                break;
+            case 13:
+                xPosition = (xPosition - ((speed*50)/100)); // - 50%
+                break;
+            case 14:
+                xPosition = (xPosition - ((speed*42)/100)); // - 40%
+                break;
+            case 15:
+                xPosition = (xPosition - ((speed*25)/100)); // - 25%
+                break;
         }
         return xPosition;
     }
@@ -103,55 +158,54 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public int getYPosition(int imageIndex, int yPosition, int speed) {
         switch (imageIndex) {
             case 0:
-                yPosition = yPosition - speed; // + 100%
+                yPosition = (yPosition - ((speed*50)/100)); // should be 100% but it's weird
                 break;
             case 1:
-                yPosition = (yPosition - ((speed*25)/100)); // + 25%
+                yPosition = (yPosition - ((speed*50)/100)); // - 50%
                 break;
             case 2:
-                yPosition = (yPosition - ((speed*50)/100)); // + 50%
+                yPosition = (yPosition - ((speed*42)/100)); // - 40%
                 break;
             case 3:
-                yPosition = (yPosition - ((speed*25)/100)); // + 25%
+                yPosition = (yPosition - ((speed*25)/100)); // - 25%
                 break;
             case 4:
                 yPosition = yPosition;
                 break;
             case 5:
-                yPosition = (yPosition + ((speed*25)/100)); // - 25%
+                yPosition = (yPosition + ((speed*25)/100)); // + 25%
                 break;
             case 6:
-                yPosition = (yPosition + ((speed*50)/100)); // - 50%
+                yPosition = (yPosition + ((speed*42)/100)); // + 40%
                 break;
             case 7:
-                yPosition = (yPosition + ((speed*75)/100)); // - 75%
+                yPosition = (yPosition + ((speed*50)/100)); // + 50%
                 break;
             case 8:
-                yPosition = yPosition + speed; // - 100%
+                yPosition = (yPosition + ((speed*50)/100)); // should be - 100% but it's weird
                 break;
             case 9:
-                yPosition = (yPosition + ((speed*75)/100)); // - 75%
+                yPosition = (yPosition + ((speed*50)/100)); // + 50%
                 break;
             case 10:
-                yPosition = (yPosition + ((speed*50)/100)); // - 50%
+                yPosition = (yPosition + ((speed*42)/100)); // + 40%
                 break;
             case 11:
-                yPosition = (yPosition + ((speed*25)/100)); // - 25%
+                yPosition = (yPosition + ((speed*25)/100)); // + 25%
                 break;
             case 12:
                 yPosition = yPosition;
                 break;
             case 13:
-                yPosition = (yPosition - ((speed*25)/100)); // + 25%
+                yPosition = (yPosition - ((speed*25)/100)); // - 25%
                 break;
             case 14:
-                yPosition = (yPosition - ((speed*50)/100)); // + 50%
+                yPosition = (yPosition - ((speed*42)/100)); // - 40%
                 break;
             case 15:
-                yPosition = (yPosition - ((speed*75)/100)); // + 75%
+                yPosition = (yPosition - ((speed*50)/100)); // - 50%
                 break;
         }
-
         return yPosition;
     }
 
@@ -210,18 +264,22 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public void turnLeft(int player) {
         switch (player) {
             case 1:
-                if (redKartImageIndex == 0) {
-                    // if the index is 0 then jump to the last image in the array (can't go negative index)
-                    redKartImageIndex = NUMBER_OF_IMAGES - 1;
-                } else {
-                    redKartImageIndex -= 1;
+                if (redKartSpeed != 0) {
+                    if (redKartImageIndex == 0) {
+                        // if the index is 0 then jump to the last image in the array (can't go negative index)
+                        redKartImageIndex = NUMBER_OF_IMAGES - 1;
+                    } else {
+                        redKartImageIndex -= 1;
+                    }
                 }
                 break;
             case 2:
-                if (blueKartImageIndex == 0) {
-                    blueKartImageIndex = NUMBER_OF_IMAGES - 1;
-                } else {
-                    blueKartImageIndex -= 1;
+                if (blueKartSpeed != 0) {
+                    if (blueKartImageIndex == 0) {
+                        blueKartImageIndex = NUMBER_OF_IMAGES - 1;
+                    } else {
+                        blueKartImageIndex -= 1;
+                    }
                 }
                 break;
         }
@@ -230,10 +288,14 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public void turnRight(int player) {
         switch (player) {
             case 1:
-                redKartImageIndex = (redKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                if (redKartSpeed != 0) {
+                    redKartImageIndex = (redKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                }
                 break;
             case 2:
-                blueKartImageIndex = (blueKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                if (blueKartSpeed != 0) {
+                    blueKartImageIndex = (blueKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                }
                 break;
         }
     }
