@@ -6,19 +6,34 @@ import java.io.File;
 
 class MainWindowPanel extends JPanel implements ActionListener {
 
-    private Timer animationTimer;
+    private final Timer animationTimer;
     private static final int delay = 100;
-    private final static String redKartImageName = "kartRed"; // base image name
+    private final static String redKartImageName = "kartRed";
     private final static String blueKartImageName = "kartBlue";
+
     private int blueKartImageIndex = 12;
     private int redKartImageIndex = 12;
+    private int blueKartSpeed = 0;
     private int blueKartXPosition = 425;
     private int blueKartYPosition = 500;
+    private int redKartSpeed = 0;
     private int redKartXPosition = 425;
     private int redKartYPosition = 550;
+
+    private final int MIN_X_OUTER_EDGE = 50;
+    private final int MAX_X_OUTER_EDGE = 750;
+    private final int MIN_Y_OUTER_EDGE = 100;
+    private final int MAX_Y_OUTER_EDGE = 500;
+
+    private final int MIN_X_INNER_EDGE = 150;
+    private final int MAX_X_INNER_EDGE = 550;
+    private final int MIN_Y_INNER_EDGE = 200;
+    private final int MAX_Y_INNER_EDGE = 300;
+
+
     protected int NUMBER_OF_IMAGES = 16;
-    protected ImageIcon redKart[];
-    protected ImageIcon blueKart[];
+    protected ImageIcon[] redKart;
+    protected ImageIcon[] blueKart;
 
     public MainWindowPanel() {
         super();
@@ -58,32 +73,29 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
             renderTrack(g);
 
-            blueKart[blueKartImageIndex].paintIcon(this, g, blueKartXPosition, blueKartYPosition);
+            blueKart[blueKartImageIndex].paintIcon(this, g, blueKartXPosition -= blueKartSpeed, blueKartYPosition);
 
-            redKart[redKartImageIndex].paintIcon(this, g, redKartXPosition, redKartYPosition);
+            redKart[redKartImageIndex].paintIcon(this, g, redKartXPosition -= redKartSpeed, redKartYPosition);
         }
 
     }
 
     public void renderTrack(Graphics g) {
-        Color black = Color.black;
-        g.setColor(black);
-        g.drawRect(50, 100, 750, 500);  // outer edge
-        g.drawRect(150, 200, 550, 300); // inner edge
+        g.setColor(Color.black);
+        g.drawRect(50, 100, 750, 500);  // draw outer edge
+        g.drawRect(150, 200, 550, 300); // draw inner edge
 
-        Color gray = Color.gray;
-        g.setColor(gray);
-        g.fillRect(50, 100, 750, 500); // road
+        g.setColor(Color.gray);
+        g.fillRect(50, 100, 750, 500); // fill in the road
 
-        Color yellow = Color.yellow;
-        g.setColor(yellow);
+        g.setColor(Color.yellow);
         g.drawRect(100, 150, 650, 400); // mid-lane marker
 
-        Color white = Color.white;
-        g.setColor(white);
-        g.fillRect(417, 501, 9, 99); // start line
-        // === checkerboard ===
-        g.setColor(black);
+        g.setColor(Color.white);
+        g.fillRect(417, 501, 9, 99); // draw start line
+
+        // === draw checkerboard on start line ===
+        g.setColor(Color.black);
         for(int i = 0; i<=99; i+=6) {
             g.fillRect(417, 501 + i, 3, 3);
             g.fillRect(423, 501 + i, 3, 3);
@@ -91,20 +103,19 @@ class MainWindowPanel extends JPanel implements ActionListener {
         for(int i = 0; i<=93; i+=6) {
             g.fillRect(420, 504 + i, 3, 3);
         }
-        // ====================
+        // =======================================
 
-        Color green = Color.green;
-        g.setColor(green);
-        g.fillRect(150, 200, 550, 300); // grass
+        g.setColor(Color.green);
+        g.fillRect(150, 200, 550, 300); // draw central grassed area
     }
 
     public void speedPlus(int player) {
         switch (player) {
             case 1:
-                redKartXPosition -= 10;
+                redKartSpeed -= 1;
                 break;
             case 2:
-                blueKartXPosition -= 10;
+                blueKartSpeed -= 1;
                 break;
         }
     }
@@ -112,13 +123,44 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public void speedMinus(int player) {
         switch (player) {
             case 1:
-                redKartXPosition += 10;
+                redKartSpeed += 1;
                 break;
             case 2:
-                blueKartXPosition += 10;
+                blueKartSpeed += 1;
                 break;
         }
 
+    }
+
+    public void turnLeft(int player) {
+        switch (player) {
+            case 1:
+                if (redKartImageIndex == 0) {
+                    // if the index is 0 then jump to the last image in the array (can't go negative index)
+                    redKartImageIndex = NUMBER_OF_IMAGES - 1;
+                } else {
+                    redKartImageIndex -= 1;
+                }
+                break;
+            case 2:
+                if (blueKartImageIndex == 0) {
+                    blueKartImageIndex = NUMBER_OF_IMAGES - 1;
+                } else {
+                    blueKartImageIndex -= 1;
+                }
+                break;
+        }
+    }
+
+    public void turnRight(int player) {
+        switch (player) {
+            case 1:
+                redKartImageIndex = (redKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                break;
+            case 2:
+                blueKartImageIndex = (blueKartImageIndex + 1) % NUMBER_OF_IMAGES;
+                break;
+        }
     }
 
     @Override

@@ -26,9 +26,11 @@ public class MyKeyListener implements KeyListener {
                 break;
             case 'a':
                 System.out.println("BLUE LEFT");
+                myPanel.turnLeft(player);
                 break;
             case 'd':
                 System.out.println("BLUE RIGHT");
+                myPanel.turnRight(player);
                 break;
         }
     }
@@ -46,9 +48,11 @@ public class MyKeyListener implements KeyListener {
                 break;
             case KeyEvent.VK_LEFT:
                 System.out.println("RED LEFT");
+                myPanel.turnLeft(player);
                 break;
             case KeyEvent.VK_RIGHT:
                 System.out.println("RED RIGHT");
+                myPanel.turnRight(player);
                 break;
         }
     }
