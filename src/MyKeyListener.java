@@ -4,7 +4,12 @@ import java.awt.event.KeyListener;
 
 public class MyKeyListener implements KeyListener {
 
-    public MyKeyListener() { }
+    MainWindowPanel myPanel;
+
+    public MyKeyListener(MainWindowPanel panel) {
+
+        myPanel = panel;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -12,9 +17,11 @@ public class MyKeyListener implements KeyListener {
         switch( keyChar ) {
             case 'w':
                 System.out.println("BLUE UP");
+                myPanel.speedPlusBlue();
                 break;
             case 's':
                 System.out.println("BLUE DOWN");
+                myPanel.speedMinusBlue();
                 break;
             case 'a':
                 System.out.println("BLUE LEFT");
@@ -30,10 +37,10 @@ public class MyKeyListener implements KeyListener {
         int keyCode = e.getKeyCode();
         switch( keyCode ) {
             case KeyEvent.VK_UP:
-                System.out.println("RED UP");
+                myPanel.speedPlusRed();
                 break;
             case KeyEvent.VK_DOWN:
-                System.out.println("RED DOWN");
+                myPanel.speedMinusRed();
                 break;
             case KeyEvent.VK_LEFT:
                 System.out.println("RED LEFT");

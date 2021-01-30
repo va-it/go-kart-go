@@ -10,7 +10,12 @@ class MainWindowPanel extends JPanel implements ActionListener {
     private static final int delay = 100;
     private final static String redKartImageName = "kartRed"; // base image name
     private final static String blueKartImageName = "kartBlue";
-    private int currentImage = 0;
+    private int blueKartImageIndex = 12;
+    private int redKartImageIndex = 12;
+    private int blueKartXPosition = 430;
+    private int blueKartYPosition = 500;
+    private int redKartXPosition = 430;
+    private int redKartYPosition = 550;
     protected int NUMBER_OF_IMAGES = 16;
     protected ImageIcon redKart[];
     protected ImageIcon blueKart[];
@@ -44,16 +49,18 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g); // call superclass paintComponent
-        blueKart[currentImage].paintIcon(this, g, 0, 0);
 
-        redKart[currentImage].paintIcon(this, g, 60, 0);
 
         if (animationTimer.isRunning()) {
             // increase by 1 to show next image
             // % ensures that the first image is prepared when we display the last one
-            currentImage = (currentImage + 1) % NUMBER_OF_IMAGES;
+            //currentImage = (currentImage + 1) % NUMBER_OF_IMAGES;
 
             renderTrack(g);
+
+            blueKart[blueKartImageIndex].paintIcon(this, g, blueKartXPosition, blueKartYPosition);
+
+            redKart[redKartImageIndex].paintIcon(this, g, redKartXPosition, redKartYPosition);
         }
 
     }
@@ -79,6 +86,22 @@ class MainWindowPanel extends JPanel implements ActionListener {
         Color green = Color.green;
         g.setColor(green);
         g.fillRect(150, 200, 550, 300); // grass
+    }
+
+    public void speedPlusBlue() {
+        blueKartXPosition -= 10;
+    }
+
+    public void speedPlusRed() {
+        redKartXPosition -= 10;
+    }
+
+    public void speedMinusBlue() {
+        blueKartXPosition += 10;
+    }
+
+    public void speedMinusRed() {
+        redKartXPosition += 10;
     }
 
     @Override
