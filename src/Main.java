@@ -1,10 +1,14 @@
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
-        System.out.println("Hello, World!");
+
+        System.out.println("Application started");
 
         MainWindow mainWindow = new MainWindow();
+        MyKeyListener keyListener = new MyKeyListener();
+
+        // instruct the JFrame (MainWindow) to listen for key events
+        mainWindow.addKeyListener(keyListener);
 
         mainWindow.setVisible(true);
     }
