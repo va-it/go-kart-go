@@ -4,29 +4,28 @@ import java.awt.event.KeyListener;
 
 public class MyKeyListener implements KeyListener {
 
-    MainWindowPanel myPanel;
+    MainWindowPanel mainWindowPanel;
 
     public MyKeyListener(MainWindowPanel panel) {
 
-        myPanel = panel;
+        mainWindowPanel = panel;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         char keyChar = e.getKeyChar();
-        int player = 2; // blue
         switch( keyChar ) {
             case 'w':
-                myPanel.speedPlus(player);
+                mainWindowPanel.blueKart.accelerate();
                 break;
             case 's':
-                myPanel.speedMinus(player);
+                mainWindowPanel.blueKart.decelerate();
                 break;
             case 'a':
-                myPanel.turnLeft(player);
+                mainWindowPanel.blueKart.turnLeft();
                 break;
             case 'd':
-                myPanel.turnRight(player);
+                mainWindowPanel.blueKart.turnRight();
                 break;
         }
     }
@@ -34,19 +33,18 @@ public class MyKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        int player = 1; // red
         switch( keyCode ) {
             case KeyEvent.VK_UP:
-                myPanel.speedPlus(player);
+                mainWindowPanel.redKart.accelerate();
                 break;
             case KeyEvent.VK_DOWN:
-                myPanel.speedMinus(player);
+                mainWindowPanel.redKart.decelerate();
                 break;
             case KeyEvent.VK_LEFT:
-                myPanel.turnLeft(player);
+                mainWindowPanel.redKart.turnLeft();
                 break;
             case KeyEvent.VK_RIGHT:
-                myPanel.turnRight(player);
+                mainWindowPanel.redKart.turnRight();
                 break;
         }
     }

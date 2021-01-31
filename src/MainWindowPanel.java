@@ -8,23 +8,6 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
     private static final int delay = 75;
-    private final static String redKartImage = "kartRed";
-    private final static String blueKartImage = "kartBlue";
-
-    // initially the car is shown pointing left
-    private int blueKartImageIndex = 12;
-    private int redKartImageIndex = 12;
-
-    private int blueKartSpeed = 0;
-    private int redKartSpeed = 0;
-
-    // initially the blue car is in the innermost lane, just before the starting line
-    private int blueKartXPosition = 425;
-    private int blueKartYPosition = 500;
-
-    // initially the red car is in the outermost lane (below blue), just before the starting line
-    private int redKartXPosition = 425;
-    private int redKartYPosition = 550;
 
     private final int MIN_X_OUTER_EDGE = 50;
     private final int MAX_X_OUTER_EDGE = 750;
@@ -36,37 +19,31 @@ class MainWindowPanel extends JPanel implements ActionListener {
     private final int MIN_Y_INNER_EDGE = 200;
     private final int MAX_Y_INNER_EDGE = 300;
 
-
-    protected int NUMBER_OF_IMAGES = 16;
-    protected ImageIcon[] redKart;
-    protected ImageIcon[] blueKart;
-
     JLabel redKartSpeedLabel = new JLabel();
     JLabel blueKartSpeedLabel = new JLabel();
+
+    public Kart redKart;
+    public Kart blueKart;
 
     public MainWindowPanel() {
         super();
 
-        // load images into array
-        loadImages();
+        this.redKart = new Kart("red");
+        this.blueKart = new Kart("blue");
+
+        // set initial karts position to be just before the starting line
+        this.redKart.setxPosition(425);
+        this.redKart.setyPosition(500);
+        // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
+        this.blueKart.setxPosition(425);
+        this.blueKart.setyPosition(550);
+
 
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
-    }
-
-    public void loadImages() {
-        redKart = new ImageIcon[NUMBER_OF_IMAGES];
-        blueKart = new ImageIcon[NUMBER_OF_IMAGES];
-
-        Class cl = this.getClass();
-
-        for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
-            redKart[i] = new ImageIcon(cl.getResource("images" + File.separator + redKartImage + i + ".png"));
-            blueKart[i] = new ImageIcon(cl.getResource("images" + File.separator + blueKartImage + i + ".png"));
-        }
     }
 
     public void paintComponent(Graphics g) {
@@ -76,85 +53,29 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
             renderTrack(g);
 
-            blueKartXPosition = getXPosition(blueKartImageIndex, blueKartXPosition, blueKartSpeed);
-            blueKartYPosition = getYPosition(blueKartImageIndex, blueKartYPosition, blueKartSpeed);
+            blueKart.setNextXPosition();
+            blueKart.setNextYPosition();
 
-            blueKart[blueKartImageIndex].paintIcon(this, g, blueKartXPosition, blueKartYPosition);
+            blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
-            redKartXPosition = getXPosition(redKartImageIndex, redKartXPosition, redKartSpeed);
-            redKartYPosition = getYPosition(redKartImageIndex, redKartYPosition, redKartSpeed);
+            redKart.setNextXPosition();
+            redKart.setNextYPosition();
 
-            redKart[redKartImageIndex].paintIcon(this, g, redKartXPosition, redKartYPosition);
+            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
 
             printSpeedInformation();
         }
     }
 
     public void printSpeedInformation() {
-        redKartSpeedLabel.setText("Red speed: " + redKartSpeed);
-        blueKartSpeedLabel.setText("Blue speed: " + blueKartSpeed);
+        redKartSpeedLabel.setText("Red speed: " + redKart.getSpeed());
+        blueKartSpeedLabel.setText("Blue speed: " + blueKart.getSpeed());
 
         redKartSpeedLabel.setBounds(50, 50, 100, 30);
         blueKartSpeedLabel.setBounds(200, 50, 100, 30);
 
         add(redKartSpeedLabel);
         add(blueKartSpeedLabel);
-    }
-
-    public int getXPosition(int imageIndex, int xPosition, int speed) {
-        // multiple cases as shown in docs:
-        // https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
-        switch (imageIndex) {
-            case 1: case 7:
-                xPosition = (xPosition + 1 * ((speed*10)/100)); // + 10%
-                break;
-            case 2: case 6:
-                xPosition = (xPosition + 1 * ((speed*20)/100)); // + 20%
-                break;
-            case 3: case 4: case 5:
-                xPosition = (xPosition + 1 * ((speed*30)/100)); // + 30%
-                break;
-            case 9: case 15:
-                xPosition = (xPosition - 1 * ((speed*10)/100)); // - 10%
-                break;
-            case 10: case 14:
-                xPosition = (xPosition - 1 * ((speed*20)/100)); // - 20%
-                break;
-            case 11: case 12: case 13:
-                xPosition = (xPosition - 1 * ((speed*30)/100)); // - 30%
-                break;
-            default:
-                // 0 and 8, no change in position
-                break;
-        }
-        return xPosition;
-    }
-
-    public int getYPosition(int imageIndex, int yPosition, int speed) {
-        switch (imageIndex) {
-            case 0: case 1: case 15:
-                yPosition = (yPosition - 1 * ((speed*30)/100)); // -30%
-                break;
-            case 2: case 14:
-                yPosition = (yPosition - 1 * ((speed*20)/100)); // - 20%
-                break;
-            case 3: case 13:
-                    yPosition = (yPosition - 1 * ((speed*10)/100)); // - 10%
-                break;
-            case 5: case 11:
-                yPosition = (yPosition + 1 * ((speed*10)/100)); // + 10%
-                break;
-            case 6: case 10:
-                yPosition = (yPosition + 1 * ((speed*20)/100)); // + 20%
-                break;
-            case 7: case 8: case 9:
-                yPosition = (yPosition + 1 * ((speed*30)/100)); // + 30%
-                break;
-            default:
-                //4 and 12, no change in position
-                break;
-        }
-        return yPosition;
     }
 
     public void renderTrack(Graphics g) {
@@ -184,68 +105,6 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         g.setColor(Color.green);
         g.fillRect(150, 200, 550, 300); // draw central grassed area
-    }
-
-    public void speedPlus(int player) {
-        switch (player) {
-            case 1:
-                redKartSpeed += 10;
-                break;
-            case 2:
-                blueKartSpeed += 10;
-                break;
-        }
-    }
-
-    public void speedMinus(int player) {
-        switch (player) {
-            case 1:
-                redKartSpeed -= 10;
-                break;
-            case 2:
-                blueKartSpeed -= 10;
-                break;
-        }
-
-    }
-
-    public void turnLeft(int player) {
-        switch (player) {
-            case 1:
-                if (redKartSpeed != 0) {
-                    if (redKartImageIndex == 0) {
-                        // if the index is 0 then jump to the last image in the array (can't go negative index)
-                        redKartImageIndex = NUMBER_OF_IMAGES - 1;
-                    } else {
-                        redKartImageIndex -= 1;
-                    }
-                }
-                break;
-            case 2:
-                if (blueKartSpeed != 0) {
-                    if (blueKartImageIndex == 0) {
-                        blueKartImageIndex = NUMBER_OF_IMAGES - 1;
-                    } else {
-                        blueKartImageIndex -= 1;
-                    }
-                }
-                break;
-        }
-    }
-
-    public void turnRight(int player) {
-        switch (player) {
-            case 1:
-                if (redKartSpeed != 0) {
-                    redKartImageIndex = (redKartImageIndex + 1) % NUMBER_OF_IMAGES;
-                }
-                break;
-            case 2:
-                if (blueKartSpeed != 0) {
-                    blueKartImageIndex = (blueKartImageIndex + 1) % NUMBER_OF_IMAGES;
-                }
-                break;
-        }
     }
 
     @Override
