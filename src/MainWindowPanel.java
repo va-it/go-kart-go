@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
-import java.io.File;
 
 class MainWindowPanel extends JPanel implements ActionListener {
 
