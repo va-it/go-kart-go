@@ -7,7 +7,7 @@ import java.io.File;
 class MainWindowPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
-    private static final int delay = 50;
+    private static final int delay = 75;
     private final static String redKartImage = "kartRed";
     private final static String blueKartImage = "kartBlue";
 
@@ -106,22 +106,22 @@ class MainWindowPanel extends JPanel implements ActionListener {
         // https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
         switch (imageIndex) {
             case 1: case 7:
-                xPosition = (xPosition + ((speed*25)/100)); // + 25%
+                xPosition = (xPosition + 1 * ((speed*10)/100)); // + 10%
                 break;
             case 2: case 6:
-                xPosition = (xPosition + ((speed*42)/100)); // + 42%
+                xPosition = (xPosition + 1 * ((speed*20)/100)); // + 20%
                 break;
             case 3: case 4: case 5:
-                xPosition = (xPosition + ((speed*50)/100)); // + 50%
+                xPosition = (xPosition + 1 * ((speed*30)/100)); // + 30%
                 break;
             case 9: case 15:
-                xPosition = (xPosition - ((speed*25)/100)); // - 25%
+                xPosition = (xPosition - 1 * ((speed*10)/100)); // - 10%
                 break;
             case 10: case 14:
-                xPosition = (xPosition - ((speed*42)/100)); // - 42%
+                xPosition = (xPosition - 1 * ((speed*20)/100)); // - 20%
                 break;
             case 11: case 12: case 13:
-                xPosition = (xPosition - ((speed*50)/100)); // - 50%
+                xPosition = (xPosition - 1 * ((speed*30)/100)); // - 30%
                 break;
             default:
                 // 0 and 8, no change in position
@@ -133,22 +133,22 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public int getYPosition(int imageIndex, int yPosition, int speed) {
         switch (imageIndex) {
             case 0: case 1: case 15:
-                yPosition = (yPosition - ((speed*50)/100)); // should be 100% but it's weird
+                yPosition = (yPosition - 1 * ((speed*30)/100)); // -30%
                 break;
             case 2: case 14:
-                yPosition = (yPosition - ((speed*42)/100)); // - 42%
+                yPosition = (yPosition - 1 * ((speed*20)/100)); // - 20%
                 break;
             case 3: case 13:
-                yPosition = (yPosition - ((speed*25)/100)); // - 25%
+                    yPosition = (yPosition - 1 * ((speed*10)/100)); // - 10%
                 break;
             case 5: case 11:
-                yPosition = (yPosition + ((speed*25)/100)); // + 25%
+                yPosition = (yPosition + 1 * ((speed*10)/100)); // + 10%
                 break;
             case 6: case 10:
-                yPosition = (yPosition + ((speed*42)/100)); // + 42%
+                yPosition = (yPosition + 1 * ((speed*20)/100)); // + 20%
                 break;
             case 7: case 8: case 9:
-                yPosition = (yPosition + ((speed*50)/100)); // + 50%
+                yPosition = (yPosition + 1 * ((speed*30)/100)); // + 30%
                 break;
             default:
                 //4 and 12, no change in position
