@@ -10,9 +10,9 @@ public class Main {
         // instruct the JFrame (MainWindow) to listen for key events
         mainWindow.addKeyListener(keyListener);
 
-        SoundsMnager soundsMnager = new SoundsMnager();
+        SoundsManager soundsManager = new SoundsManager();
 
-        soundsMnager.playSound();
+        //soundsManager.playSound("arcade-music-loop");
 
         mainWindow.setVisible(true);
 

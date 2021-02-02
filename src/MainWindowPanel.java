@@ -55,6 +55,10 @@ class MainWindowPanel extends JPanel implements ActionListener {
             blueKart.setNextXPosition();
             blueKart.setNextYPosition();
 
+            detectCollisionWithTrack(redKart);
+
+            detectCollision();
+
             blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
             redKart.setNextXPosition();
@@ -104,6 +108,74 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         g.setColor(Color.green);
         g.fillRect(150, 200, 550, 300); // draw central grassed area
+    }
+
+    public void detectCollisionWithTrack(Kart kart) {
+
+        // store values in variables to avoid having to call the getters multiple times
+        int xPosition = kart.getxPosition();
+        int yPosition = kart.getyPosition();
+        boolean crashed = false;
+
+        // only check collisions when kart is moving
+        if (kart.getSpeed() != 0) {
+            if (xPosition < MIN_X_OUTER_EDGE || xPosition > MAX_X_OUTER_EDGE) {
+                // crashed into left or right outer edges
+                System.out.println("here");
+                crashed = true;
+            } else {
+                if (yPosition < MIN_Y_OUTER_EDGE || yPosition > MAX_Y_OUTER_EDGE) {
+                    // crashed into left or right outer edges
+                    System.out.println("here2");
+                    crashed = true;
+                } else {
+                    if (yPosition > MIN_Y_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE && xPosition > MIN_X_INNER_EDGE) {
+                        // if y between 300 and 200 and x > 150 -> crashed into left side inner edge
+                        System.out.println("here3");
+                        crashed = true;
+                    } else {
+                        if (yPosition > MIN_Y_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE && xPosition < MAX_X_INNER_EDGE) {
+                            // if y between 300 and 200 and x < 550 -> crashed into right side inned edge
+                            System.out.println("here4");
+                            crashed = true;
+                        } else {
+                            if (xPosition > MIN_X_INNER_EDGE && xPosition < MAX_X_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE) {
+                                // if x between 150 and 550 and y < 300 -> crashed into top side inner edge
+                                System.out.println("here5");
+                                crashed = true;
+                            } else {
+                                if (xPosition > MIN_X_INNER_EDGE && xPosition < MAX_X_INNER_EDGE && yPosition > MIN_Y_INNER_EDGE) {
+                                    // if x between 150 and 550 and y > 200 -> crashed into bottom side inner edge
+
+
+                                    // BUG HERE - RED CAR CRASHES ON START !!!
+
+                                    crashed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (crashed) {
+                SoundsManager soundsManager = new SoundsManager();
+                soundsManager.playSound("accident");
+                kart.setSpeed(0);
+            }
+        }
+    }
+
+    private void detectCollision() {
+        int yDifference = redKart.getyPosition() - blueKart.getyPosition();
+        int xDifference = redKart.getxPosition() - blueKart.getxPosition();
+
+        if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 40) {
+            SoundsManager soundsManager = new SoundsManager();
+            soundsManager.playSound("accident");
+            animationTimer.stop();
+            // GAME OVER
+        }
     }
 
     @Override

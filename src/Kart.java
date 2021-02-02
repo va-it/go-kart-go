@@ -102,23 +102,31 @@ public class Kart {
 
     public void setNextYPosition() {
         switch (this.getImageIndex()) {
-            case 0: case 1: case 15:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed()*30)/100)); // -30%
+            case 0:
+            case 1:
+            case 15:
+                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 30) / 100)); // -30%
                 break;
-            case 2: case 14:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed()*20)/100)); // - 20%
+            case 2:
+            case 14:
+                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
                 break;
-            case 3: case 13:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed()*10)/100)); // - 10%
+            case 3:
+            case 13:
+                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
                 break;
-            case 5: case 11:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed()*10)/100)); // + 10%
+            case 5:
+            case 11:
+                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
                 break;
-            case 6: case 10:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed()*20)/100)); // + 20%
+            case 6:
+            case 10:
+                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
                 break;
-            case 7: case 8: case 9:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed()*30)/100)); // + 30%
+            case 7:
+            case 8:
+            case 9:
+                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
                 break;
             default:
                 //4 and 12, no change in position
@@ -131,7 +139,11 @@ public class Kart {
     }
 
     public void decelerate() {
-        this.setSpeed(this.getSpeed() - 10);
+        if (this.getSpeed() > -10) {
+            // kart can only reverse at 10 speed
+            this.setSpeed(this.getSpeed() - 10);
+        }
+
 
     }
 

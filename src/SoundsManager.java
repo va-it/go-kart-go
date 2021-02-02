@@ -7,18 +7,20 @@ import java.io.IOException;
 
 // https://docs.oracle.com/javase/tutorial/sound/playing.html
 // https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
-public class SoundsMnager {
+public class SoundsManager {
 
-    public SoundsMnager() {
+    private static final String CRASH = "crash";
+
+    public SoundsManager() {
 
     }
 
-    public void playSound() {
+    public void playSound(String soundToPlay) {
         try {
             Clip sound = AudioSystem.getClip();
             sound.open(
                 AudioSystem.getAudioInputStream(
-                    getClass().getResource("sounds" + File.separator + "arcade-music-loop.wav")
+                    getClass().getResource("sounds" + File.separator + soundToPlay + ".wav")
                 )
             );
             sound.start();
