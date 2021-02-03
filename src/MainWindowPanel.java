@@ -25,6 +25,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
     JLabel redKartSpeedLabel = new JLabel();
     JLabel blueKartSpeedLabel = new JLabel();
+    JLabel redKartSpeed = new JLabel();
+    JLabel blueKartSpeed = new JLabel();
 
     public Kart redKart;
     public Kart blueKart;
@@ -32,23 +34,31 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public MainWindowPanel() {
         super();
 
-        // set up labels to display karts' speed
-        redKartSpeedLabel.setBounds(50, 50, 100, 30);
-        blueKartSpeedLabel.setBounds(200, 50, 100, 30);
-
-        add(redKartSpeedLabel);
-        add(blueKartSpeedLabel);
-
         this.redKart = new Kart("red");
         this.blueKart = new Kart("blue");
 
-        // set initial karts position so we have the values in the instances and they get updated for later use
+        // set initial karts position to be just before the starting line
         this.redKart.setxPosition(START_LINE_RIGHT_EDGE);
-        this.redKart.setyPosition(INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
+        this.redKart.setyPosition(INNER_BOTTOM_EDGE);
+        // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
         this.blueKart.setxPosition(START_LINE_RIGHT_EDGE);
-        this.blueKart.setyPosition(INNER_BOTTOM_EDGE + this.blueKart.IMAGE_SIZE);
+        this.blueKart.setyPosition(INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
 
-        // create swing timer with delay and start it
+        // Labels for karts' speed
+        redKartSpeedLabel.setText("Red speed: ");
+        blueKartSpeedLabel.setText("Blue speed: ");
+        redKartSpeedLabel.setBounds(50, 50, 80, 20);
+        blueKartSpeedLabel.setBounds(200, 50, 80, 20);
+        add(redKartSpeedLabel);
+        add(blueKartSpeedLabel);
+
+        // Labels that will contain the actual speed value
+        redKartSpeed.setBounds(130, 50, 20, 20);
+        blueKartSpeed.setBounds(280, 50, 20, 20);
+        add(redKartSpeed);
+        add(blueKartSpeed);
+
+        // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
 
@@ -69,8 +79,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
             updateSpeedInformation();
 
-            this.blueKart.setNextYPosition();
-            this.redKart.setNextYPosition();
+            blueKart.setNextXPosition();
+            blueKart.setNextYPosition();
 
             blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
@@ -82,8 +92,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
     }
 
     public void updateSpeedInformation() {
-        redKartSpeedLabel.setText("Red speed: " + redKart.getSpeed());
-        blueKartSpeedLabel.setText("Blue speed: " + blueKart.getSpeed());
+        redKartSpeed.setText(String.valueOf(redKart.getSpeed()));
+        blueKartSpeed.setText(String.valueOf(blueKart.getSpeed()));
     }
 
     public void renderTrack(Graphics g) {

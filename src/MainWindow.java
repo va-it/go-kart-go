@@ -12,15 +12,18 @@ class MainWindow extends JFrame {
         // call constructor of JFrame
         super();
 
+        this.setSize(WIDTH, HEIGHT);
+        this.setResizable(false);
+
         Container pane = getContentPane();
 
         panel = new MainWindowPanel();
 
+        panel.setLayout(null);
+
         pane.add(panel);
 
         this.setTitle("Go-Kart-Go");
-        // x, y (form top-left), width, height
-        this.setBounds(0, 0, WIDTH, HEIGHT);
 
         // ensure the program closes when this window is closed
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -13,8 +13,7 @@ public class MyKeyListener implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        char keyChar = e.getKeyChar();
-        switch( keyChar ) {
+        switch (e.getKeyChar()) {
             case 'w':
                 mainWindowPanel.blueKart.accelerate();
                 break;
@@ -32,8 +31,7 @@ public class MyKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        switch( keyCode ) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 mainWindowPanel.redKart.accelerate();
                 break;
@@ -50,5 +48,6 @@ public class MyKeyListener implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e) {
+    }
 }

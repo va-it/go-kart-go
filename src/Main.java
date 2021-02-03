@@ -15,7 +15,5 @@ public class Main {
         //soundsManager.playSound("arcade-music-loop");
 
         mainWindow.setVisible(true);
-
-
     }
 }
