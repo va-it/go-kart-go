@@ -6,17 +6,22 @@ import javax.swing.*;
 class MainWindowPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
-    private static final int delay = 75;
+    // 30 times a second
+    private static final int delay = 1000 / 30;
 
-    private final int MIN_X_OUTER_EDGE = 50;
-    private final int MAX_X_OUTER_EDGE = 750;
-    private final int MIN_Y_OUTER_EDGE = 100;
-    private final int MAX_Y_OUTER_EDGE = 500;
+    private static final int OUTER_LEFT_EDGE = 50;
+    private static final int OUTER_RIGHT_EDGE = 800;
+    private static final int OUTER_TOP_EDGE = 100;
+    private static final int OUTER_BOTTOM_EDGE = 600;
 
-    private final int MIN_X_INNER_EDGE = 150;
-    private final int MAX_X_INNER_EDGE = 550;
-    private final int MIN_Y_INNER_EDGE = 200;
-    private final int MAX_Y_INNER_EDGE = 300;
+    private static final int INNER_LEFT_EDGE = 150;
+    private static final int INNER_RIGHT_EDGE = 700;
+    private static final int INNER_TOP_EDGE = 200;
+    private static final int INNER_BOTTOM_EDGE = 500;
+
+    private static final int START_LINE_WIDTH = 9;
+    private static final int START_LINE_LEFT_EDGE = ((INNER_RIGHT_EDGE + INNER_LEFT_EDGE) / 2) - START_LINE_WIDTH;
+    private static final int START_LINE_RIGHT_EDGE = START_LINE_LEFT_EDGE + START_LINE_WIDTH;
 
     JLabel redKartSpeedLabel = new JLabel();
     JLabel blueKartSpeedLabel = new JLabel();
@@ -27,18 +32,23 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public MainWindowPanel() {
         super();
 
+        // set up labels to display karts' speed
+        redKartSpeedLabel.setBounds(50, 50, 100, 30);
+        blueKartSpeedLabel.setBounds(200, 50, 100, 30);
+
+        add(redKartSpeedLabel);
+        add(blueKartSpeedLabel);
+
         this.redKart = new Kart("red");
         this.blueKart = new Kart("blue");
 
-        // set initial karts position to be just before the starting line
-        this.redKart.setxPosition(425);
-        this.redKart.setyPosition(500);
-        // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
-        this.blueKart.setxPosition(425);
-        this.blueKart.setyPosition(550);
+        // set initial karts position so we have the values in the instances and they get updated for later use
+        this.redKart.setxPosition(START_LINE_RIGHT_EDGE);
+        this.redKart.setyPosition(INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
+        this.blueKart.setxPosition(START_LINE_RIGHT_EDGE);
+        this.blueKart.setyPosition(INNER_BOTTOM_EDGE + this.blueKart.IMAGE_SIZE);
 
-
-        // create swing timer with 100ms delay and start it
+        // create swing timer with delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
 
@@ -48,16 +58,19 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g); // call superclass paintComponent
 
+        renderTrack(g);
+
         if (animationTimer.isRunning()) {
 
-            renderTrack(g);
-
-            blueKart.setNextXPosition();
-            blueKart.setNextYPosition();
-
             detectCollisionWithTrack(redKart);
+            detectCollisionWithTrack(blueKart);
 
-            detectCollision();
+            detectCollisionBetweenKarts();
+
+            updateSpeedInformation();
+
+            this.blueKart.setNextYPosition();
+            this.redKart.setNextYPosition();
 
             blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
@@ -65,49 +78,50 @@ class MainWindowPanel extends JPanel implements ActionListener {
             redKart.setNextYPosition();
 
             redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
-
-            printSpeedInformation();
         }
     }
 
-    public void printSpeedInformation() {
+    public void updateSpeedInformation() {
         redKartSpeedLabel.setText("Red speed: " + redKart.getSpeed());
         blueKartSpeedLabel.setText("Blue speed: " + blueKart.getSpeed());
-
-        redKartSpeedLabel.setBounds(50, 50, 100, 30);
-        blueKartSpeedLabel.setBounds(200, 50, 100, 30);
-
-        add(redKartSpeedLabel);
-        add(blueKartSpeedLabel);
     }
 
     public void renderTrack(Graphics g) {
         g.setColor(Color.black);
-        g.drawRect(MIN_X_OUTER_EDGE, MIN_Y_OUTER_EDGE, MAX_X_OUTER_EDGE, MAX_Y_OUTER_EDGE);  // draw outer edge
-        g.drawRect(MIN_X_INNER_EDGE, MIN_Y_INNER_EDGE, MAX_X_INNER_EDGE, MAX_Y_INNER_EDGE); // draw inner edge
+        // draw outer edge
+        g.drawRect(OUTER_LEFT_EDGE, OUTER_TOP_EDGE, (OUTER_RIGHT_EDGE - OUTER_LEFT_EDGE), (OUTER_BOTTOM_EDGE - OUTER_TOP_EDGE));
+        // draw inner edge
+        g.drawRect(INNER_LEFT_EDGE, INNER_TOP_EDGE, (INNER_RIGHT_EDGE - INNER_LEFT_EDGE), (INNER_BOTTOM_EDGE - INNER_TOP_EDGE));
 
         g.setColor(Color.gray);
-        g.fillRect(50, 100, 750, 500); // fill in the road
+        // fill in the road
+        g.fillRect(OUTER_LEFT_EDGE, OUTER_TOP_EDGE, (OUTER_RIGHT_EDGE - OUTER_LEFT_EDGE), (OUTER_BOTTOM_EDGE - OUTER_TOP_EDGE));
 
         g.setColor(Color.yellow);
-        g.drawRect(100, 150, 650, 400); // mid-lane marker
+
+        // mid-lane marker
+        g.drawRect((OUTER_LEFT_EDGE + INNER_LEFT_EDGE) / 2, (OUTER_TOP_EDGE + INNER_TOP_EDGE) / 2, (INNER_RIGHT_EDGE - OUTER_LEFT_EDGE), (INNER_BOTTOM_EDGE - OUTER_TOP_EDGE)
+        );
 
         g.setColor(Color.white);
-        g.fillRect(417, 501, 9, 99); // draw start line
+        // draw start line
+        g.fillRect(START_LINE_LEFT_EDGE, INNER_BOTTOM_EDGE, START_LINE_WIDTH, (OUTER_BOTTOM_EDGE - INNER_BOTTOM_EDGE));
 
         // === draw checkerboard on start line ===
         g.setColor(Color.black);
-        for(int i = 0; i<=99; i+=6) {
-            g.fillRect(417, 501 + i, 3, 3);
-            g.fillRect(423, 501 + i, 3, 3);
+        int square_size = 3;
+        for (int i = 0; i <= 99; i += 6) {
+            g.fillRect(START_LINE_LEFT_EDGE, INNER_BOTTOM_EDGE + 1 + i, square_size, square_size);
+            g.fillRect(START_LINE_LEFT_EDGE + (square_size * 2), INNER_BOTTOM_EDGE + 1 + i, square_size, square_size);
         }
-        for(int i = 0; i<=93; i+=6) {
-            g.fillRect(420, 504 + i, 3, 3);
+        for (int i = 0; i <= 93; i += 6) {
+            g.fillRect(START_LINE_LEFT_EDGE + square_size, INNER_BOTTOM_EDGE + 1 + square_size + i, square_size, square_size);
         }
         // =======================================
 
         g.setColor(Color.green);
-        g.fillRect(150, 200, 550, 300); // draw central grassed area
+        // draw central grassed area
+        g.fillRect(INNER_LEFT_EDGE, INNER_TOP_EDGE, (INNER_RIGHT_EDGE - INNER_LEFT_EDGE), (INNER_BOTTOM_EDGE - INNER_TOP_EDGE));
     }
 
     public void detectCollisionWithTrack(Kart kart) {
@@ -119,37 +133,30 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         // only check collisions when kart is moving
         if (kart.getSpeed() != 0) {
-            if (xPosition < MIN_X_OUTER_EDGE || xPosition > MAX_X_OUTER_EDGE) {
+
+            if (xPosition < OUTER_LEFT_EDGE || xPosition > OUTER_RIGHT_EDGE) {
                 // crashed into left or right outer edges
-                System.out.println("here");
                 crashed = true;
             } else {
-                if (yPosition < MIN_Y_OUTER_EDGE || yPosition > MAX_Y_OUTER_EDGE) {
-                    // crashed into left or right outer edges
-                    System.out.println("here2");
+                if (yPosition < OUTER_TOP_EDGE || yPosition > (OUTER_BOTTOM_EDGE - kart.IMAGE_SIZE)) {
+                    // subtract image size otherwise the condition only applies when the whole image is below the point
+                    // crashed into top or bottom outer edges
                     crashed = true;
                 } else {
-                    if (yPosition > MIN_Y_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE && xPosition > MIN_X_INNER_EDGE) {
-                        // if y between 300 and 200 and x > 150 -> crashed into left side inner edge
-                        System.out.println("here3");
+                    if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE) {
+                        // crashed into inner left edge
                         crashed = true;
                     } else {
-                        if (yPosition > MIN_Y_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE && xPosition < MAX_X_INNER_EDGE) {
-                            // if y between 300 and 200 and x < 550 -> crashed into right side inned edge
-                            System.out.println("here4");
+                        if (xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE && yPosition > (INNER_TOP_EDGE - kart.IMAGE_SIZE) && yPosition < INNER_BOTTOM_EDGE) {
+                            // subtract image size otherwise the condition only applies when the whole image is below the point
                             crashed = true;
                         } else {
-                            if (xPosition > MIN_X_INNER_EDGE && xPosition < MAX_X_INNER_EDGE && yPosition < MAX_Y_INNER_EDGE) {
-                                // if x between 150 and 550 and y < 300 -> crashed into top side inner edge
-                                System.out.println("here5");
+                            if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && xPosition < INNER_RIGHT_EDGE && xPosition > INNER_LEFT_EDGE) {
+                                // crashed into inner right edge
                                 crashed = true;
                             } else {
-                                if (xPosition > MIN_X_INNER_EDGE && xPosition < MAX_X_INNER_EDGE && yPosition > MIN_Y_INNER_EDGE) {
-                                    // if x between 150 and 550 and y > 200 -> crashed into bottom side inner edge
-
-
-                                    // BUG HERE - RED CAR CRASHES ON START !!!
-
+                                if (xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE && yPosition < INNER_BOTTOM_EDGE && yPosition > INNER_TOP_EDGE) {
+                                    // crashed into inner bottom edge
                                     crashed = true;
                                 }
                             }
@@ -166,11 +173,12 @@ class MainWindowPanel extends JPanel implements ActionListener {
         }
     }
 
-    private void detectCollision() {
+    private void detectCollisionBetweenKarts() {
         int yDifference = redKart.getyPosition() - blueKart.getyPosition();
         int xDifference = redKart.getxPosition() - blueKart.getxPosition();
 
         if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 40) {
+            // Should be minus image size, but since the karts don't fill the whole 50 pixels...
             SoundsManager soundsManager = new SoundsManager();
             soundsManager.playSound("accident");
             animationTimer.stop();

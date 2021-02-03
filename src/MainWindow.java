@@ -18,6 +18,7 @@ class MainWindow extends JFrame {
 
         pane.add(panel);
 
+        this.setTitle("Go-Kart-Go");
         // x, y (form top-left), width, height
         this.setBounds(0, 0, WIDTH, HEIGHT);
 

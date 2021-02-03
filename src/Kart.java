@@ -11,6 +11,7 @@ public class Kart {
     private int imageIndex;
     private ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
+    public static final int IMAGE_SIZE = 50;
 
     public Kart(String colour) {
         this.speed = 0;
