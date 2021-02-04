@@ -12,6 +12,7 @@ public class Kart {
     private ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public static final int IMAGE_SIZE = 50;
+    SoundsManager soundsManager;
 
     public Kart(String colour) {
         this.speed = 0;
@@ -26,6 +27,8 @@ public class Kart {
         }
         // initial position of the car is pointing left
         this.imageIndex = 12;
+        soundsManager = new SoundsManager("Speed0");
+        soundsManager.playSoundInLoop();
 
     }
 
@@ -137,15 +140,21 @@ public class Kart {
 
     public void accelerate() {
         this.setSpeed(this.getSpeed() + 10);
+        playSpeedSound();
     }
 
     public void decelerate() {
         if (this.getSpeed() > -10) {
             // kart can only reverse at 10 speed
             this.setSpeed(this.getSpeed() - 10);
+            playSpeedSound();
         }
+    }
 
-
+    public void playSpeedSound() {
+        soundsManager.stopSound();
+        soundsManager = new SoundsManager("Speed" + Math.abs(this.getSpeed())); //play speed10 when reversing
+        soundsManager.playSoundInLoop();
     }
 
     public void turnLeft() {

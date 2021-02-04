@@ -3,7 +3,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-class MainWindowPanel extends JPanel implements ActionListener {
+class RaceTrackPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
     // 30 times a second
@@ -31,7 +31,7 @@ class MainWindowPanel extends JPanel implements ActionListener {
     public Kart redKart;
     public Kart blueKart;
 
-    public MainWindowPanel() {
+    public RaceTrackPanel() {
         super();
 
         this.redKart = new Kart("red");
@@ -153,12 +153,14 @@ class MainWindowPanel extends JPanel implements ActionListener {
                     // crashed into top or bottom outer edges
                     crashed = true;
                 } else {
-                    if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE) {
+                    if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && (xPosition + kart.IMAGE_SIZE) > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE) {
                         // crashed into inner left edge
+                        // add image size otherwise the condition only applies when the wole kart has gone over the edge
                         crashed = true;
                     } else {
                         if (xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE && yPosition > (INNER_TOP_EDGE - kart.IMAGE_SIZE) && yPosition < INNER_BOTTOM_EDGE) {
                             // subtract image size otherwise the condition only applies when the whole image is below the point
+                            // crashed into top inner edge
                             crashed = true;
                         } else {
                             if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && xPosition < INNER_RIGHT_EDGE && xPosition > INNER_LEFT_EDGE) {
@@ -176,8 +178,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
             }
 
             if (crashed) {
-                SoundsManager soundsManager = new SoundsManager();
-                soundsManager.playSound("accident");
+                SoundsManager soundsManager = new SoundsManager("accident");
+                soundsManager.playSound();
                 kart.setSpeed(0);
             }
         }
@@ -189,8 +191,8 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 40) {
             // Should be minus image size, but since the karts don't fill the whole 50 pixels...
-            SoundsManager soundsManager = new SoundsManager();
-            soundsManager.playSound("accident");
+            SoundsManager soundsManager = new SoundsManager("accident");
+            soundsManager.playSound();
             animationTimer.stop();
             // GAME OVER
         }

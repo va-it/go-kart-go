@@ -11,20 +11,16 @@ public class SoundsManager {
 
     private static final String CRASH = "crash";
 
-    public SoundsManager() {
+    Clip sound;
 
-    }
-
-    public void playSound(String soundToPlay) {
+    public SoundsManager(String soundToPlay) {
         try {
-            Clip sound = AudioSystem.getClip();
+            sound = AudioSystem.getClip();
             sound.open(
-                AudioSystem.getAudioInputStream(
-                    getClass().getResource("sounds" + File.separator + soundToPlay + ".wav")
-                )
+                    AudioSystem.getAudioInputStream(
+                            getClass().getResource("sounds" + File.separator + soundToPlay + ".wav")
+                    )
             );
-            sound.start();
-
         } catch (UnsupportedAudioFileException ex) {
             System.out.println("ERROR: File not supported");
             ex.printStackTrace();
@@ -35,5 +31,18 @@ public class SoundsManager {
             System.out.println("ERROR: File cannot be played");
             ex.printStackTrace();
         }
+
+    }
+
+    public void playSound() {
+        sound.start();
+    }
+
+    public void playSoundInLoop(){
+        sound.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    public void stopSound() {
+        sound.stop();
     }
 }
