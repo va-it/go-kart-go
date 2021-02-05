@@ -110,7 +110,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         int yDifference = redKart.getyPosition() - blueKart.getyPosition();
         int xDifference = redKart.getxPosition() - blueKart.getxPosition();
 
-        if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 35) {
+        if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 40) {
             // Shave a few pixels since the karts don't fill the whole 50 pixels...
             SoundsManager soundsManager = new SoundsManager("accident");
             soundsManager.playSound();
