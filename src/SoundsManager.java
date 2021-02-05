@@ -1,9 +1,7 @@
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 // https://docs.oracle.com/javase/tutorial/sound/playing.html
 // https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
@@ -39,6 +37,8 @@ public class SoundsManager {
     }
 
     public void playSoundInLoop(){
+        // LOOP_CONTINOUSLY found here:
+        // https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/Clip.html
         sound.loop(Clip.LOOP_CONTINUOUSLY);
     }
 

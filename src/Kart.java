@@ -151,6 +151,11 @@ public class Kart {
         }
     }
 
+    public void stop() {
+        this.setSpeed(0);
+        soundsManager.stopSound();
+    }
+
     public void playSpeedSound() {
         soundsManager.stopSound();
         soundsManager = new SoundsManager("Speed" + Math.abs(this.getSpeed())); //play speed10 when reversing

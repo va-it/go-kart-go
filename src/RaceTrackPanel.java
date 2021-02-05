@@ -7,7 +7,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
     // 30 times a second
-    private static final int delay = 1000 / 30;
+    // private static final int delay = 1000 / 30;
+    private static final int delay = 75;
 
     private static final int OUTER_LEFT_EDGE = 50;
     private static final int OUTER_RIGHT_EDGE = 800;
@@ -180,7 +181,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             if (crashed) {
                 SoundsManager soundsManager = new SoundsManager("accident");
                 soundsManager.playSound();
-                kart.setSpeed(0);
+                kart.stop();
             }
         }
     }
@@ -193,6 +194,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             // Should be minus image size, but since the karts don't fill the whole 50 pixels...
             SoundsManager soundsManager = new SoundsManager("accident");
             soundsManager.playSound();
+            redKart.stop();
+            blueKart.stop();
             animationTimer.stop();
             // GAME OVER
         }

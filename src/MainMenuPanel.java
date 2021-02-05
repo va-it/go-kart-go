@@ -23,4 +23,9 @@ public class MainMenuPanel extends JPanel {
     public void stopMusic() {
         soundsManager.stopSound();
     }
+
+    public void playEnterSound() {
+        soundsManager = new SoundsManager("menu-select");
+        soundsManager.playSound();
+    }
 }

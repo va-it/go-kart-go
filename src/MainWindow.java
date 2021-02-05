@@ -37,6 +37,7 @@ class MainWindow extends JFrame implements KeyListener {
             // only replace the panel to be the track the first time that the user presses enter
 
             mainMenuPanel.stopMusic();
+            mainMenuPanel.playEnterSound();
             pane.remove(mainMenuPanel);
 
             raceTrackPanel = new RaceTrackPanel();
