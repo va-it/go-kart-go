@@ -58,16 +58,21 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart.setyPosition(INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
 
         // Labels for karts' speed
+        Font font = new Font("Sans-Serif", Font.BOLD,25);
         redKartSpeedLabel.setText("Red speed: ");
+        redKartSpeedLabel.setFont(font);
         blueKartSpeedLabel.setText("Blue speed: ");
-        redKartSpeedLabel.setBounds(50, 50, 80, 20);
-        blueKartSpeedLabel.setBounds(200, 50, 80, 20);
+        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 50, 150, 50);
+        blueKartSpeedLabel.setFont(font);
+        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 50, 160, 50);
         add(redKartSpeedLabel);
         add(blueKartSpeedLabel);
 
         // Labels that will contain the actual speed value
-        redKartSpeed.setBounds(130, 50, 20, 20);
-        blueKartSpeed.setBounds(280, 50, 20, 20);
+        redKartSpeed.setFont(font);
+        blueKartSpeed.setFont(font);
+        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 150, 50, 40, 50);
+        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 40, 50, 40, 50);
         add(redKartSpeed);
         add(blueKartSpeed);
 
