@@ -48,19 +48,22 @@ class MainWindow extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        switch (e.getKeyChar()) {
-            case 'w':
-                raceTrackPanel.blueKart.accelerate();
-                break;
-            case 's':
-                raceTrackPanel.blueKart.decelerate();
-                break;
-            case 'a':
-                raceTrackPanel.blueKart.turnLeft();
-                break;
-            case 'd':
-                raceTrackPanel.blueKart.turnRight();
-                break;
+        if (raceTrackPanel.RACE_STARTED) {
+            // only allow control of kart when race starts
+            switch (e.getKeyChar()) {
+                case 'w':
+                    raceTrackPanel.blueKart.accelerate();
+                    break;
+                case 's':
+                    raceTrackPanel.blueKart.decelerate();
+                    break;
+                case 'a':
+                    raceTrackPanel.blueKart.turnLeft();
+                    break;
+                case 'd':
+                    raceTrackPanel.blueKart.turnRight();
+                    break;
+            }
         }
     }
 
@@ -68,16 +71,24 @@ class MainWindow extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                raceTrackPanel.redKart.accelerate();
+                if (raceTrackPanel.RACE_STARTED) {
+                    raceTrackPanel.redKart.accelerate();
+                }
                 break;
             case KeyEvent.VK_DOWN:
-                raceTrackPanel.redKart.decelerate();
+                if (raceTrackPanel.RACE_STARTED) {
+                    raceTrackPanel.redKart.decelerate();
+                }
                 break;
             case KeyEvent.VK_LEFT:
-                raceTrackPanel.redKart.turnLeft();
+                if (raceTrackPanel.RACE_STARTED) {
+                    raceTrackPanel.redKart.turnLeft();
+                }
                 break;
             case KeyEvent.VK_RIGHT:
-                raceTrackPanel.redKart.turnRight();
+                if (raceTrackPanel.RACE_STARTED) {
+                    raceTrackPanel.redKart.turnRight();
+                }
             case KeyEvent.VK_ENTER:
                 replaceMainMenuWithRaceTrack();
                 break;

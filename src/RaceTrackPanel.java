@@ -1,11 +1,19 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import javax.swing.*;
 
 class RaceTrackPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
+
+    private final Timer startRaceTimer;
+    private int secondsElapsed = 0;
+    private SoundsManager countDownSoundManager;
+    private JLabel raceLightsLabel = new JLabel();
+    ImageIcon raceLights;
+
     // 30 times a second
     // private static final int delay = 1000 / 30;
     private static final int delay = 75;
@@ -24,16 +32,20 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private static final int START_LINE_LEFT_EDGE = ((INNER_RIGHT_EDGE + INNER_LEFT_EDGE) / 2) - START_LINE_WIDTH;
     private static final int START_LINE_RIGHT_EDGE = START_LINE_LEFT_EDGE + START_LINE_WIDTH;
 
-    JLabel redKartSpeedLabel = new JLabel();
-    JLabel blueKartSpeedLabel = new JLabel();
-    JLabel redKartSpeed = new JLabel();
-    JLabel blueKartSpeed = new JLabel();
+    private JLabel redKartSpeedLabel = new JLabel();
+    private JLabel blueKartSpeedLabel = new JLabel();
+    private JLabel redKartSpeed = new JLabel();
+    private JLabel blueKartSpeed = new JLabel();
 
     public Kart redKart;
     public Kart blueKart;
 
+    public boolean RACE_STARTED = false;
+
     public RaceTrackPanel() {
         super();
+
+        this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
         this.redKart = new Kart("red");
         this.blueKart = new Kart("blue");
@@ -59,11 +71,44 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(redKartSpeed);
         add(blueKartSpeed);
 
+        setRaceLightsImage(0);
+        displayRaceLights();
+        add(raceLightsLabel);
+
+        startRaceTimer = new Timer(1000, startRaceCountDown());
+        startRaceTimer.start();
+
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
+    }
 
-        this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
+    public ActionListener startRaceCountDown() {
+        countDownSoundManager = new SoundsManager("race-start-ready-go");
+
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (secondsElapsed == 0) {
+                    // only play countdown sound the first time
+                    countDownSoundManager.playSound();
+                }
+                secondsElapsed += 1;
+                if (secondsElapsed < 5) {
+                    setRaceLightsImage(secondsElapsed);
+                }
+                switch (secondsElapsed) {
+                    case 4:
+                        RACE_STARTED = true;
+                        break;
+                    case 5: // let the lights display for an extra second
+                        startRaceTimer.stop();
+                        remove(raceLightsLabel);
+                        break;
+                }
+            }
+        };
+        return actionListener;
     }
 
     public void paintComponent(Graphics g) {
@@ -135,12 +180,33 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         g.fillRect(INNER_LEFT_EDGE, INNER_TOP_EDGE, (INNER_RIGHT_EDGE - INNER_LEFT_EDGE), (INNER_BOTTOM_EDGE - INNER_TOP_EDGE));
     }
 
+    public void displayRaceLights() {
+        if (raceLights != null) {
+            int width = raceLights.getIconWidth();
+            int height = raceLights.getIconHeight();
+            int yPosition = ((INNER_BOTTOM_EDGE + INNER_TOP_EDGE) / 2) - (height / 2); // center vertically
+            raceLightsLabel.setBounds(START_LINE_LEFT_EDGE - ( width / 2), yPosition, width, height);
+        }
+    }
+
+    public void setRaceLightsImage(int index) {
+        raceLights = new ImageIcon(getClass().getResource("images" + File.separator + "lights" + index + ".png"));
+        raceLightsLabel.setIcon(raceLights);
+    }
+
     public void detectCollisionWithTrack(Kart kart) {
 
         // store values in variables to avoid having to call the getters multiple times
         int xPosition = kart.getxPosition();
         int yPosition = kart.getyPosition();
         boolean crashed = false;
+
+        // shave 10 pixels from inner edges to avoid crashing easily
+        // since the kart doesn't fill all 50 pixels and it's easy to crash because of that
+        int inner_top_edge = INNER_TOP_EDGE + 10;
+        int inner_bottom_edge = INNER_BOTTOM_EDGE - 10;
+        int inner_left_edge = INNER_LEFT_EDGE + 10;
+        int inner_right_edge = INNER_RIGHT_EDGE - 10;
 
         // only check collisions when kart is moving
         if (kart.getSpeed() != 0) {
@@ -154,21 +220,21 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                     // crashed into top or bottom outer edges
                     crashed = true;
                 } else {
-                    if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && (xPosition + kart.IMAGE_SIZE) > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE) {
+                    if (yPosition > inner_top_edge && yPosition < inner_bottom_edge && (xPosition + kart.IMAGE_SIZE) > inner_left_edge && xPosition < inner_right_edge) {
                         // crashed into inner left edge
                         // add image size otherwise the condition only applies when the wole kart has gone over the edge
                         crashed = true;
                     } else {
-                        if (xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE && yPosition > (INNER_TOP_EDGE - kart.IMAGE_SIZE) && yPosition < INNER_BOTTOM_EDGE) {
+                        if (xPosition > inner_left_edge && xPosition < inner_right_edge && yPosition > (inner_top_edge - kart.IMAGE_SIZE) && yPosition < inner_bottom_edge) {
                             // subtract image size otherwise the condition only applies when the whole image is below the point
                             // crashed into top inner edge
                             crashed = true;
                         } else {
-                            if (yPosition > INNER_TOP_EDGE && yPosition < INNER_BOTTOM_EDGE && xPosition < INNER_RIGHT_EDGE && xPosition > INNER_LEFT_EDGE) {
+                            if (yPosition > inner_top_edge && yPosition < inner_bottom_edge && xPosition < inner_right_edge && xPosition > inner_left_edge) {
                                 // crashed into inner right edge
                                 crashed = true;
                             } else {
-                                if (xPosition > INNER_LEFT_EDGE && xPosition < INNER_RIGHT_EDGE && yPosition < INNER_BOTTOM_EDGE && yPosition > INNER_TOP_EDGE) {
+                                if (xPosition > inner_left_edge && xPosition < inner_right_edge && yPosition < inner_bottom_edge && yPosition > inner_top_edge) {
                                     // crashed into inner bottom edge
                                     crashed = true;
                                 }
