@@ -10,14 +10,14 @@ public class Kart {
     private final String image;
     private final int player;
     private int imageIndex;
+    private boolean winner = false;
+    private int checkPoint = 0;
+    private int lap = 0;
+    private boolean crashed = false;
     private SoundsManager soundsManager;
     private final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public final int IMAGE_SIZE = 50;
-    public boolean winner = false;
-
-    private int checkPoint = 0;
-    private int lap = 0;
 
     public Kart(String colour, int player) {
         this.speed = 0;
@@ -100,6 +100,14 @@ public class Kart {
 
     public int getPlayer() {
         return player;
+    }
+
+    public boolean isCrashed() {
+        return crashed;
+    }
+
+    public void setCrashed(boolean crashed) {
+        this.crashed = crashed;
     }
 
     public void setNextXPosition() {
@@ -231,7 +239,6 @@ public class Kart {
                 } else {
                     this.setLap(this.getLap() + 1);
                 }
-                System.out.println(this.getCheckPoint());
                 return;
             }
         }
@@ -239,7 +246,6 @@ public class Kart {
         if (this.kartIsOnLeftRoad() && this.getYPosition() <= RaceTrack.CHECKPOINTS[1]) {
             if (this.getCheckPoint() == 1) {
                 this.setCheckPoint(2);
-                System.out.println(this.getCheckPoint());
             }
             return;
         }
@@ -247,7 +253,6 @@ public class Kart {
         if (this.kartIsOnTopRoad() && this.getXPosition() >= RaceTrack.CHECKPOINTS[0]) {
             if (this.getCheckPoint() == 2) {
                 this.setCheckPoint(3);
-                System.out.println(this.getCheckPoint());
             }
             return;
         }
@@ -255,7 +260,6 @@ public class Kart {
         if (this.kartIsOnRightRoad() && this.getYPosition() >= RaceTrack.CHECKPOINTS[1]) {
             if (this.getCheckPoint() == 3) {
                 this.setCheckPoint(4);
-                System.out.println(this.getCheckPoint());
             }
             return;
         }

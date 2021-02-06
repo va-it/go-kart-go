@@ -43,7 +43,7 @@ public class RaceTrack {
     public JLabel raceLightsLabel = new JLabel();
     public ImageIcon raceLights;
 
-    public SoundsManager countDownSoundManager;
+    public SoundsManager soundsManager;
 
     public RaceTrack() {
 
@@ -90,7 +90,7 @@ public class RaceTrack {
         blueKartLap.setText("0/" + HelperClass.NUMBER_OF_LAPS);
         blueKartLap.setBounds(OUTER_RIGHT_EDGE - 60, 55, 50, 25);
 
-        countDownSoundManager = new SoundsManager("race-start-ready-go");
+        soundsManager = new SoundsManager("race-start-ready-go");
     }
 
     public void renderTrack(Graphics g) {
@@ -180,29 +180,35 @@ public class RaceTrack {
 
             if (crashedIntoXOuterEdges) {
                 // crashed into left or right outer edges
+                kart.setCrashed(true);
                 return true;
             }
             if (crashedIntoYOuterEdges) {
                 // subtract image size otherwise the condition only applies when the whole image is below the point
                 // crashed into top or bottom outer edges
+                kart.setCrashed(true);
                 return true;
             }
             if (betweenInnerYEdges && (xPosition + kart.IMAGE_SIZE) > inner_left_edge && xPosition < inner_right_edge) {
                 // crashed into inner left edge
                 // add image size otherwise the condition only applies when the whole kart has gone over the edge
+                kart.setCrashed(true);
                 return true;
             }
             if (betweenInnerXEdges && yPosition > (inner_top_edge - kart.IMAGE_SIZE) && yPosition < inner_bottom_edge) {
                 // subtract image size otherwise the condition only applies when the whole image is below the point
                 // crashed into top inner edge
+                kart.setCrashed(true);
                 return true;
             }
             if (betweenInnerYEdges && xPosition < inner_right_edge && xPosition > inner_left_edge) {
                 // crashed into inner right edge
+                kart.setCrashed(true);
                 return true;
             }
             if (betweenInnerXEdges && yPosition < inner_bottom_edge && yPosition > inner_top_edge) {
                 // crashed into inner bottom edge
+                kart.setCrashed(true);
                 return true;
             }
         }
@@ -211,22 +217,22 @@ public class RaceTrack {
 
     public void detectCollisionWithTrack(Kart kart) {
         if (detectCollision(kart)) {
-            SoundsManager soundsManager = new SoundsManager("accident");
+            soundsManager = new SoundsManager("accident");
             soundsManager.playSound();
             kart.stop();
         }
     }
 
     public void playCountDownSound() {
-        countDownSoundManager.playSound();
+        soundsManager.playSound();
     }
 
     public void playCheeringSound() {
-        SoundsManager cheeringSoundManager = new SoundsManager("cheering");
-        cheeringSoundManager.playSound();
+        soundsManager = new SoundsManager("cheering");
+        soundsManager.playSound();
     }
 
     public void stopAllSounds() {
-        countDownSoundManager.stopSound();
+        soundsManager.stopSound();
     }
 }

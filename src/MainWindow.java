@@ -52,7 +52,7 @@ class MainWindow extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if (raceTrackPanel.RACE_IN_PROGRESS) {
+        if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.blueKart.isCrashed()) {
             // only allow control of kart when race starts
             switch (e.getKeyChar()) {
                 case 'w':
@@ -75,22 +75,22 @@ class MainWindow extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                if (raceTrackPanel.RACE_IN_PROGRESS) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
                     raceTrackPanel.redKart.accelerate();
                 }
                 break;
             case KeyEvent.VK_DOWN:
-                if (raceTrackPanel.RACE_IN_PROGRESS) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
                     raceTrackPanel.redKart.decelerate();
                 }
                 break;
             case KeyEvent.VK_LEFT:
-                if (raceTrackPanel.RACE_IN_PROGRESS) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
                     raceTrackPanel.redKart.turnLeft();
                 }
                 break;
             case KeyEvent.VK_RIGHT:
-                if (raceTrackPanel.RACE_IN_PROGRESS) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
                     raceTrackPanel.redKart.turnRight();
                 }
             case KeyEvent.VK_ENTER:

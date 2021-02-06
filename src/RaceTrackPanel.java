@@ -13,6 +13,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private static final int delay = 1000 / 30;
 
     private JLabel centralMessage = new JLabel("", JLabel.CENTER);
+    private String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
+    private String gameOverMessage = "<html>GAME OVER<br>" + endGameMessage + "</html>";
 
     public Kart redKart;
     public Kart blueKart;
@@ -103,6 +105,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             raceTrack.detectCollisionWithTrack(redKart);
             raceTrack.detectCollisionWithTrack(blueKart);
 
+            stopGameIfBothKartsAreCrashed();
+
             detectCollisionBetweenKarts();
 
             raceTrack.updateSpeedInformation(redKart, blueKart);
@@ -139,19 +143,24 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             soundsManager.playSound();
             redKart.stop();
             blueKart.stop();
+            redKart.setCrashed(true);
+            blueKart.setCrashed(true);
             animationTimer.stop();
-            // GAME OVER
+            this.centralMessage.setText(gameOverMessage);
+        }
+    }
+
+    public void stopGameIfBothKartsAreCrashed() {
+        if (redKart.isCrashed() && blueKart.isCrashed()) {
+            this.centralMessage.setText(gameOverMessage);
+            this.stopRace();
         }
     }
 
     private void checkAndDeclareWinner(Kart kart) {
         if (kart.isWinner()) {
             this.stopRace();
-            // dirty workaround to display multiple lines. Ugly.
-            this.centralMessage.setText("<html>PLAYER " + kart.getPlayer() + " WINS !!! <br>" +
-                    "<br> PRESS ENTER TO RESTART <br>" +
-                    "<br> PRESS ESC TO QUIT"
-            );
+            this.centralMessage.setText("<html>PLAYER " + kart.getPlayer() + " WINS !!!<br>" + endGameMessage + "</html>");
             raceTrack.playCheeringSound();
         }
     }
