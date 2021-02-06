@@ -34,6 +34,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
         this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
 
+        add(raceTrack.player1Label);
+        add(raceTrack.player2Label);
+
         add(raceTrack.redKartSpeedLabel);
         add(raceTrack.blueKartSpeedLabel);
         add(raceTrack.redKartSpeed);

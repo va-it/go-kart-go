@@ -4,6 +4,8 @@ import java.io.File;
 
 public class RaceTrack {
 
+    public JLabel player1Label = new JLabel();
+    public JLabel player2Label = new JLabel();
     public JLabel redKartSpeedLabel = new JLabel();
     public JLabel blueKartSpeedLabel = new JLabel();
     public JLabel redKartSpeed = new JLabel();
@@ -15,13 +17,13 @@ public class RaceTrack {
 
     public static final int OUTER_LEFT_EDGE = 50;
     public static final int OUTER_RIGHT_EDGE = 800;
-    public static final int OUTER_TOP_EDGE = 75; //100
-    public static final int OUTER_BOTTOM_EDGE = 575; //600
+    public static final int OUTER_TOP_EDGE = 85; //100
+    public static final int OUTER_BOTTOM_EDGE = 585; //600
 
     public static final int INNER_LEFT_EDGE = 150;
     public static final int INNER_RIGHT_EDGE = 700;
-    public static final int INNER_TOP_EDGE = 175; //200
-    public static final int INNER_BOTTOM_EDGE = 475; //500
+    public static final int INNER_TOP_EDGE = 185; //200
+    public static final int INNER_BOTTOM_EDGE = 485; //500
 
     public static final int WIDTH_OF_GREEN_AREA = (INNER_RIGHT_EDGE - INNER_LEFT_EDGE);
     public static final int WIDTH_OF_TRACK = (OUTER_RIGHT_EDGE - OUTER_LEFT_EDGE);
@@ -46,36 +48,47 @@ public class RaceTrack {
     public RaceTrack() {
 
         HelperClass helperClass = new HelperClass();
+
+        player1Label.setFont(helperClass.font);
+        player1Label.setText("PLAYER 1");
+        player1Label.setForeground(Color.red);
+        player1Label.setBounds(OUTER_LEFT_EDGE, 5, 100, 25);
+
+        player2Label.setFont(helperClass.font);
+        player2Label.setText("PLAYER 2");
+        player2Label.setForeground(Color.blue);
+        player2Label.setBounds(OUTER_RIGHT_EDGE - 120, 5, 120, 25);
+
         redKartSpeedLabel.setFont(helperClass.font);
-        redKartSpeedLabel.setText("RED SPEED: ");
-        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 130, 25);
+        redKartSpeedLabel.setText("SPEED: ");
+        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 30, 150, 25);
 
         blueKartSpeedLabel.setFont(helperClass.font);
-        blueKartSpeedLabel.setText("BLUE SPEED: ");
-        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 10, 150, 25);
+        blueKartSpeedLabel.setText("SPEED: ");
+        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 120, 30, 150, 25);
 
         // Labels that will contain the actual speed value
         redKartSpeed.setFont(helperClass.font);
-        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 130, 10, 40, 25);
+        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 95, 30, 40, 25);
         blueKartSpeed.setFont(helperClass.font);
-        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 55, 10, 40, 25);
+        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 25, 30, 40, 25);
 
         // Labels for laps information
         redKartLapLabel.setFont(helperClass.font);
         redKartLapLabel.setText("LAP: ");
-        redKartLapLabel.setBounds(OUTER_LEFT_EDGE, 40, 60, 25);
+        redKartLapLabel.setBounds(OUTER_LEFT_EDGE, 55, 60, 25);
 
         blueKartLapLabel.setFont(helperClass.font);
         blueKartLapLabel.setText("LAP: ");
-        blueKartLapLabel.setBounds(OUTER_RIGHT_EDGE - 200, 40, 60, 25);
+        blueKartLapLabel.setBounds(OUTER_RIGHT_EDGE - 120, 55, 60, 25);
 
         redKartLap.setFont(helperClass.font);
         redKartLap.setText("0/3");
-        redKartLap.setBounds(OUTER_LEFT_EDGE + 60, 40, 50, 25);
+        redKartLap.setBounds(OUTER_LEFT_EDGE + 60, 55, 50, 25);
 
         blueKartLap.setFont(helperClass.font);
         blueKartLap.setText("0/3");
-        blueKartLap.setBounds(OUTER_RIGHT_EDGE - 140, 40, 50, 25);
+        blueKartLap.setBounds(OUTER_RIGHT_EDGE - 60, 55, 50, 25);
     }
 
     public void renderTrack(Graphics g) {
