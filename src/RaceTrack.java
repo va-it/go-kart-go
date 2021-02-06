@@ -28,6 +28,7 @@ public class RaceTrack {
     public static final int WIDTH_OF_GREEN_AREA = (INNER_RIGHT_EDGE - INNER_LEFT_EDGE);
     public static final int WIDTH_OF_TRACK = (OUTER_RIGHT_EDGE - OUTER_LEFT_EDGE);
     public static final int HEIGHT_OF_TRACK = (OUTER_BOTTOM_EDGE - OUTER_TOP_EDGE);
+    public static final int MID_HEIGHT = HEIGHT_OF_TRACK / 2;
     public static final int SUM_OF_LEFT_EDGES = (OUTER_LEFT_EDGE + INNER_LEFT_EDGE);
     public static final int SUM_OF_TOP_EDGES = (OUTER_TOP_EDGE + INNER_TOP_EDGE);
     public static final int WIDTH_MINUS_RIGHT_ROAD = (INNER_RIGHT_EDGE - OUTER_LEFT_EDGE);
@@ -83,11 +84,11 @@ public class RaceTrack {
         blueKartLapLabel.setBounds(OUTER_RIGHT_EDGE - 120, 55, 60, 25);
 
         redKartLap.setFont(helperClass.font);
-        redKartLap.setText("0/3");
+        redKartLap.setText("0/" + HelperClass.NUMBER_OF_LAPS);
         redKartLap.setBounds(OUTER_LEFT_EDGE + 60, 55, 50, 25);
 
         blueKartLap.setFont(helperClass.font);
-        blueKartLap.setText("0/3");
+        blueKartLap.setText("0/" + HelperClass.NUMBER_OF_LAPS);
         blueKartLap.setBounds(OUTER_RIGHT_EDGE - 60, 55, 50, 25);
     }
 
@@ -144,8 +145,8 @@ public class RaceTrack {
     }
 
     public void updateLapInformation(Kart redKart, Kart blueKart) {
-        redKartLap.setText(redKart.getLap() + "/3");
-        blueKartLap.setText(blueKart.getLap() + "/3");
+        redKartLap.setText(redKart.getLap() + "/" + HelperClass.NUMBER_OF_LAPS);
+        blueKartLap.setText(blueKart.getLap() + "/" + HelperClass.NUMBER_OF_LAPS);
     }
 
     public void setRaceLightsImage(int index) {

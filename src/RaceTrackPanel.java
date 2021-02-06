@@ -12,11 +12,14 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     // 30 times a second
     private static final int delay = 1000 / 30;
 
+    private JLabel centralMessage = new JLabel();
+
     public Kart redKart;
     public Kart blueKart;
 
-    public boolean RACE_STARTED = false;
+    public boolean RACE_IN_PROGRESS = false;
 
+    private HelperClass helperClass = new HelperClass();
     RaceTrack raceTrack = new RaceTrack();
 
     public RaceTrackPanel() {
@@ -24,8 +27,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
-        this.redKart = new Kart("red");
-        this.blueKart = new Kart("blue");
+        this.redKart = new Kart("red", 1);
+        this.blueKart = new Kart("blue", 2);
 
         // set initial karts position to be just before the starting line
         this.redKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
@@ -54,6 +57,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         startRaceTimer = new Timer(1000, startRaceCountDown());
         startRaceTimer.start();
 
+        // Place central message roughly in the centre..
+        centralMessage.setFont(helperClass.font);
+        centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 70, RaceTrack.MID_HEIGHT, 200, 50);
+        add(centralMessage);
+
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
@@ -75,7 +83,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             }
             switch (secondsElapsed) {
                 case 4:
-                    RACE_STARTED = true;
+                    this.startRace();
                     break;
                 case 5: // let the lights display for an extra second
                     startRaceTimer.stop();
@@ -117,6 +125,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getXPosition(), redKart.getYPosition());
 
             raceTrack.updateLapInformation(redKart, blueKart);
+
+            checkAndDeclareWinner(redKart);
+            checkAndDeclareWinner(blueKart);
         }
     }
 
@@ -133,6 +144,24 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             animationTimer.stop();
             // GAME OVER
         }
+    }
+
+    private void checkAndDeclareWinner(Kart kart) {
+        if (kart.isWinner()) {
+            this.stopRace();
+            this.centralMessage.setText("PLAYER " + kart.getPlayer() + " WINS !!!");
+        }
+    }
+
+    public void startRace() {
+        this.RACE_IN_PROGRESS = true;
+    }
+
+    public void stopRace() {
+        this.redKart.stop(); // stop to change speed and sound
+        this.blueKart.stop();
+        this.animationTimer.stop();
+        this.RACE_IN_PROGRESS = false;
     }
 
     @Override

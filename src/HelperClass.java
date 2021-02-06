@@ -6,6 +6,7 @@ import java.io.InputStream;
 public class HelperClass {
     private InputStream customFont;
     public Font font;
+    public static final int NUMBER_OF_LAPS = 1;
 
     public HelperClass() {
         loadCustomFont();

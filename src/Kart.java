@@ -8,19 +8,22 @@ public class Kart {
     private int yPosition;
     private final String colour;
     private final String image;
+    private final int player;
     private int imageIndex;
     private SoundsManager soundsManager;
     private final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public final int IMAGE_SIZE = 50;
+    public boolean winner = false;
 
     private int checkPoint = 0;
     private int lap = 0;
 
-    public Kart(String colour) {
+    public Kart(String colour, int player) {
         this.speed = 0;
         this.colour = colour;
         this.image = "kart" + this.colour.toUpperCase(Locale.ROOT);
+        this.player = player;
 
         // load images into an array
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
@@ -85,6 +88,18 @@ public class Kart {
 
     public void setLap(int lap) {
         this.lap = lap;
+    }
+
+    public boolean isWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
+    public int getPlayer() {
+        return player;
     }
 
     public void setNextXPosition() {
@@ -206,7 +221,13 @@ public class Kart {
                 // only update checkpoint if the kart is going through them in order
                 this.setCheckPoint(1);
                 // here should increment lap only once
-                this.setLap(this.getLap() + 1);
+                if (this.getLap() == HelperClass.NUMBER_OF_LAPS) {
+                    // Stop the game, this Kart won the race
+                    this.setWinner(true);
+                } else {
+                    this.setLap(this.getLap() + 1);
+                }
+                return;
             }
         }
         // kart is in left road
@@ -214,18 +235,21 @@ public class Kart {
             if (this.getCheckPoint() == 1) {
                 this.setCheckPoint(2);
             }
+            return;
         }
         // kart is in top road
         if (this.kartIsOnTopRoad() && this.getXPosition() >= RaceTrack.CHECKPOINTS[0]) {
             if (this.getCheckPoint() == 2) {
                 this.setCheckPoint(3);
             }
+            return;
         }
         // kart is in right road
         if (this.kartIsOnRightRoad() && this.getYPosition() >= RaceTrack.CHECKPOINTS[1]) {
             if (this.getCheckPoint() == 3) {
                 this.setCheckPoint(4);
             }
+            return;
         }
     }
 
