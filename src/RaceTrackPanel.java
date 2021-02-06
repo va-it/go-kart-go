@@ -146,6 +146,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             redKart.setCrashed(true);
             blueKart.setCrashed(true);
             animationTimer.stop();
+            this.stopRace();
             this.centralMessage.setText(gameOverMessage);
         }
     }
