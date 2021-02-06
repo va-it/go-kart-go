@@ -17,14 +17,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     public boolean RACE_STARTED = false;
 
-    RaceTrack raceTrack;
+    RaceTrack raceTrack = new RaceTrack();
 
     public RaceTrackPanel() {
         super();
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
-
-        raceTrack = new RaceTrack();
 
         this.redKart = new Kart("red");
         this.blueKart = new Kart("blue");
@@ -99,12 +97,18 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             blueKart.setNextXPosition();
             blueKart.setNextYPosition();
 
+            blueKart.updateCheckpoint();
+
             blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
             redKart.setNextXPosition();
             redKart.setNextYPosition();
 
+            redKart.updateCheckpoint();
+
             redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
+
+            raceTrack.updateLap(redKart, blueKart);
         }
     }
 

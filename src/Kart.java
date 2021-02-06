@@ -9,10 +9,12 @@ public class Kart {
     private String colour;
     private String image;
     private int imageIndex;
+    private SoundsManager soundsManager;
     private ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public static final int IMAGE_SIZE = 50;
-    SoundsManager soundsManager;
+
+    public int[] lastCheckpoint = {0,0};
 
     public Kart(String colour) {
         this.speed = 0;
@@ -179,5 +181,13 @@ public class Kart {
             // % NUMBER_OF_IMAGES ensures that the first image is prepared when we reach the end of the array
             this.setImageIndex((this.getImageIndex() + 1) % Kart.NUMBER_OF_IMAGES);
         }
+    }
+
+    public void updateCheckpoint() {
+
+        // if kart is on top or after one of the checkpoints, then assign the closes checkpoint value
+
+        // e.g. checkPoint is start line and kart is after the line. Then assign start-line to latestCheckpoint
+
     }
 }

@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class RaceTrack {
 
@@ -30,38 +28,51 @@ public class RaceTrack {
     public static final int WIDTH_MINUS_RIGHT_ROAD = (INNER_RIGHT_EDGE - OUTER_LEFT_EDGE);
     public static final int HEIGHT_MINUS_BOTTOM_ROAD = (INNER_BOTTOM_EDGE - OUTER_TOP_EDGE);
 
-
     public static final int START_LINE_WIDTH = 9;
     public static final int START_LINE_LEFT_EDGE = ((INNER_RIGHT_EDGE + INNER_LEFT_EDGE) / 2) - START_LINE_WIDTH;
     public static final int START_LINE_RIGHT_EDGE = START_LINE_LEFT_EDGE + START_LINE_WIDTH;
+    public static final int ROAD_WIDTH = 100;
+
+    // (x,y) pairs
+    public static final int[][] CHECKPOINTS = {
+            { START_LINE_LEFT_EDGE, OUTER_BOTTOM_EDGE }, // mid-way bottom road
+            { OUTER_LEFT_EDGE, OUTER_BOTTOM_EDGE }, // 1st corner
+            { OUTER_LEFT_EDGE, HEIGHT_OF_TRACK / 2 }, // mid-way left road
+            { OUTER_LEFT_EDGE, OUTER_TOP_EDGE }, // top-left corner
+            { WIDTH_OF_TRACK / 2, OUTER_TOP_EDGE }, // mid-way top road
+            { OUTER_RIGHT_EDGE, OUTER_TOP_EDGE }, // top-right corner
+            { OUTER_RIGHT_EDGE, HEIGHT_OF_TRACK / 2 }, // mid-way right road
+            { WIDTH_OF_TRACK, HEIGHT_OF_TRACK }, // bottom-right corner
+    };
+
+    public int lap = 0;
 
     public JLabel raceLightsLabel = new JLabel();
     public ImageIcon raceLights;
 
     public SoundsManager countDownSoundManager;
 
-    private HelperClass helperClass;
+    private HelperClass helperClass = new HelperClass();
 
     public RaceTrack() {
-         helperClass= new HelperClass();
 
-        // Labels for karts' speed
-        redKartSpeedLabel.setText("RED SPEED: ");
         redKartSpeedLabel.setFont(helperClass.font);
-        blueKartSpeedLabel.setText("BLUE SPEED: ");
+        redKartSpeedLabel.setText("RED SPEED: ");
         redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 150, 50);
+
         blueKartSpeedLabel.setFont(helperClass.font);
+        blueKartSpeedLabel.setText("BLUE SPEED: ");
         blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 10, 160, 50);
 
         // Labels that will contain the actual speed value
         redKartSpeed.setFont(helperClass.font);
-        blueKartSpeed.setFont(helperClass.font);
         redKartSpeed.setBounds(OUTER_LEFT_EDGE + 150, 10, 40, 50);
+        blueKartSpeed.setFont(helperClass.font);
         blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 30, 10, 40, 50);
 
         // Labels for laps information
-        lapsLabel.setText("LAP: 0/3");
         lapsLabel.setFont(helperClass.font);
+        lapsLabel.setText("LAP: " + lap + "/3");
         lapsLabel.setBounds(START_LINE_LEFT_EDGE - 50, 10, 100, 50);
     }
 
@@ -182,5 +193,18 @@ public class RaceTrack {
             soundsManager.playSound();
             kart.stop();
         }
+    }
+
+    public void updateLap(Kart player1, Kart player2) {
+        // update lap to 1 if any of the two karts is after the first checkpoint (start line)
+
+        // if lap == 1 and one of the two karts is after the first checkpoint then lap -> 2
+
+        // if lap == 2 and one of the two karts is after the first checkpoint then lap -> 3
+
+        // if lap == 3 and one of the two karts is after the first checkpoint then kart is winner
+
+        // !!! Only valid if all checkpoints have been touched !!!
+
     }
 }
