@@ -8,7 +8,10 @@ public class RaceTrack {
     public JLabel blueKartSpeedLabel = new JLabel();
     public JLabel redKartSpeed = new JLabel();
     public JLabel blueKartSpeed = new JLabel();
-    public JLabel lapsLabel = new JLabel();
+    public JLabel redKartLapLabel = new JLabel();
+    public JLabel blueKartLapLabel = new JLabel();
+    public JLabel redKartLap = new JLabel();
+    public JLabel blueKartLap = new JLabel();
 
     public static final int OUTER_LEFT_EDGE = 50;
     public static final int OUTER_RIGHT_EDGE = 800;
@@ -31,19 +34,9 @@ public class RaceTrack {
     public static final int START_LINE_WIDTH = 9;
     public static final int START_LINE_LEFT_EDGE = ((INNER_RIGHT_EDGE + INNER_LEFT_EDGE) / 2) - START_LINE_WIDTH;
     public static final int START_LINE_RIGHT_EDGE = START_LINE_LEFT_EDGE + START_LINE_WIDTH;
-    public static final int ROAD_WIDTH = 100;
 
-    // (x,y) pairs
-    public static final int[][] CHECKPOINTS = {
-            { START_LINE_LEFT_EDGE, OUTER_BOTTOM_EDGE }, // mid-way bottom road
-            { OUTER_LEFT_EDGE, OUTER_BOTTOM_EDGE }, // 1st corner
-            { OUTER_LEFT_EDGE, HEIGHT_OF_TRACK / 2 }, // mid-way left road
-            { OUTER_LEFT_EDGE, OUTER_TOP_EDGE }, // top-left corner
-            { WIDTH_OF_TRACK / 2, OUTER_TOP_EDGE }, // mid-way top road
-            { OUTER_RIGHT_EDGE, OUTER_TOP_EDGE }, // top-right corner
-            { OUTER_RIGHT_EDGE, HEIGHT_OF_TRACK / 2 }, // mid-way right road
-            { WIDTH_OF_TRACK, HEIGHT_OF_TRACK }, // bottom-right corner
-    };
+    // Checkpoints are in the middle of the "4" roads
+    public static final int[] CHECKPOINTS = { START_LINE_LEFT_EDGE, HEIGHT_OF_TRACK / 2 };
 
     public int lap = 0;
 
@@ -58,22 +51,34 @@ public class RaceTrack {
 
         redKartSpeedLabel.setFont(helperClass.font);
         redKartSpeedLabel.setText("RED SPEED: ");
-        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 150, 50);
+        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 130, 25);
 
         blueKartSpeedLabel.setFont(helperClass.font);
         blueKartSpeedLabel.setText("BLUE SPEED: ");
-        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 10, 160, 50);
+        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 10, 150, 25);
 
         // Labels that will contain the actual speed value
         redKartSpeed.setFont(helperClass.font);
-        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 150, 10, 40, 50);
+        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 130, 10, 40, 25);
         blueKartSpeed.setFont(helperClass.font);
-        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 30, 10, 40, 50);
+        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 55, 10, 40, 25);
 
         // Labels for laps information
-        lapsLabel.setFont(helperClass.font);
-        lapsLabel.setText("LAP: " + lap + "/3");
-        lapsLabel.setBounds(START_LINE_LEFT_EDGE - 50, 10, 100, 50);
+        redKartLapLabel.setFont(helperClass.font);
+        redKartLapLabel.setText("LAP: ");
+        redKartLapLabel.setBounds(OUTER_LEFT_EDGE, 40, 60, 25);
+
+        blueKartLapLabel.setFont(helperClass.font);
+        blueKartLapLabel.setText("LAP: ");
+        blueKartLapLabel.setBounds(OUTER_RIGHT_EDGE - 200, 40, 60, 25);
+
+        redKartLap.setFont(helperClass.font);
+        redKartLap.setText("0/3");
+        redKartLap.setBounds(OUTER_LEFT_EDGE + 60, 40, 50, 25);
+
+        blueKartLap.setFont(helperClass.font);
+        blueKartLap.setText("0/3");
+        blueKartLap.setBounds(OUTER_RIGHT_EDGE - 140, 40, 50, 25);
     }
 
     public void renderTrack(Graphics g) {
@@ -195,16 +200,7 @@ public class RaceTrack {
         }
     }
 
-    public void updateLap(Kart player1, Kart player2) {
-        // update lap to 1 if any of the two karts is after the first checkpoint (start line)
-
-        // if lap == 1 and one of the two karts is after the first checkpoint then lap -> 2
-
-        // if lap == 2 and one of the two karts is after the first checkpoint then lap -> 3
-
-        // if lap == 3 and one of the two karts is after the first checkpoint then kart is winner
-
-        // !!! Only valid if all checkpoints have been touched !!!
-
+    public void setLapValue(Kart kart) {
+        redKartLap.setText(kart.lap + "/3");
     }
 }

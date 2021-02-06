@@ -39,7 +39,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(raceTrack.redKartSpeed);
         add(raceTrack.blueKartSpeed);
 
-        add(raceTrack.lapsLabel);
+        add(raceTrack.redKartLapLabel);
+        add(raceTrack.blueKartLapLabel);
+        add(raceTrack.redKartLap);
+        add(raceTrack.blueKartLap);
 
         raceTrack.setRaceLightsImage(0);
         raceTrack.setUpRaceLights();
@@ -99,6 +102,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             blueKart.updateCheckpoint();
 
+            raceTrack.setLapValue(blueKart);
+
             blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
 
             redKart.setNextXPosition();
@@ -106,9 +111,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             redKart.updateCheckpoint();
 
-            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
+            raceTrack.setLapValue(redKart);
 
-            raceTrack.updateLap(redKart, blueKart);
+            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
         }
     }
 

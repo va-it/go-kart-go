@@ -14,7 +14,8 @@ public class Kart {
     public static final int NUMBER_OF_IMAGES = 16;
     public static final int IMAGE_SIZE = 50;
 
-    public int[] lastCheckpoint = {0,0};
+    public int checkPoint = 0;
+    public int lap = 0;
 
     public Kart(String colour) {
         this.speed = 0;
@@ -184,10 +185,59 @@ public class Kart {
     }
 
     public void updateCheckpoint() {
-
-        // if kart is on top or after one of the checkpoints, then assign the closes checkpoint value
-
-        // e.g. checkPoint is start line and kart is after the line. Then assign start-line to latestCheckpoint
-
+        if (this.kartIsOnBottomRoad() && this.getxPosition() <= RaceTrack.CHECKPOINTS[0]) {
+            if (this.checkPoint == 0 || this.checkPoint == 4) {
+                // only update checkpoint if the kart is going through them in order
+                this.checkPoint = 1;
+                // here should increment lap
+            }
+        }
+        // kart is in left road
+        if (this.kartIsOnLeftRoad() && this.getyPosition() <= RaceTrack.CHECKPOINTS[1]) {
+            if (this.checkPoint == 1) {
+                this.checkPoint = 2;
+            }
+        }
+        // kart is in top road
+        if (this.kartIsOnTopRoad() && this.getxPosition() >= RaceTrack.CHECKPOINTS[0]) {
+            if (this.checkPoint == 2) {
+                this.checkPoint = 3;
+            }
+        }
+        // kart is in right road
+        if (this.kartIsOnRightRoad() && this.getyPosition() >= RaceTrack.CHECKPOINTS[1]) {
+            if (this.checkPoint == 3) {
+                this.checkPoint = 4;
+            }
+        }
     }
+
+    public boolean kartIsOnBottomRoad() {
+        if (this.getyPosition() >= RaceTrack.INNER_BOTTOM_EDGE && this.getyPosition() <= RaceTrack.OUTER_BOTTOM_EDGE) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean kartIsOnTopRoad() {
+        if (this.getyPosition() >= RaceTrack.OUTER_TOP_EDGE && this.getyPosition() <= RaceTrack.INNER_TOP_EDGE) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean kartIsOnLeftRoad() {
+        if (this.getxPosition() >= RaceTrack.OUTER_LEFT_EDGE && this.getxPosition() <= RaceTrack.INNER_LEFT_EDGE) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean kartIsOnRightRoad() {
+        if (this.getxPosition() <= RaceTrack.OUTER_RIGHT_EDGE && this.getxPosition() >= RaceTrack.INNER_RIGHT_EDGE) {
+            return true;
+        }
+        return false;
+    }
+
 }
