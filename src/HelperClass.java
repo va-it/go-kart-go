@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -39,5 +40,9 @@ public class HelperClass {
 
     private void setFallbackFont() {
         font = new Font("Sans-Serif", Font.BOLD, 25);
+    }
+
+    public static ImageIcon getWindowIcon() {
+        return new ImageIcon(HelperClass.class.getResource("images" + File.separator + "windowImage.png"));
     }
 }
