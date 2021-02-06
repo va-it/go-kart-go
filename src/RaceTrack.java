@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class RaceTrack {
 
@@ -8,6 +10,7 @@ public class RaceTrack {
     public JLabel blueKartSpeedLabel = new JLabel();
     public JLabel redKartSpeed = new JLabel();
     public JLabel blueKartSpeed = new JLabel();
+    public JLabel lapsLabel = new JLabel();
 
     public static final int OUTER_LEFT_EDGE = 50;
     public static final int OUTER_RIGHT_EDGE = 800;
@@ -37,21 +40,29 @@ public class RaceTrack {
 
     public SoundsManager countDownSoundManager;
 
+    private HelperClass helperClass;
+
     public RaceTrack() {
+         helperClass= new HelperClass();
+
         // Labels for karts' speed
-        Font font = new Font("Sans-Serif", Font.BOLD, 25);
-        redKartSpeedLabel.setText("Red speed: ");
-        redKartSpeedLabel.setFont(font);
-        blueKartSpeedLabel.setText("Blue speed: ");
-        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 0, 150, 50);
-        blueKartSpeedLabel.setFont(font);
-        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 0, 160, 50);
+        redKartSpeedLabel.setText("RED SPEED: ");
+        redKartSpeedLabel.setFont(helperClass.font);
+        blueKartSpeedLabel.setText("BLUE SPEED: ");
+        redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 150, 50);
+        blueKartSpeedLabel.setFont(helperClass.font);
+        blueKartSpeedLabel.setBounds(OUTER_RIGHT_EDGE - 200, 10, 160, 50);
 
         // Labels that will contain the actual speed value
-        redKartSpeed.setFont(font);
-        blueKartSpeed.setFont(font);
-        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 150, 0, 40, 50);
-        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 40, 0, 40, 50);
+        redKartSpeed.setFont(helperClass.font);
+        blueKartSpeed.setFont(helperClass.font);
+        redKartSpeed.setBounds(OUTER_LEFT_EDGE + 150, 10, 40, 50);
+        blueKartSpeed.setBounds(OUTER_RIGHT_EDGE - 30, 10, 40, 50);
+
+        // Labels for laps information
+        lapsLabel.setText("LAP: 0/3");
+        lapsLabel.setFont(helperClass.font);
+        lapsLabel.setBounds(START_LINE_LEFT_EDGE - 50, 10, 100, 50);
     }
 
     public void renderTrack(Graphics g) {
@@ -116,15 +127,18 @@ public class RaceTrack {
         int xPosition = kart.getxPosition();
         int yPosition = kart.getyPosition();
 
-        // shave 10 pixels from inner edges to avoid crashing easily
-        // since the kart doesn't fill all 50 pixels and it's easy to crash because of that
+        // shave 10 pixels from edges to avoid crashing easily since the kart doesn't fill all 50 pixels
         int inner_top_edge = INNER_TOP_EDGE + 10;
         int inner_bottom_edge = INNER_BOTTOM_EDGE - 10;
         int inner_left_edge = INNER_LEFT_EDGE + 10;
         int inner_right_edge = INNER_RIGHT_EDGE - 10;
+        int outer_left_edge = OUTER_LEFT_EDGE - 10;
+        int outer_right_edge = OUTER_RIGHT_EDGE + 10;
+        int outer_top_edge = OUTER_TOP_EDGE - 10;
+        int outer_bottom_edge = OUTER_BOTTOM_EDGE + 10;
 
-        boolean crashedIntoXOuterEdges = xPosition < OUTER_LEFT_EDGE || xPosition > OUTER_RIGHT_EDGE;
-        boolean crashedIntoYOuterEdges = yPosition < OUTER_TOP_EDGE || yPosition > (OUTER_BOTTOM_EDGE - kart.IMAGE_SIZE);
+        boolean crashedIntoXOuterEdges = xPosition < outer_left_edge || xPosition > outer_right_edge;
+        boolean crashedIntoYOuterEdges = yPosition < outer_top_edge || yPosition > ( outer_bottom_edge - kart.IMAGE_SIZE);
         boolean betweenInnerYEdges = yPosition > inner_top_edge && yPosition < inner_bottom_edge;
         boolean betweenInnerXEdges = xPosition > inner_left_edge && xPosition < inner_right_edge;
 
