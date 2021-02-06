@@ -38,8 +38,6 @@ public class RaceTrack {
     // Checkpoints are in the middle of the "4" roads
     public static final int[] CHECKPOINTS = { START_LINE_LEFT_EDGE, HEIGHT_OF_TRACK / 2 };
 
-    public int lap = 0;
-
     public JLabel raceLightsLabel = new JLabel();
     public ImageIcon raceLights;
 
@@ -133,6 +131,11 @@ public class RaceTrack {
         blueKartSpeed.setText(String.valueOf(blueKart.getSpeed()));
     }
 
+    public void updateLapInformation(Kart redKart, Kart blueKart) {
+        redKartLap.setText(redKart.getLap() + "/3");
+        blueKartLap.setText(blueKart.getLap() + "/3");
+    }
+
     public void setRaceLightsImage(int index) {
         raceLights = new ImageIcon(getClass().getResource("images" + File.separator + "lights" + index + ".png"));
         raceLightsLabel.setIcon(raceLights);
@@ -140,8 +143,8 @@ public class RaceTrack {
 
     public boolean detectCollision(Kart kart) {
         // store values in variables to avoid having to call the getters multiple times
-        int xPosition = kart.getxPosition();
-        int yPosition = kart.getyPosition();
+        int xPosition = kart.getXPosition();
+        int yPosition = kart.getYPosition();
 
         // shave 10 pixels from edges to avoid crashing easily since the kart doesn't fill all 50 pixels
         int inner_top_edge = INNER_TOP_EDGE + 10;
@@ -198,9 +201,5 @@ public class RaceTrack {
             soundsManager.playSound();
             kart.stop();
         }
-    }
-
-    public void setLapValue(Kart kart) {
-        redKartLap.setText(kart.lap + "/3");
     }
 }

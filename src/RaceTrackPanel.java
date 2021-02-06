@@ -28,11 +28,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart = new Kart("blue");
 
         // set initial karts position to be just before the starting line
-        this.redKart.setxPosition(raceTrack.START_LINE_RIGHT_EDGE);
-        this.redKart.setyPosition(raceTrack.INNER_BOTTOM_EDGE);
+        this.redKart.setXPosition(raceTrack.START_LINE_RIGHT_EDGE);
+        this.redKart.setYPosition(raceTrack.INNER_BOTTOM_EDGE);
         // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
-        this.blueKart.setxPosition(raceTrack.START_LINE_RIGHT_EDGE);
-        this.blueKart.setyPosition(raceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
+        this.blueKart.setXPosition(raceTrack.START_LINE_RIGHT_EDGE);
+        this.blueKart.setYPosition(raceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
 
         add(raceTrack.redKartSpeedLabel);
         add(raceTrack.blueKartSpeedLabel);
@@ -90,36 +90,36 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         if (animationTimer.isRunning()) {
 
+            // ====================== DETECT COLLISIONS =====================
             raceTrack.detectCollisionWithTrack(redKart);
             raceTrack.detectCollisionWithTrack(blueKart);
 
             detectCollisionBetweenKarts();
 
             raceTrack.updateSpeedInformation(redKart, blueKart);
+            // ==============================================================
 
             blueKart.setNextXPosition();
             blueKart.setNextYPosition();
 
             blueKart.updateCheckpoint();
 
-            raceTrack.setLapValue(blueKart);
-
-            blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getxPosition(), blueKart.getyPosition());
+            blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getXPosition(), blueKart.getYPosition());
 
             redKart.setNextXPosition();
             redKart.setNextYPosition();
 
             redKart.updateCheckpoint();
 
-            raceTrack.setLapValue(redKart);
+            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getXPosition(), redKart.getYPosition());
 
-            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getxPosition(), redKart.getyPosition());
+            raceTrack.updateLapInformation(redKart, blueKart);
         }
     }
 
     private void detectCollisionBetweenKarts() {
-        int yDifference = redKart.getyPosition() - blueKart.getyPosition();
-        int xDifference = redKart.getxPosition() - blueKart.getxPosition();
+        int yDifference = redKart.getYPosition() - blueKart.getYPosition();
+        int xDifference = redKart.getXPosition() - blueKart.getXPosition();
 
         if (Math.abs(yDifference) < 40 && Math.abs(xDifference) < 40) {
             // Shave a few pixels since the karts don't fill the whole 50 pixels...

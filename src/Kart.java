@@ -6,16 +6,16 @@ public class Kart {
     private int speed;
     private int xPosition;
     private int yPosition;
-    private String colour;
-    private String image;
+    private final String colour;
+    private final String image;
     private int imageIndex;
     private SoundsManager soundsManager;
-    private ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
+    private final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public static final int IMAGE_SIZE = 50;
 
-    public int checkPoint = 0;
-    public int lap = 0;
+    private int checkPoint = 0;
+    private int lap = 0;
 
     public Kart(String colour) {
         this.speed = 0;
@@ -43,19 +43,19 @@ public class Kart {
         this.speed = speed;
     }
 
-    public int getxPosition() {
+    public int getXPosition() {
         return xPosition;
     }
 
-    public void setxPosition(int xPosition) {
+    public void setXPosition(int xPosition) {
         this.xPosition = xPosition;
     }
 
-    public int getyPosition() {
+    public int getYPosition() {
         return yPosition;
     }
 
-    public void setyPosition(int yPosition) {
+    public void setYPosition(int yPosition) {
         this.yPosition = yPosition;
     }
 
@@ -71,35 +71,51 @@ public class Kart {
         return this.images[this.imageIndex];
     }
 
+    public int getCheckPoint() {
+        return checkPoint;
+    }
+
+    public void setCheckPoint(int checkPoint) {
+        this.checkPoint = checkPoint;
+    }
+
+    public int getLap() {
+        return lap;
+    }
+
+    public void setLap(int lap) {
+        this.lap = lap;
+    }
+
     public void setNextXPosition() {
         // multiple cases as shown in docs:
         // https://docs.oracle.com/javase/tutorial/java/nutsandbolts/switch.html
         switch (this.getImageIndex()) {
             case 1:
             case 7:
-                this.setxPosition(this.getxPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
+                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
                 break;
             case 2:
             case 6:
-                this.setxPosition(this.getxPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
+                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
                 break;
             case 3:
             case 4:
             case 5:
-                this.setxPosition(this.getxPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
+                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
                 break;
             case 9:
             case 15:
-                this.setxPosition(this.getxPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
+                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
                 break;
             case 10:
             case 14:
-                this.setxPosition(this.getxPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
+                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
                 break;
             case 11:
             case 12:
             case 13:
-                this.setxPosition(this.getxPosition() - 1 * ((this.getSpeed() * 30) / 100)); // - 30%
+                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 30) / 100)); // - 30%
                 break;
             default:
                 // 0 and 8, no change in position
@@ -112,28 +128,28 @@ public class Kart {
             case 0:
             case 1:
             case 15:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 30) / 100)); // -30%
+                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 30) / 100)); // -30%
                 break;
             case 2:
             case 14:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
+                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
                 break;
             case 3:
             case 13:
-                this.setyPosition(this.getyPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
+                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
                 break;
             case 5:
             case 11:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
+                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
                 break;
             case 6:
             case 10:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
+                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
                 break;
             case 7:
             case 8:
             case 9:
-                this.setyPosition(this.getyPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
+                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
                 break;
             default:
                 //4 and 12, no change in position
@@ -185,59 +201,48 @@ public class Kart {
     }
 
     public void updateCheckpoint() {
-        if (this.kartIsOnBottomRoad() && this.getxPosition() <= RaceTrack.CHECKPOINTS[0]) {
-            if (this.checkPoint == 0 || this.checkPoint == 4) {
+        if (this.kartIsOnBottomRoad() && this.getXPosition() <= RaceTrack.CHECKPOINTS[0]) {
+            if (this.getCheckPoint() == 0 || this.getCheckPoint() == 4) {
                 // only update checkpoint if the kart is going through them in order
-                this.checkPoint = 1;
-                // here should increment lap
+                this.setCheckPoint(1);
+                // here should increment lap only once
+                this.setLap(this.getLap() + 1);
             }
         }
         // kart is in left road
-        if (this.kartIsOnLeftRoad() && this.getyPosition() <= RaceTrack.CHECKPOINTS[1]) {
-            if (this.checkPoint == 1) {
-                this.checkPoint = 2;
+        if (this.kartIsOnLeftRoad() && this.getYPosition() <= RaceTrack.CHECKPOINTS[1]) {
+            if (this.getCheckPoint() == 1) {
+                this.setCheckPoint(2);
             }
         }
         // kart is in top road
-        if (this.kartIsOnTopRoad() && this.getxPosition() >= RaceTrack.CHECKPOINTS[0]) {
-            if (this.checkPoint == 2) {
-                this.checkPoint = 3;
+        if (this.kartIsOnTopRoad() && this.getXPosition() >= RaceTrack.CHECKPOINTS[0]) {
+            if (this.getCheckPoint() == 2) {
+                this.setCheckPoint(3);
             }
         }
         // kart is in right road
-        if (this.kartIsOnRightRoad() && this.getyPosition() >= RaceTrack.CHECKPOINTS[1]) {
-            if (this.checkPoint == 3) {
-                this.checkPoint = 4;
+        if (this.kartIsOnRightRoad() && this.getYPosition() >= RaceTrack.CHECKPOINTS[1]) {
+            if (this.getCheckPoint() == 3) {
+                this.setCheckPoint(4);
             }
         }
     }
 
     public boolean kartIsOnBottomRoad() {
-        if (this.getyPosition() >= RaceTrack.INNER_BOTTOM_EDGE && this.getyPosition() <= RaceTrack.OUTER_BOTTOM_EDGE) {
-            return true;
-        }
-        return false;
+        return this.getYPosition() >= RaceTrack.INNER_BOTTOM_EDGE && this.getYPosition() <= RaceTrack.OUTER_BOTTOM_EDGE;
     }
 
     public boolean kartIsOnTopRoad() {
-        if (this.getyPosition() >= RaceTrack.OUTER_TOP_EDGE && this.getyPosition() <= RaceTrack.INNER_TOP_EDGE) {
-            return true;
-        }
-        return false;
+        return this.getYPosition() >= RaceTrack.OUTER_TOP_EDGE && this.getYPosition() <= RaceTrack.INNER_TOP_EDGE;
     }
 
     public boolean kartIsOnLeftRoad() {
-        if (this.getxPosition() >= RaceTrack.OUTER_LEFT_EDGE && this.getxPosition() <= RaceTrack.INNER_LEFT_EDGE) {
-            return true;
-        }
-        return false;
+        return this.getXPosition() >= RaceTrack.OUTER_LEFT_EDGE && this.getXPosition() <= RaceTrack.INNER_LEFT_EDGE;
     }
 
     public boolean kartIsOnRightRoad() {
-        if (this.getxPosition() <= RaceTrack.OUTER_RIGHT_EDGE && this.getxPosition() >= RaceTrack.INNER_RIGHT_EDGE) {
-            return true;
-        }
-        return false;
+        return this.getXPosition() <= RaceTrack.OUTER_RIGHT_EDGE && this.getXPosition() >= RaceTrack.INNER_RIGHT_EDGE;
     }
 
 }
