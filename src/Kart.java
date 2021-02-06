@@ -12,7 +12,7 @@ public class Kart {
     private SoundsManager soundsManager;
     private final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
-    public static final int IMAGE_SIZE = 50;
+    public final int IMAGE_SIZE = 50;
 
     private int checkPoint = 0;
     private int lap = 0;
@@ -93,29 +93,29 @@ public class Kart {
         switch (this.getImageIndex()) {
             case 1:
             case 7:
-                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
+                this.setXPosition(this.getXPosition() + ((this.getSpeed() * 10) / 100)); // + 10%
                 break;
             case 2:
             case 6:
-                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
+                this.setXPosition(this.getXPosition() + ((this.getSpeed() * 20) / 100)); // + 20%
                 break;
             case 3:
             case 4:
             case 5:
-                this.setXPosition(this.getXPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
+                this.setXPosition(this.getXPosition() + ((this.getSpeed() * 30) / 100)); // + 30%
                 break;
             case 9:
             case 15:
-                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
+                this.setXPosition(this.getXPosition() - ((this.getSpeed() * 10) / 100)); // - 10%
                 break;
             case 10:
             case 14:
-                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
+                this.setXPosition(this.getXPosition() - ((this.getSpeed() * 20) / 100)); // - 20%
                 break;
             case 11:
             case 12:
             case 13:
-                this.setXPosition(this.getXPosition() - 1 * ((this.getSpeed() * 30) / 100)); // - 30%
+                this.setXPosition(this.getXPosition() - ((this.getSpeed() * 30) / 100)); // - 30%
                 break;
             default:
                 // 0 and 8, no change in position
@@ -128,31 +128,31 @@ public class Kart {
             case 0:
             case 1:
             case 15:
-                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 30) / 100)); // -30%
+                this.setYPosition(this.getYPosition() - ((this.getSpeed() * 30) / 100)); // -30%
                 break;
             case 2:
             case 14:
-                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 20) / 100)); // - 20%
+                this.setYPosition(this.getYPosition() - ((this.getSpeed() * 20) / 100)); // - 20%
                 break;
             case 3:
             case 13:
-                this.setYPosition(this.getYPosition() - 1 * ((this.getSpeed() * 10) / 100)); // - 10%
+                this.setYPosition(this.getYPosition() - ((this.getSpeed() * 10) / 100)); // - 10%
                 break;
             case 5:
             case 11:
-                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 10) / 100)); // + 10%
+                this.setYPosition(this.getYPosition() + ((this.getSpeed() * 10) / 100)); // + 10%
                 break;
             case 6:
             case 10:
-                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 20) / 100)); // + 20%
+                this.setYPosition(this.getYPosition() + ((this.getSpeed() * 20) / 100)); // + 20%
                 break;
             case 7:
             case 8:
             case 9:
-                this.setYPosition(this.getYPosition() + 1 * ((this.getSpeed() * 30) / 100)); // + 30%
+                this.setYPosition(this.getYPosition() + ((this.getSpeed() * 30) / 100)); // + 30%
                 break;
             default:
-                //4 and 12, no change in position
+                // 4 and 12, no change in position
                 break;
         }
     }

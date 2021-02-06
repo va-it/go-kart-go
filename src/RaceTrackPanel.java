@@ -28,11 +28,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart = new Kart("blue");
 
         // set initial karts position to be just before the starting line
-        this.redKart.setXPosition(raceTrack.START_LINE_RIGHT_EDGE);
-        this.redKart.setYPosition(raceTrack.INNER_BOTTOM_EDGE);
+        this.redKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+        this.redKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE);
         // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
-        this.blueKart.setXPosition(raceTrack.START_LINE_RIGHT_EDGE);
-        this.blueKart.setYPosition(raceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
+        this.blueKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+        this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
 
         add(raceTrack.redKartSpeedLabel);
         add(raceTrack.blueKartSpeedLabel);

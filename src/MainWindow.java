@@ -7,10 +7,10 @@ class MainWindow extends JFrame implements KeyListener {
 
     public static final int WIDTH = 850;
     public static final int HEIGHT = 650;
-    private Container pane;
+    private final Container pane;
 
     private RaceTrackPanel raceTrackPanel;
-    private MainMenuPanel mainMenuPanel;
+    private final MainMenuPanel mainMenuPanel;
 
     public MainWindow() {
         // call constructor of JFrame

@@ -43,10 +43,9 @@ public class RaceTrack {
 
     public SoundsManager countDownSoundManager;
 
-    private HelperClass helperClass = new HelperClass();
-
     public RaceTrack() {
 
+        HelperClass helperClass = new HelperClass();
         redKartSpeedLabel.setFont(helperClass.font);
         redKartSpeedLabel.setText("RED SPEED: ");
         redKartSpeedLabel.setBounds(OUTER_LEFT_EDGE, 10, 130, 25);

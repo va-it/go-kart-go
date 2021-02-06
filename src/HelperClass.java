@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 public class HelperClass {
     private InputStream customFont;
-    public static Font font;
+    public Font font;
 
     public HelperClass() {
         loadCustomFont();
