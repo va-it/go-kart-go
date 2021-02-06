@@ -196,6 +196,10 @@ public class Kart {
         soundsManager.playSoundInLoop();
     }
 
+    public void stopSpeedSound() {
+        soundsManager.stopSound();
+    }
+
     public void turnLeft() {
         if (this.getSpeed() != 0) {
             // only turn car when it's moving
@@ -227,6 +231,7 @@ public class Kart {
                 } else {
                     this.setLap(this.getLap() + 1);
                 }
+                System.out.println(this.getCheckPoint());
                 return;
             }
         }
@@ -234,6 +239,7 @@ public class Kart {
         if (this.kartIsOnLeftRoad() && this.getYPosition() <= RaceTrack.CHECKPOINTS[1]) {
             if (this.getCheckPoint() == 1) {
                 this.setCheckPoint(2);
+                System.out.println(this.getCheckPoint());
             }
             return;
         }
@@ -241,6 +247,7 @@ public class Kart {
         if (this.kartIsOnTopRoad() && this.getXPosition() >= RaceTrack.CHECKPOINTS[0]) {
             if (this.getCheckPoint() == 2) {
                 this.setCheckPoint(3);
+                System.out.println(this.getCheckPoint());
             }
             return;
         }
@@ -248,6 +255,7 @@ public class Kart {
         if (this.kartIsOnRightRoad() && this.getYPosition() >= RaceTrack.CHECKPOINTS[1]) {
             if (this.getCheckPoint() == 3) {
                 this.setCheckPoint(4);
+                System.out.println(this.getCheckPoint());
             }
             return;
         }

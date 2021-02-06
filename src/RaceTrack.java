@@ -28,7 +28,6 @@ public class RaceTrack {
     public static final int WIDTH_OF_GREEN_AREA = (INNER_RIGHT_EDGE - INNER_LEFT_EDGE);
     public static final int WIDTH_OF_TRACK = (OUTER_RIGHT_EDGE - OUTER_LEFT_EDGE);
     public static final int HEIGHT_OF_TRACK = (OUTER_BOTTOM_EDGE - OUTER_TOP_EDGE);
-    public static final int MID_HEIGHT = HEIGHT_OF_TRACK / 2;
     public static final int SUM_OF_LEFT_EDGES = (OUTER_LEFT_EDGE + INNER_LEFT_EDGE);
     public static final int SUM_OF_TOP_EDGES = (OUTER_TOP_EDGE + INNER_TOP_EDGE);
     public static final int WIDTH_MINUS_RIGHT_ROAD = (INNER_RIGHT_EDGE - OUTER_LEFT_EDGE);
@@ -39,7 +38,7 @@ public class RaceTrack {
     public static final int START_LINE_RIGHT_EDGE = START_LINE_LEFT_EDGE + START_LINE_WIDTH;
 
     // Checkpoints are in the middle of the "4" roads
-    public static final int[] CHECKPOINTS = { START_LINE_LEFT_EDGE, HEIGHT_OF_TRACK / 2 };
+    public static final int[] CHECKPOINTS = { WIDTH_OF_TRACK / 2, HEIGHT_OF_TRACK / 2 };
 
     public JLabel raceLightsLabel = new JLabel();
     public ImageIcon raceLights;
@@ -90,6 +89,8 @@ public class RaceTrack {
         blueKartLap.setFont(helperClass.font);
         blueKartLap.setText("0/" + HelperClass.NUMBER_OF_LAPS);
         blueKartLap.setBounds(OUTER_RIGHT_EDGE - 60, 55, 50, 25);
+
+        countDownSoundManager = new SoundsManager("race-start-ready-go");
     }
 
     public void renderTrack(Graphics g) {
@@ -214,5 +215,18 @@ public class RaceTrack {
             soundsManager.playSound();
             kart.stop();
         }
+    }
+
+    public void playCountDownSound() {
+        countDownSoundManager.playSound();
+    }
+
+    public void playCheeringSound() {
+        SoundsManager cheeringSoundManager = new SoundsManager("cheering");
+        cheeringSoundManager.playSound();
+    }
+
+    public void stopAllSounds() {
+        countDownSoundManager.stopSound();
     }
 }

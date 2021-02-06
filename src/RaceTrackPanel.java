@@ -12,7 +12,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     // 30 times a second
     private static final int delay = 1000 / 30;
 
-    private JLabel centralMessage = new JLabel();
+    private JLabel centralMessage = new JLabel("", JLabel.CENTER);
 
     public Kart redKart;
     public Kart blueKart;
@@ -20,7 +20,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     public boolean RACE_IN_PROGRESS = false;
 
     private HelperClass helperClass = new HelperClass();
-    RaceTrack raceTrack = new RaceTrack();
+    public RaceTrack raceTrack = new RaceTrack();
 
     public RaceTrackPanel() {
         super();
@@ -59,7 +59,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         // Place central message roughly in the centre..
         centralMessage.setFont(helperClass.font);
-        centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 70, RaceTrack.MID_HEIGHT, 200, 50);
+        centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 100, 200, 300, 250);
         add(centralMessage);
 
         // create swing timer with 100ms delay and start it
@@ -68,13 +68,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     public ActionListener startRaceCountDown() {
-        raceTrack.countDownSoundManager = new SoundsManager("race-start-ready-go");
-
         // replaced new ActionListener() { @Override actionPerformed ... } with lambda expression
         ActionListener actionListener = e -> {
             if (secondsElapsed == 0) {
                 // only play countdown sound the first time
-                raceTrack.countDownSoundManager.playSound();
+                raceTrack.playCountDownSound();
             }
             secondsElapsed += 1;
             if (secondsElapsed < 5) {
@@ -149,7 +147,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private void checkAndDeclareWinner(Kart kart) {
         if (kart.isWinner()) {
             this.stopRace();
-            this.centralMessage.setText("PLAYER " + kart.getPlayer() + " WINS !!!");
+            // dirty workaround to display multiple lines. Ugly.
+            this.centralMessage.setText("<html>PLAYER " + kart.getPlayer() + " WINS !!! <br>" +
+                    "<br> PRESS ENTER TO RESTART <br>" +
+                    "<br> PRESS ESC TO QUIT"
+            );
+            raceTrack.playCheeringSound();
         }
     }
 
@@ -162,6 +165,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart.stop();
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
+    }
+
+    public void stopAllSounds() {
+        // stop any sound that might be playing
+        raceTrack.stopAllSounds();
+        blueKart.stopSpeedSound();
+        redKart.stopSpeedSound();
     }
 
     @Override

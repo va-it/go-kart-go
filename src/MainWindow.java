@@ -32,6 +32,12 @@ class MainWindow extends JFrame implements KeyListener {
         pane.add(mainMenuPanel);
     }
 
+    public void instantiateRaceTrackPanel() {
+        raceTrackPanel = new RaceTrackPanel();
+        raceTrackPanel.setLayout(null);
+        pane.add(raceTrackPanel);
+    }
+
     public void replaceMainMenuWithRaceTrack() {
         if (pane.getComponent(0) == mainMenuPanel) {
             // only replace the panel to be the track the first time that the user presses enter
@@ -40,9 +46,7 @@ class MainWindow extends JFrame implements KeyListener {
             mainMenuPanel.playEnterSound();
             pane.remove(mainMenuPanel);
 
-            raceTrackPanel = new RaceTrackPanel();
-            raceTrackPanel.setLayout(null);
-            pane.add(raceTrackPanel);
+            this.instantiateRaceTrackPanel();
         }
     }
 
@@ -90,7 +94,21 @@ class MainWindow extends JFrame implements KeyListener {
                     raceTrackPanel.redKart.turnRight();
                 }
             case KeyEvent.VK_ENTER:
+                if (pane.getComponent(0) == raceTrackPanel && !raceTrackPanel.RACE_IN_PROGRESS) {
+                    // if the user presses enter while the race is not in progress then restart
+                    raceTrackPanel.stopAllSounds();
+                    pane.remove(raceTrackPanel);
+                    this.instantiateRaceTrackPanel();
+                }
                 replaceMainMenuWithRaceTrack();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                // quit game
+                if (pane.getComponent(0) == raceTrackPanel) {
+                    raceTrackPanel.stopAllSounds();
+                    pane.remove(raceTrackPanel);
+                }
+                System.exit(0);
                 break;
         }
     }
