@@ -19,6 +19,7 @@ class MainWindow extends JFrame implements KeyListener {
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
         this.setTitle("Go-Kart-Go");
+        this.setLocationRelativeTo(null); // center the window
 
         // ensure the program closes when this window is closed
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
