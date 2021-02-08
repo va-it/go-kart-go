@@ -8,9 +8,10 @@ public class HelperClass {
     private InputStream customFont;
     public Font font;
     public static final int NUMBER_OF_LAPS = 3; // change this to set the number of laps
-    public static final String images = "images";
-    public static final String sounds = "sounds";
-    public static final String fonts = "fonts";
+    public static final String resources = "resources";
+    public static final String images = File.separator + resources + File.separator + "images";
+    public static final String sounds = File.separator + resources + File.separator + "sounds";
+    public static final String fonts = File.separator + resources + File.separator + "fonts";
 
     public HelperClass() {
         loadCustomFont();
