@@ -7,7 +7,7 @@ public class MainMenuPanel extends JPanel {
 
     public MainMenuPanel() {
 
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource(HelperClass.images + File.separator + "menu.png"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource(HelperClass.images + "menu.png"));
         JLabel backgroundImageHolder = new JLabel(backgroundImage);
         backgroundImageHolder.setBounds(0,0, MainWindow.WIDTH, MainWindow.HEIGHT);
         add(backgroundImageHolder);

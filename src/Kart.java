@@ -28,7 +28,7 @@ public class Kart {
         // load images into an array
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
             this.images[i] = new ImageIcon(
-                    getClass().getResource(HelperClass.images + File.separator + this.image + i + ".png")
+                    getClass().getResource(HelperClass.images + this.image + i + ".png")
             );
         }
         // initial position of the car is pointing left

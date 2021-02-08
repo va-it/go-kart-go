@@ -8,10 +8,10 @@ public class HelperClass {
     private InputStream customFont;
     public Font font;
     public static final int NUMBER_OF_LAPS = 3; // change this to set the number of laps
-    public static final String resources = "resources";
-    public static final String images = File.separator + resources + File.separator + "images";
-    public static final String sounds = File.separator + resources + File.separator + "sounds";
-    public static final String fonts = File.separator + resources + File.separator + "fonts";
+    public static final String resources = "/resources";
+    public static final String images = resources + "/images/";
+    public static final String sounds = resources + "/sounds/";
+    public static final String fonts = resources + "/fonts/";
 
     public HelperClass() {
         loadCustomFont();
@@ -21,7 +21,7 @@ public class HelperClass {
         // https://docs.oracle.com/javase/7/docs/api/java/awt/Font.html#createFont(int,%20java.io.InputStream)
         // https://docs.oracle.com/javase/7/docs/api/java/awt/GraphicsEnvironment.html#registerFont(java.awt.Font)
         try {
-            customFont = getClass().getResource(fonts + File.separator + "Eight-Bit-Madness.ttf").openStream();
+            customFont = getClass().getResource(fonts + "Eight-Bit-Madness.ttf").openStream();
         } catch (IOException e) {
             // fallback to standard sans-serif font
             setFallbackFont();
@@ -47,9 +47,6 @@ public class HelperClass {
     }
 
     public static ImageIcon getWindowIcon() {
-
-        System.out.println(HelperClass.class.getResource(images + File.separator + "windowImage.png"));
-
-        return new ImageIcon(HelperClass.class.getResource(images + File.separator + "windowImage.png"));
+        return new ImageIcon(HelperClass.class.getResource(images + "windowImage.png"));
     }
 }

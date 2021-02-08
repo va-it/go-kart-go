@@ -16,7 +16,7 @@ public class SoundsManager {
             sound = AudioSystem.getClip();
             sound.open(
                     AudioSystem.getAudioInputStream(
-                            getClass().getResource(HelperClass.sounds + File.separator + soundToPlay + ".wav")
+                            getClass().getResource(HelperClass.sounds + soundToPlay + ".wav")
                     )
             );
         } catch (UnsupportedAudioFileException ex) {

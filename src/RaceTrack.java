@@ -151,7 +151,7 @@ public class RaceTrack {
     }
 
     public void setRaceLightsImage(int index) {
-        raceLights = new ImageIcon(getClass().getResource(HelperClass.images + File.separator + "lights" + index + ".png"));
+        raceLights = new ImageIcon(getClass().getResource(HelperClass.images + "lights" + index + ".png"));
         raceLightsLabel.setIcon(raceLights);
     }
 

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="go-kart-go:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/go_kart_go_jar</output-path>
+    <root id="archive" name="go-kart-go.jar">
+      <element id="module-output" name="go-kart-go" />
+    </root>
+  </artifact>
+</component>
