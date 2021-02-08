@@ -21,12 +21,14 @@ public class Kart {
 
     public Kart(String colour, int player) {
         this.speed = 0;
-        this.colour = colour;
-        this.image = "kart" + this.colour.toUpperCase(Locale.ROOT);
+        // capitalise the first letter of the string (https://stackoverflow.com/a/3904607)
+        this.colour = colour.substring(0, 1).toUpperCase() + colour.substring(1);
+        this.image = "kart" + this.colour;
         this.player = player;
 
         // load images into an array
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
+            System.out.println(HelperClass.images + this.image + i + ".png");
             this.images[i] = new ImageIcon(
                     getClass().getResource(HelperClass.images + this.image + i + ".png")
             );
