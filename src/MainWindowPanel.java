@@ -37,10 +37,10 @@ class MainWindowPanel extends JPanel implements ActionListener {
 
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
             redKart[i] = new ImageIcon(
-                    getClass().getResource("images" + File.separator + redKartImageName + i + ".png")
+                    getClass().getResource("images/" + redKartImageName + i + ".png")
             );
             blueKart[i] = new ImageIcon(
-                    getClass().getResource("images" + File.separator + blueKartImageName + i + ".png")
+                    getClass().getResource("images/" + blueKartImageName + i + ".png")
             );
         }
     }
