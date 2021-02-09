@@ -28,7 +28,6 @@ public class Kart {
 
         // load images into an array
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
-            System.out.println(HelperClass.images + this.image + i + ".png");
             this.images[i] = new ImageIcon(
                     getClass().getResource(HelperClass.images + this.image + i + ".png")
             );
