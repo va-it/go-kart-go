@@ -95,6 +95,7 @@ class MainWindow extends JFrame implements KeyListener {
                 if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
                     raceTrackPanel.redKart.turnRight();
                 }
+                break;
             case KeyEvent.VK_ENTER:
                 if (pane.getComponent(0) == raceTrackPanel && !raceTrackPanel.RACE_IN_PROGRESS) {
                     // if the user presses enter while the race is not in progress then restart
