@@ -1,15 +1,11 @@
 import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 // https://docs.oracle.com/javase/tutorial/sound/playing.html
 // https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
 public class SoundsManager {
 
-    private static final String CRASH = "crash";
-
-    Clip sound;
+    private Clip sound;
 
     public SoundsManager(String soundToPlay) {
         try {
@@ -37,7 +33,7 @@ public class SoundsManager {
     }
 
     public void playSoundInLoop(){
-        // LOOP_CONTINOUSLY found here:
+        // LOOP_CONTINUOUSLY found here:
         // https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/Clip.html
         sound.loop(Clip.LOOP_CONTINUOUSLY);
     }

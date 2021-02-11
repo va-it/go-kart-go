@@ -12,16 +12,15 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     // 30 times a second
     private static final int delay = 1000 / 30;
 
-    private JLabel centralMessage = new JLabel("", JLabel.CENTER);
-    private String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
-    private String gameOverMessage = "<html>GAME OVER<br>" + endGameMessage + "</html>";
+    private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
+    private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
+    private final String gameOverMessage = "<html>GAME OVER<br>" + endGameMessage + "</html>";
 
     public Kart redKart;
     public Kart blueKart;
 
     public boolean RACE_IN_PROGRESS = false;
 
-    private HelperClass helperClass = new HelperClass();
     public RaceTrack raceTrack = new RaceTrack();
 
     public RaceTrackPanel() {
@@ -60,6 +59,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         startRaceTimer.start();
 
         // Place central message roughly in the centre..
+        HelperClass helperClass = new HelperClass();
         centralMessage.setFont(helperClass.font);
         centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 100, 200, 300, 250);
         add(centralMessage);

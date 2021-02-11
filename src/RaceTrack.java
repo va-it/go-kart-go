@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class RaceTrack {
 
@@ -170,7 +169,9 @@ public class RaceTrack {
         int outer_top_edge = OUTER_TOP_EDGE - 10;
         int outer_bottom_edge = OUTER_BOTTOM_EDGE + 10;
 
-        boolean crashedIntoXOuterEdges = xPosition < outer_left_edge || xPosition > outer_right_edge;
+        // sometimes the image size is considered otherwise the condition only applies when
+        // the whole kart has gone over the edge
+        boolean crashedIntoXOuterEdges = xPosition < outer_left_edge || xPosition > (outer_right_edge - kart.IMAGE_SIZE);
         boolean crashedIntoYOuterEdges = yPosition < outer_top_edge || yPosition > ( outer_bottom_edge - kart.IMAGE_SIZE);
         boolean betweenInnerYEdges = yPosition > inner_top_edge && yPosition < inner_bottom_edge;
         boolean betweenInnerXEdges = xPosition > inner_left_edge && xPosition < inner_right_edge;
@@ -191,7 +192,6 @@ public class RaceTrack {
             }
             if (betweenInnerYEdges && (xPosition + kart.IMAGE_SIZE) > inner_left_edge && xPosition < inner_right_edge) {
                 // crashed into inner left edge
-                // add image size otherwise the condition only applies when the whole kart has gone over the edge
                 kart.setCrashed(true);
                 return true;
             }

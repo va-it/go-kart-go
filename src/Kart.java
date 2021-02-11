@@ -1,13 +1,9 @@
 import javax.swing.*;
-import java.io.File;
-import java.util.Locale;
 
 public class Kart {
     private int speed;
     private int xPosition;
     private int yPosition;
-    private final String colour;
-    private final String image;
     private final int player;
     private int imageIndex;
     private boolean winner = false;
@@ -20,16 +16,17 @@ public class Kart {
     public final int IMAGE_SIZE = 50;
 
     public Kart(String colour, int player) {
-        this.speed = 0;
         // capitalise the first letter of the string (https://stackoverflow.com/a/3904607)
-        this.colour = colour.substring(0, 1).toUpperCase() + colour.substring(1);
-        this.image = "kart" + this.colour;
+        String colourUppercase = colour.substring(0, 1).toUpperCase() + colour.substring(1);
+        String image = "kart" + colourUppercase;
+
+        this.speed = 0;
         this.player = player;
 
         // load images into an array
         for (int i = 0; i < NUMBER_OF_IMAGES; i++) {
             this.images[i] = new ImageIcon(
-                    getClass().getResource(HelperClass.images + this.image + i + ".png")
+                    getClass().getResource(HelperClass.images + image + i + ".png")
             );
         }
         // initial position of the car is pointing left
@@ -262,7 +259,6 @@ public class Kart {
             if (this.getCheckPoint() == 3) {
                 this.setCheckPoint(4);
             }
-            return;
         }
     }
 
