@@ -12,9 +12,13 @@ class MainWindow extends JFrame implements KeyListener {
     private RaceTrackPanel raceTrackPanel;
     private final MainMenuPanel mainMenuPanel;
 
-    public MainWindow() {
+    private int player;
+
+    public MainWindow(int player) {
         // call constructor of JFrame
         super();
+
+        this.player = player;
 
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
@@ -54,7 +58,7 @@ class MainWindow extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.blueKart.isCrashed()) {
+        if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.blueKart.isCrashed() && player == 2) {
             // only allow control of kart when race starts
             switch (e.getKeyChar()) {
                 case 'w':
@@ -77,22 +81,22 @@ class MainWindow extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed() && player == 1) {
                     raceTrackPanel.redKart.accelerate();
                 }
                 break;
             case KeyEvent.VK_DOWN:
-                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed() && player == 1) {
                     raceTrackPanel.redKart.decelerate();
                 }
                 break;
             case KeyEvent.VK_LEFT:
-                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed() && player == 1) {
                     raceTrackPanel.redKart.turnLeft();
                 }
                 break;
             case KeyEvent.VK_RIGHT:
-                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed()) {
+                if (raceTrackPanel.RACE_IN_PROGRESS && !raceTrackPanel.redKart.isCrashed() && player == 1) {
                     raceTrackPanel.redKart.turnRight();
                 }
                 break;
