@@ -39,7 +39,7 @@ class MainWindow extends JFrame implements KeyListener {
     }
 
     public void instantiateRaceTrackPanel() {
-        raceTrackPanel = new RaceTrackPanel();
+        raceTrackPanel = new RaceTrackPanel(player);
         raceTrackPanel.setLayout(null);
         pane.add(raceTrackPanel);
     }

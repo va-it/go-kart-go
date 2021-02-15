@@ -23,8 +23,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     public RaceTrack raceTrack = new RaceTrack();
 
-    public RaceTrackPanel() {
+    private int player;
+
+    public RaceTrackPanel(int player) {
         super();
+
+        this.player = player;
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
@@ -69,6 +73,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         animationTimer.start();
     }
 
+    // this needs to happen when both client are connected to server and both pressed enter to start
     public ActionListener startRaceCountDown() {
         // replaced new ActionListener() { @Override actionPerformed ... } with lambda expression
         ActionListener actionListener = e -> {
@@ -100,6 +105,25 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         raceTrack.renderTrack(g);
 
         if (animationTimer.isRunning()) {
+
+            // here we need to send this player's kart information to the server
+            // as well as retrieve the other player's position, speed etc.
+
+            // PSEUDO-CODE **************************************************
+
+            // if (player == 1) {
+            //  sendKartInfo(server, player, redKart);
+            //  blueKart.setSpeed(server.getPlayer2Speed());
+            //  blueKart.setImageIndex(server.getPlayer2ImageIndex());
+            // } else {
+            //  sendKartInfo(server, player, blueKart);
+            //  redKart.setSpeed(server.getPlayer1Speed())
+            //  redKart.setImageIndex(server.getPlayer1ImageIndex())
+            // }
+
+            // **************************************************************
+
+
 
             // ====================== DETECT COLLISIONS =====================
             raceTrack.detectCollisionWithTrack(redKart);
@@ -168,6 +192,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     public void startRace() {
         this.RACE_IN_PROGRESS = true;
+        //  inform the server
     }
 
     public void stopRace() {
@@ -175,6 +200,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.blueKart.stop();
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
+        // inform the server
     }
 
     public void stopAllSounds() {
