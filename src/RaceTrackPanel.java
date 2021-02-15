@@ -3,8 +3,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-import go_kart_go_network.*;
-
 class RaceTrackPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
@@ -108,29 +106,17 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         if (animationTimer.isRunning()) {
 
-            // here we need to send this player's kart information to the server
-            // as well as retrieve the other player's position, speed etc.
-
-            // PSEUDO-CODE **************************************************
-
-            // if (player == 1) {
-            //  sendKartInfo(server, player, redKart);
-            //  blueKart.setSpeed(server.getPlayer2Speed());
-            //  blueKart.setImageIndex(server.getPlayer2ImageIndex());
-            // } else {
-            //  sendKartInfo(server, player, blueKart);
-            //  redKart.setSpeed(server.getPlayer1Speed())
-            //  redKart.setImageIndex(server.getPlayer1ImageIndex())
-            // }
-
-            // **************************************************************
-
+            // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
-                sendKartInfo(redKart);
-                blueKart.setSpeed(getOppentSpeed(blueKart));
-                blueKart.setImageIndex(getOppentImageIndex(blueKart));
+                NetworkCommunicationManager.sendKartInfo(redKart);
+                blueKart.setSpeed(NetworkCommunicationManager.getOpponentSpeed(blueKart));
+                blueKart.setImageIndex(NetworkCommunicationManager.getOpponentImageIndex(blueKart));
+            } else {
+                NetworkCommunicationManager.sendKartInfo(blueKart);
+                redKart.setSpeed(NetworkCommunicationManager.getOpponentSpeed(redKart));
+                redKart.setImageIndex(NetworkCommunicationManager.getOpponentImageIndex(redKart));
             }
-
+            // **************************************************************
 
 
             // ====================== DETECT COLLISIONS =====================
@@ -201,6 +187,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     public void startRace() {
         this.RACE_IN_PROGRESS = true;
         //  inform the server
+        NetworkCommunicationManager.sendStartRace();
     }
 
     public void stopRace() {
@@ -209,6 +196,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
         // inform the server
+        NetworkCommunicationManager.sendStopRace();
     }
 
     public void stopAllSounds() {
@@ -218,41 +206,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         redKart.stopSpeedSound();
     }
 
-    private void sendKartInfo(Kart kart) {
-        // String message = "player:1;speed:10;index:10";
-        String message = "player:1;";
-        message += "speed:" + kart.getSpeed() + ";";
-        message += "index:" + kart.getImageIndex() + ";";
-        // send this player's kart info to server
-        PacketSender.sendPacket(message, Server.address, Server.port);
-    }
 
-    private int getOppentSpeed(Kart kart) {
-        String message = "get_player_" + kart.getPlayer() + "_speed;";
-        PacketSender.sendPacket(message, Server.address, Server.port);
-        String opponentSpeed = PacketReceiver.receivePacket();
-        if (!opponentSpeed.isBlank()) {
-            // ideally the answer is something like: player_X_speed:XX
-            // and we parse it here?
-            return Integer.parseInt(opponentSpeed);
-        } else {
-            // something went wrong. Can't talk to server
-        }
-        return 0;
-    }
-    private int getOppentImageIndex(Kart kart) {
-        String message = "get_player_" + kart.getPlayer() + "_index;";
-        PacketSender.sendPacket(message, Server.address, Server.port);
-        String opponentImageIndex = PacketReceiver.receivePacket();
-        if (!opponentImageIndex.isBlank()) {
-            // ideally the answer is something like: player_X_index:XX
-            // and we parse it here?
-            return Integer.parseInt(opponentImageIndex);
-        } else {
-            // something went wrong. Can't talk to server
-        }
-        return 0;
-    }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
