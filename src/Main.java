@@ -1,4 +1,4 @@
-import network.*;
+import go_kart_go_network.*;
 
 public class Main {
 

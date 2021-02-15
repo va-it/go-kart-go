@@ -3,6 +3,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
+import go_kart_go_network.*;
+
 class RaceTrackPanel extends JPanel implements ActionListener {
 
     private final Timer animationTimer;
@@ -123,6 +125,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             // **************************************************************
 
+            if (player == 1) {
+                sendKartInfo(redKart);
+                blueKart.setSpeed(getOppentSpeed(blueKart));
+                blueKart.setImageIndex(getOppentImageIndex(blueKart));
+            }
+
 
 
             // ====================== DETECT COLLISIONS =====================
@@ -208,6 +216,42 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         raceTrack.stopAllSounds();
         blueKart.stopSpeedSound();
         redKart.stopSpeedSound();
+    }
+
+    private void sendKartInfo(Kart kart) {
+        // String message = "player:1;speed:10;index:10";
+        String message = "player:1;";
+        message += "speed:" + kart.getSpeed() + ";";
+        message += "index:" + kart.getImageIndex() + ";";
+        // send this player's kart info to server
+        PacketSender.sendPacket(message, Server.address, Server.port);
+    }
+
+    private int getOppentSpeed(Kart kart) {
+        String message = "get_player_" + kart.getPlayer() + "_speed;";
+        PacketSender.sendPacket(message, Server.address, Server.port);
+        String opponentSpeed = PacketReceiver.receivePacket();
+        if (!opponentSpeed.isBlank()) {
+            // ideally the answer is something like: player_X_speed:XX
+            // and we parse it here?
+            return Integer.parseInt(opponentSpeed);
+        } else {
+            // something went wrong. Can't talk to server
+        }
+        return 0;
+    }
+    private int getOppentImageIndex(Kart kart) {
+        String message = "get_player_" + kart.getPlayer() + "_index;";
+        PacketSender.sendPacket(message, Server.address, Server.port);
+        String opponentImageIndex = PacketReceiver.receivePacket();
+        if (!opponentImageIndex.isBlank()) {
+            // ideally the answer is something like: player_X_index:XX
+            // and we parse it here?
+            return Integer.parseInt(opponentImageIndex);
+        } else {
+            // something went wrong. Can't talk to server
+        }
+        return 0;
     }
 
     @Override
