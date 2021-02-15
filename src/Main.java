@@ -1,27 +1,42 @@
-import network.Server;
+import network.*;
 
 public class Main {
 
     private static int player;
 
     public static void main(String[] args) {
+        boolean connected = connectToServer();
 
-        connectToServer();
+        if (connected) {
 
-        MainWindow mainWindow = new MainWindow(player);
-        mainWindow.setVisible(true);
+            determinePlayer();
+
+            MainWindow mainWindow = new MainWindow(player);
+            mainWindow.setVisible(true);
+        } else {
+            System.out.println("Connection error");
+        }
     }
 
-    private static void connectToServer() {
+    private static boolean connectToServer() {
         //  here we try to connect to the game server
 
         // sendPacket with "establish connection" message.
+        PacketSender.sendPacket("establish_connection", Server.address, Server.port);
+
         // listen for answer from server (receivePacket)
+        String serverResponse = PacketReceiver.receivePacket();
 
-        // if answer == connection successful then proceed
+        if (!serverResponse.isBlank()) {
+            if (serverResponse == "connection_successful") {
+                // if answer == connection successful then proceed
+                return true;
+            }
+        } else {
+            // something went wrong. Can't talk to server
+        }
 
-        // Once a connection is established we determine which player we are
-        determinePlayer();
+        return false;
     }
 
     private static void determinePlayer() {
@@ -33,6 +48,16 @@ public class Main {
 
         // the logic above needs to be handled by server
 
-        player = 1;
+        // Ask the server what player to be
+        PacketSender.sendPacket("get_player", Server.address, Server.port);
+        // And listen for answer
+        String serverResponse = PacketReceiver.receivePacket();
+
+        if (!serverResponse.isBlank()) {
+            player = Integer.parseInt(serverResponse);
+        } else {
+            // something went wrong. Can't talk to server
+        }
+
     }
 }
