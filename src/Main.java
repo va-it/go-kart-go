@@ -1,3 +1,5 @@
+import network.Server;
+
 public class Main {
 
     private static int player;
