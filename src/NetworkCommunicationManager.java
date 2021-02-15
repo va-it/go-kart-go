@@ -9,13 +9,13 @@ public class NetworkCommunicationManager {
         //  here we try to connect to the game server
 
         // sendPacket with "establish connection" message.
-        PacketSender.sendPacket("establish_connection", Server.address, Server.port);
+        PacketSender.sendPacket(Messages.establishConnection, Server.address, Server.port);
 
         // listen for answer from server (receivePacket)
         String serverResponse = PacketReceiver.receivePacket();
 
         if (!serverResponse.isBlank()) {
-            if (serverResponse == "connection_successful") {
+            if (serverResponse == Messages.connectionSuccessful) {
                 // if answer == connection successful then proceed
                 return true;
             }
@@ -36,7 +36,7 @@ public class NetworkCommunicationManager {
         // the logic above needs to be handled by server
 
         // Ask the server what player to be
-        PacketSender.sendPacket("get_player", Server.address, Server.port);
+        PacketSender.sendPacket(Messages.getPlayerNumber, Server.address, Server.port);
         // And listen for answer
         String serverResponse = PacketReceiver.receivePacket();
 
