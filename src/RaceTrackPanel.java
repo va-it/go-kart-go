@@ -25,10 +25,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private int player;
 
-    public RaceTrackPanel(int player) {
+    private NetworkCommunicationManager networkCommunicationManager;
+
+    public RaceTrackPanel(int player, NetworkCommunicationManager networkCommunicationManager) {
         super();
 
         this.player = player;
+        this.networkCommunicationManager = networkCommunicationManager;
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
@@ -54,6 +57,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(raceTrack.blueKartLapLabel);
         add(raceTrack.redKartLap);
         add(raceTrack.blueKartLap);
+
+
+        networkCommunicationManager = new NetworkCommunicationManager();
 
         raceTrack.setRaceLightsImage(0);
         raceTrack.setUpRaceLights();
@@ -108,13 +114,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
-                NetworkCommunicationManager.sendKartInfo(redKart);
-                blueKart.setSpeed(NetworkCommunicationManager.getOpponentSpeed(blueKart));
-                blueKart.setImageIndex(NetworkCommunicationManager.getOpponentImageIndex(blueKart));
+                networkCommunicationManager.sendKartInfo(redKart);
+                blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(blueKart));
+                blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(blueKart));
             } else {
-                NetworkCommunicationManager.sendKartInfo(blueKart);
-                redKart.setSpeed(NetworkCommunicationManager.getOpponentSpeed(redKart));
-                redKart.setImageIndex(NetworkCommunicationManager.getOpponentImageIndex(redKart));
+                networkCommunicationManager.sendKartInfo(blueKart);
+                redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(redKart));
+                redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(redKart));
             }
             // **************************************************************
 
@@ -187,7 +193,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     public void startRace() {
         this.RACE_IN_PROGRESS = true;
         //  inform the server
-        NetworkCommunicationManager.sendStartRace();
+        networkCommunicationManager.sendStartRace();
     }
 
     public void stopRace() {
@@ -196,7 +202,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
         // inform the server
-        NetworkCommunicationManager.sendStopRace();
+        networkCommunicationManager.sendStopRace();
     }
 
     public void stopAllSounds() {

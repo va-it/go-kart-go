@@ -1,20 +1,22 @@
 import go_kart_go_network.*;
 
-import java.net.DatagramSocket;
-
 public class NetworkCommunicationManager {
+    public CommunicationSocket communicationSocket;
 
-    public static CommunicationSocket communicationSocket;
-    private static DatagramSocket socket = NetworkCommunicationManager.communicationSocket.socket;
+    public NetworkCommunicationManager() {
+        communicationSocket = new CommunicationSocket();
+    }
 
-    public static boolean connectToServer() {
+    public boolean connectToServer() {
         //  here we try to connect to the game server
 
         // sendPacket with "establish connection" message.
-        PacketSender.sendPacket(Messages.establishConnection, Server.address, Server.port, socket);
+        PacketSender.sendPacket(
+                Messages.establishConnection, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket
+        );
 
         // listen for answer from server (receivePacket)
-        String serverResponse = PacketReceiver.receivePacket(socket);
+        String serverResponse = PacketReceiver.receivePacket(communicationSocket.socket);
 
         if (!serverResponse.isBlank()) {
             if (serverResponse == Messages.connectionSuccessful) {
@@ -28,7 +30,7 @@ public class NetworkCommunicationManager {
         return false;
     }
 
-    public static int determinePlayer() {
+    public int determinePlayer() {
         // the idea is that the 1st person to connect to the server gets to be Player 1
 
         // so here we need to check if there is a client already connected to the server
@@ -38,9 +40,11 @@ public class NetworkCommunicationManager {
         // the logic above needs to be handled by server
 
         // Ask the server what player to be
-        PacketSender.sendPacket(Messages.getPlayerNumber, Server.address, Server.port, socket);
+        PacketSender.sendPacket(
+                Messages.getPlayerNumber, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket
+        );
         // And listen for answer
-        String serverResponse = PacketReceiver.receivePacket(socket);
+        String serverResponse = PacketReceiver.receivePacket(communicationSocket.socket);
 
         if (!serverResponse.isBlank()) {
             return Integer.parseInt(serverResponse);
@@ -50,18 +54,18 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public static void sendKartInfo(Kart kart) {
+    public void sendKartInfo(Kart kart) {
         // String message = "player:1;speed:10;index:10";
         String message = Messages.kartInfo(kart.getPlayer(), kart.getSpeed(), kart.getImageIndex());
         // send this player's kart info to server
-        PacketSender.sendPacket(message, Server.address, Server.port, socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
     }
 
-    public static int getOpponentSpeed(Kart kart) {
+    public int getOpponentSpeed(Kart kart) {
         String message = Messages.getOpponentSpeed(kart.getPlayer());
-        PacketSender.sendPacket(message, Server.address, Server.port, socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
 
-        String opponentSpeed = PacketReceiver.receivePacket(socket);
+        String opponentSpeed = PacketReceiver.receivePacket(communicationSocket.socket);
 
         if (!opponentSpeed.isBlank()) {
             // ideally the answer is something like: player_X_speed:XX
@@ -73,11 +77,11 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public static int getOpponentImageIndex(Kart kart) {
+    public int getOpponentImageIndex(Kart kart) {
         String message = Messages.getOpponentIndex(kart.getPlayer());
-        PacketSender.sendPacket(message, Server.address, Server.port, socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
 
-        String opponentImageIndex = PacketReceiver.receivePacket(socket);
+        String opponentImageIndex = PacketReceiver.receivePacket(communicationSocket.socket);
 
         if (!opponentImageIndex.isBlank()) {
             // ideally the answer is something like: player_X_index:XX
@@ -89,14 +93,14 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public static void sendStartRace() {
+    public void sendStartRace() {
         String message = Messages.startRace;
-        PacketSender.sendPacket(message, Server.address, Server.port, socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
     }
 
-    public static void sendStopRace() {
+    public void sendStopRace() {
         String message = Messages.stopRace;
-        PacketSender.sendPacket(message, Server.address, Server.port, socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
     }
 
 }
