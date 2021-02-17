@@ -1,7 +1,5 @@
 package go_kart_go;
 
-import go_kart_go.*;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -41,6 +39,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.redKart = new Kart("red", 1);
         this.blueKart = new Kart("blue", 2);
+
+        this.redKart.playSpeedSound();
+        this.blueKart.playSpeedSound();
 
         // set initial karts position to be just before the starting line
         this.redKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);

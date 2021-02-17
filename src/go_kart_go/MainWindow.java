@@ -1,14 +1,11 @@
 package go_kart_go;
 
-import go_kart_go.HelperClass;
-import go_kart_go.MainMenuPanel;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
 
-class MainWindow extends JFrame implements KeyListener {
+public class MainWindow extends JFrame implements KeyListener {
 
     public static final int WIDTH = 850;
     public static final int HEIGHT = 650;

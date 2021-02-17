@@ -1,8 +1,9 @@
 package go_kart_go;
 
 import javax.swing.*;
+import java.io.Serializable;
 
-public class Kart {
+public class Kart implements Serializable {
     private int speed;
     private int xPosition;
     private int yPosition;
@@ -33,9 +34,6 @@ public class Kart {
         }
         // initial position of the car is pointing left
         this.imageIndex = 12;
-        soundsManager = new SoundsManager("Speed0");
-        soundsManager.playSoundInLoop();
-
     }
 
     public int getSpeed() {
