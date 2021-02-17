@@ -1,3 +1,5 @@
+package go_kart_go;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;

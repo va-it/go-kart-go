@@ -1,3 +1,7 @@
+package go_kart_go;
+
+import go_kart_go.HelperClass;
+
 import javax.sound.sampled.*;
 import java.io.IOException;
 

@@ -1,3 +1,7 @@
+package go_kart_go;
+
+import go_kart_go.*;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

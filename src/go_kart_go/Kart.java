@@ -1,3 +1,5 @@
+package go_kart_go;
+
 import javax.swing.*;
 
 public class Kart {
@@ -232,7 +234,7 @@ public class Kart {
                 this.setCheckPoint(1);
                 // here should increment lap only once
                 if (this.getLap() == HelperClass.NUMBER_OF_LAPS) {
-                    // Stop the game, this Kart won the race
+                    // Stop the game, this go_kart_go.Kart won the race
                     this.setWinner(true);
                 } else {
                     this.setLap(this.getLap() + 1);

@@ -1,3 +1,8 @@
+package go_kart_go;
+
+import go_kart_go.HelperClass;
+import go_kart_go.MainMenuPanel;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,7 +29,7 @@ class MainWindow extends JFrame implements KeyListener {
 
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
-        this.setTitle("Go-Kart-Go");
+        this.setTitle("Go-go_kart_go.Kart-Go");
         this.setIconImage(HelperClass.getWindowIcon().getImage());
         this.setLocationRelativeTo(null); // center the window
 

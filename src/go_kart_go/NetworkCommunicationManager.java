@@ -1,3 +1,6 @@
+package go_kart_go;
+
+import go_kart_go.Kart;
 import go_kart_go_network.*;
 
 public class NetworkCommunicationManager {

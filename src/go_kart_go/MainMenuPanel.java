@@ -1,3 +1,8 @@
+package go_kart_go;
+
+import go_kart_go.HelperClass;
+import go_kart_go.SoundsManager;
+
 import javax.swing.*;
 
 public class MainMenuPanel extends JPanel {
