@@ -8,7 +8,7 @@ public class Main {
 
         if (networkCommunicationManager.connectToServer()) {
             player = networkCommunicationManager.determinePlayer();
-
+            System.out.println(player);
             MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
             mainWindow.setVisible(true);
         } else {
