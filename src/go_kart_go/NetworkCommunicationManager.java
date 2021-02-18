@@ -3,23 +3,33 @@ package go_kart_go;
 import go_kart_go_network.*;
 
 public class NetworkCommunicationManager {
-    public CommunicationSocket communicationSocket;
+
+    public UDPCommunicationSocket udpCommunicationSocket;
+
+    public ClientCommunicationSocket clientCommunicationSocket;
 
     public NetworkCommunicationManager() {
-        communicationSocket = new CommunicationSocket();
+        udpCommunicationSocket = new UDPCommunicationSocket();
+        clientCommunicationSocket = new ClientCommunicationSocket();
     }
 
     public boolean connectToServer() {
-        //  here we try to connect to the game server
 
-        // sendPacket with "establish connection" message.
-        PacketSender.sendPacket(
-                Messages.establishConnection, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket
-        );
+        String serverResponse = null;
 
-        // listen for answer from server (receivePacket)
-        String serverResponse = PacketReceiver.receivePacket(communicationSocket.socket);
+        // TCP
+        clientCommunicationSocket.sendMessage(Messages.establishConnection);
+        serverResponse = clientCommunicationSocket.getMessage();
 
+
+        //  UDP
+//        PacketSender.sendPacket(
+//                Messages.establishConnection, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket
+//        );
+//        serverResponse = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
+
+
+        // SAME FOR BOTH
         if (!serverResponse.isBlank()) {
             if (serverResponse == Messages.connectionSuccessful) {
                 // if answer == connection successful then proceed
@@ -43,10 +53,10 @@ public class NetworkCommunicationManager {
 
         // Ask the server what player to be
         PacketSender.sendPacket(
-                Messages.getPlayerNumber, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket
+                Messages.getPlayerNumber, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket
         );
         // And listen for answer
-        String serverResponse = PacketReceiver.receivePacket(communicationSocket.socket);
+        String serverResponse = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
 
         if (!serverResponse.isBlank()) {
             return Integer.parseInt(serverResponse);
@@ -60,14 +70,14 @@ public class NetworkCommunicationManager {
         // String message = "player:1;speed:10;index:10";
         String message = Messages.kartInfo(kart.getPlayer(), kart.getSpeed(), kart.getImageIndex());
         // send this player's kart info to server
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
     }
 
     public int getOpponentSpeed(Kart kart) {
         String message = Messages.getOpponentSpeed(kart.getPlayer());
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
 
-        String opponentSpeed = PacketReceiver.receivePacket(communicationSocket.socket);
+        String opponentSpeed = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
 
         if (!opponentSpeed.isBlank()) {
             // ideally the answer is something like: player_X_speed:XX
@@ -81,9 +91,9 @@ public class NetworkCommunicationManager {
 
     public int getOpponentImageIndex(Kart kart) {
         String message = Messages.getOpponentIndex(kart.getPlayer());
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
 
-        String opponentImageIndex = PacketReceiver.receivePacket(communicationSocket.socket);
+        String opponentImageIndex = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
 
         if (!opponentImageIndex.isBlank()) {
             // ideally the answer is something like: player_X_index:XX
@@ -97,12 +107,12 @@ public class NetworkCommunicationManager {
 
     public void sendStartRace() {
         String message = Messages.startRace;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
     }
 
     public void sendStopRace() {
         String message = Messages.stopRace;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, communicationSocket.socket);
+        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
     }
 
 }
