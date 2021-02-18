@@ -6,57 +6,58 @@ public class NetworkCommunicationManager {
 
     public UDPCommunicationSocket udpCommunicationSocket;
 
-    public ClientCommunicationSocket clientCommunicationSocket;
+    public TCPClientCommunicationSocket tcpClientCommunicationSocket;
 
     public NetworkCommunicationManager() {
+
         udpCommunicationSocket = new UDPCommunicationSocket();
-        clientCommunicationSocket = new ClientCommunicationSocket();
+//        PacketSender.sendPacket(
+//                Messages.getPlayerNumber, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket
+//        );
+//        // And listen for answer
+//        String serverResponse = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
+
+        tcpClientCommunicationSocket = new TCPClientCommunicationSocket();
+    }
+
+    public String getMessage() {
+        String serverResponse = null;
+        // TCP
+        serverResponse = tcpClientCommunicationSocket.getMessage();
+
+        if (!serverResponse.isBlank()) {
+            return serverResponse;
+        } else {
+            // something went wrong. Can't talk to server
+        }
+        return "";
     }
 
     public boolean connectToServer() {
-
         String serverResponse = null;
 
-        // TCP
-        clientCommunicationSocket.sendMessage(Messages.establishConnection);
-        serverResponse = clientCommunicationSocket.getMessage();
+        tcpClientCommunicationSocket.sendMessage(Messages.establishConnection);
+        serverResponse = tcpClientCommunicationSocket.getMessage();
 
-
-        //  UDP
-//        PacketSender.sendPacket(
-//                Messages.establishConnection, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket
-//        );
-//        serverResponse = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
-
-
-        // SAME FOR BOTH
         if (!serverResponse.isBlank()) {
-            if (serverResponse == Messages.connectionSuccessful) {
+            if (serverResponse.equals(Messages.connectionSuccessful)) {
                 // if answer == connection successful then proceed
                 return true;
             }
         } else {
             // something went wrong. Can't talk to server
         }
-
         return false;
     }
 
     public int determinePlayer() {
         // the idea is that the 1st person to connect to the server gets to be Player 1
 
-        // so here we need to check if there is a client already connected to the server
-        // if so then this user becomes player 2
-        // otherwise this user becomes player 1
+        String serverResponse = null;
 
-        // the logic above needs to be handled by server
-
-        // Ask the server what player to be
-        PacketSender.sendPacket(
-                Messages.getPlayerNumber, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket
-        );
-        // And listen for answer
-        String serverResponse = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
+        // TCP
+        tcpClientCommunicationSocket.sendMessage(Messages.getPlayerNumber);
+        serverResponse = tcpClientCommunicationSocket.getMessage();
 
         if (!serverResponse.isBlank()) {
             return Integer.parseInt(serverResponse);

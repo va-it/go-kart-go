@@ -17,11 +17,11 @@ public class Main {
         NetworkCommunicationManager networkCommunicationManager = new NetworkCommunicationManager();
 
         if (networkCommunicationManager.connectToServer()) {
-            System.out.println("Connected");
-//            player = networkCommunicationManager.determinePlayer();
-//            System.out.println(player);
-//            MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
-//            mainWindow.setVisible(true);
+            // the server will respond with the player number
+            player = Integer.parseInt(networkCommunicationManager.getMessage());
+            System.out.println(player);
+            MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
+            mainWindow.setVisible(true);
         } else {
             System.out.println("Connection error");
         }
