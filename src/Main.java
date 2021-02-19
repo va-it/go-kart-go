@@ -1,13 +1,6 @@
 import go_kart_go.MainWindow;
 import go_kart_go.NetworkCommunicationManager;
 
-import go_kart_go.Kart;
-
-import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-
 public class Main {
 
     private static int player;
