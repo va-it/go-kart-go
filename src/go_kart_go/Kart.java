@@ -197,7 +197,9 @@ public class Kart implements Serializable {
     }
 
     public void playSpeedSound() {
-        soundsManager.stopSound();
+        if (soundsManager != null) {
+            soundsManager.stopSound();
+        }
         soundsManager = new SoundsManager("Speed" + Math.abs(this.getSpeed())); //play speed10 when reversing
         soundsManager.playSoundInLoop();
     }
