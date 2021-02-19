@@ -68,10 +68,19 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        // String message = "player:1;speed:10;index:10";
-        String message = Messages.kartInfo(kart.getPlayer(), kart.getSpeed(), kart.getImageIndex());
-        // send this player's kart info to server
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
+
+        String serverResponse = null;
+        // TCP
+        tcpClientCommunicationSocket.sendMessage(Messages.kartInfo());
+        tcpClientCommunicationSocket.sendMessage();
+        serverResponse = tcpClientCommunicationSocket.getMessage();
+
+
+
+//        // String message = "player:1;speed:10;index:10";
+//        String message = Messages.kartInfo(kart.getPlayer(), kart.getSpeed(), kart.getImageIndex());
+//        // send this player's kart info to server
+//        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
     }
 
     public int getOpponentSpeed(Kart kart) {
