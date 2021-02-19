@@ -13,7 +13,7 @@ public class Kart implements Serializable {
     private int checkPoint = 0;
     private int lap = 0;
     private boolean crashed = false;
-    private SoundsManager soundsManager;
+    private transient SoundsManager soundsManager; // ignored when object is serialised
     private final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
     public final int IMAGE_SIZE = 50;

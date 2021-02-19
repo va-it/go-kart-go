@@ -71,10 +71,18 @@ public class NetworkCommunicationManager {
 
         String serverResponse = null;
         // TCP
-        tcpClientCommunicationSocket.sendMessage(Messages.kartInfo());
-        tcpClientCommunicationSocket.sendMessage();
+        tcpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+        tcpClientCommunicationSocket.sendKart(kart);
         serverResponse = tcpClientCommunicationSocket.getMessage();
 
+        if (!serverResponse.isBlank()) {
+            if (serverResponse.equals(Messages.kartInfoReceived)) {
+                // if answer == connection successful then proceed
+                System.out.println("Kart sent correctly and Server received it");
+            }
+        } else {
+            // something went wrong. Can't talk to server
+        }
 
 
 //        // String message = "player:1;speed:10;index:10";
