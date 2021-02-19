@@ -64,35 +64,35 @@ public class NetworkCommunicationManager {
         }
     }
 
-    public int getOpponentSpeed(Kart kart) {
-        String message = Messages.getOpponentSpeed(kart.getPlayer());
+    public int getOpponentSpeed() {
+        String message = Messages.getOpponentSpeed;
         PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
-//
-//        String opponentSpeed = packetReceiver.receivePacket(udpCommunicationSocket.socket);
-//
-//        if (!opponentSpeed.isBlank()) {
-//            // ideally the answer is something like: player_X_speed:XX
-//            // and we parse it here?
-//            return Integer.parseInt(opponentSpeed);
-//        } else {
-//            // something went wrong. Can't talk to server
-//        }
+
+        String opponentSpeed = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
+
+        if (!opponentSpeed.isBlank()) {
+            // ideally the answer is something like: player_X_speed:XX
+            // and we parse it here?
+            return Integer.parseInt(opponentSpeed);
+        } else {
+            // something went wrong. Can't talk to server
+        }
         return 0;
     }
 
-    public int getOpponentImageIndex(Kart kart) {
-        String message = Messages.getOpponentIndex(kart.getPlayer());
+    public int getOpponentImageIndex() {
+        String message = Messages.getOpponentIndex;
         PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpCommunicationSocket.socket);
 
-//        String opponentImageIndex = packetReceiver.receivePacket(udpCommunicationSocket.socket);
-//
-//        if (!opponentImageIndex.isBlank()) {
-//            // ideally the answer is something like: player_X_index:XX
-//            // and we parse it here?
-//            return Integer.parseInt(opponentImageIndex);
-//        } else {
-//            // something went wrong. Can't talk to server
-//        }
+        String opponentImageIndex = PacketReceiver.receivePacket(udpCommunicationSocket.socket);
+
+        if (!opponentImageIndex.isBlank()) {
+            // ideally the answer is something like: player_X_index:XX
+            // and we parse it here?
+            return Integer.parseInt(opponentImageIndex);
+        } else {
+            // something went wrong. Can't talk to server
+        }
         return 0;
     }
 
