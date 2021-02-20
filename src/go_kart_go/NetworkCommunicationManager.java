@@ -6,13 +6,11 @@ public class NetworkCommunicationManager {
 
     public UDPClientCommunicationSocket udpClientCommunicationSocket;
     public TCPClientCommunicationSocket tcpClientCommunicationSocket;
-    PacketReceiver packetReceiver;
 
     public NetworkCommunicationManager() {
 
         udpClientCommunicationSocket = new UDPClientCommunicationSocket();
         tcpClientCommunicationSocket = new TCPClientCommunicationSocket();
-        packetReceiver = new PacketReceiver();
     }
 
     public String getMessage() {
@@ -41,31 +39,16 @@ public class NetworkCommunicationManager {
         }
         // something went wrong. Can't talk to server
         return false;
-
-//        String message = Messages.establishConnection;
-//        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
-//        serverResponse = packetReceiver.receivePacket(udpClientCommunicationSocket.socket);
-//        if (!serverResponse.isBlank()) {
-//            if (serverResponse.equals(Messages.connectionSuccessful)) {
-//                return true;
-//            }
-//        }
-//        // something went wrong. Can't talk to server
-//        return false;
-
     }
 
     public void sendKartInfo(Kart kart) {
-        String message = Messages.sendingKartInfo;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
-        udpClientCommunicationSocket.sendKart(kart, ServerDetails.getAddress(), ServerDetails.port);
+        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+        udpClientCommunicationSocket.sendKart(kart);
     }
 
     public int getOpponentSpeed() {
-        String message = Messages.getOpponentSpeed;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
-
-        String opponentSpeed = packetReceiver.receivePacket(udpClientCommunicationSocket.socket);
+        udpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
+        String opponentSpeed = udpClientCommunicationSocket.getMessage();
 
         if (!opponentSpeed.isBlank()) {
             // ideally the answer is something like: player_X_speed:XX
@@ -78,10 +61,8 @@ public class NetworkCommunicationManager {
     }
 
     public int getOpponentImageIndex() {
-        String message = Messages.getOpponentIndex;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
-
-        String opponentImageIndex = packetReceiver.receivePacket(udpClientCommunicationSocket.socket);
+        udpClientCommunicationSocket.sendMessage(Messages.getOpponentIndex);
+        String opponentImageIndex = udpClientCommunicationSocket.getMessage();
 
         if (!opponentImageIndex.isBlank()) {
             // ideally the answer is something like: player_X_index:XX
@@ -94,13 +75,11 @@ public class NetworkCommunicationManager {
     }
 
     public void sendStartRace() {
-        String message = Messages.startRace;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
+        udpClientCommunicationSocket.sendMessage(Messages.startRace);
     }
 
     public void sendStopRace() {
-        String message = Messages.stopRace;
-        PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
+        udpClientCommunicationSocket.sendMessage(Messages.stopRace);
     }
 
 }
