@@ -44,6 +44,7 @@ public class NetworkCommunicationManager {
     public void sendKartInfo(Kart kart) {
         udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
         udpClientCommunicationSocket.sendKart(kart);
+        // server won't acknowledge so we don't listen for a response
     }
 
     public int getOpponentSpeed() {
