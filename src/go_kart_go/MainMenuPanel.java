@@ -6,9 +6,11 @@ public class MainMenuPanel extends JPanel {
 
     private SoundsManager soundsManager;
 
-    public MainMenuPanel() {
+    public MainMenuPanel(int player) {
 
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource(HelperClass.images + "menu.png"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource(
+                HelperClass.images + "menuPlayer" + player + ".png")
+        );
         JLabel backgroundImageHolder = new JLabel(backgroundImage);
         backgroundImageHolder.setBounds(0,0, MainWindow.WIDTH, MainWindow.HEIGHT);
         add(backgroundImageHolder);

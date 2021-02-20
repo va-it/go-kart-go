@@ -26,7 +26,7 @@ public class MainWindow extends JFrame implements KeyListener {
 
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
-        this.setTitle("Go-go_kart_go.Kart-Go");
+        this.setTitle("Go-Kart-Go");
         this.setIconImage(HelperClass.getWindowIcon().getImage());
         this.setLocationRelativeTo(null); // center the window
 
@@ -37,7 +37,7 @@ public class MainWindow extends JFrame implements KeyListener {
 
         pane = getContentPane();
 
-        mainMenuPanel = new MainMenuPanel();
+        mainMenuPanel = new MainMenuPanel(player);
 
         pane.add(mainMenuPanel);
     }

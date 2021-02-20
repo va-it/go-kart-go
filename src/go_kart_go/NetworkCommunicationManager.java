@@ -13,17 +13,17 @@ public class NetworkCommunicationManager {
         tcpClientCommunicationSocket = new TCPClientCommunicationSocket();
     }
 
-    public String getMessage() {
+    public int getPlayerNumber() {
         String serverResponse = null;
-        // TCP
+        tcpClientCommunicationSocket.sendMessage(Messages.getPlayerNumber);
         serverResponse = tcpClientCommunicationSocket.getMessage();
 
         if (!serverResponse.isBlank()) {
-            return serverResponse;
+            return Integer.parseInt(serverResponse);
         } else {
             // something went wrong. Can't talk to server
         }
-        return "";
+        return 0;
     }
 
     public boolean connectToServer() {

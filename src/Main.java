@@ -10,13 +10,16 @@ public class Main {
         NetworkCommunicationManager networkCommunicationManager = new NetworkCommunicationManager();
 
         if (networkCommunicationManager.connectToServer()) {
-            // the server will respond with the player number
-            player = Integer.parseInt(networkCommunicationManager.getMessage());
-            System.out.println(player);
-            MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
-            mainWindow.setVisible(true);
+            // ask server for the player number
+            player = networkCommunicationManager.getPlayerNumber();
+            if (player == 1 || player == 2) {
+                MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
+                mainWindow.setVisible(true);
+            } else {
+                System.err.println("Connection error");
+            }
         } else {
-            System.out.println("Connection error");
+            System.err.println("Connection error");
         }
     }
 }
