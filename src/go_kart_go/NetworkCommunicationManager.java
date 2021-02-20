@@ -72,13 +72,19 @@ public class NetworkCommunicationManager {
     }
 
     public void sendStartRace() {
-        // this maybe it's best sent through TCP?
-        udpClientCommunicationSocket.sendMessage(Messages.startRace);
+        tcpClientCommunicationSocket.sendMessage(Messages.startRace);
+        String confirmation = tcpClientCommunicationSocket.getMessage();
+        if (confirmation.isBlank()) {
+            System.err.println("Cannot reach server");
+        }
     }
 
     public void sendStopRace() {
-        // this maybe it's best sent through TCP?
-        udpClientCommunicationSocket.sendMessage(Messages.stopRace);
+        tcpClientCommunicationSocket.sendMessage(Messages.stopRace);
+        String confirmation = tcpClientCommunicationSocket.getMessage();
+        if (confirmation.isBlank()) {
+            System.err.println("Cannot reach server");
+        }
     }
 
 }

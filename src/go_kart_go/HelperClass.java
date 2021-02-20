@@ -13,6 +13,9 @@ public class HelperClass {
     public static final String images = resources + "/images/";
     public static final String sounds = resources + "/sounds/";
     public static final String fonts = resources + "/fonts/";
+    public static final String playerOneColour = "red";
+    public static final String playerTwoColour = "blue";
+
 
     public HelperClass() {
         loadCustomFont();
@@ -49,5 +52,13 @@ public class HelperClass {
 
     public static ImageIcon getWindowIcon() {
         return new ImageIcon(HelperClass.class.getResource(images + "windowImage.png"));
+    }
+
+    public static String returnKartColour(int player) {
+        if (player == 1) {
+            return HelperClass.playerOneColour;
+        } else {
+            return HelperClass.playerTwoColour;
+        }
     }
 }

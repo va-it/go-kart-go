@@ -37,8 +37,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
-        this.redKart = new Kart("red", 1);
-        this.blueKart = new Kart("blue", 2);
+        this.redKart = new Kart(HelperClass.playerOneColour, 1);
+        this.blueKart = new Kart(HelperClass.playerTwoColour, 2);
 
         this.redKart.playSpeedSound();
         this.blueKart.playSpeedSound();
