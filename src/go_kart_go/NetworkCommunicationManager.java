@@ -56,23 +56,9 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        String serverResponse = null;
-//        tcpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-//        tcpClientCommunicationSocket.sendKart(kart);
-//        serverResponse = tcpClientCommunicationSocket.getMessage();
-//
-//        if (!serverResponse.isBlank()) {
-//            if (serverResponse.equals(Messages.kartInfoReceived)) {
-//                // if answer == connection successful then proceed
-//                System.out.println("Kart sent correctly and Server received it");
-//            }
-//        } else {
-//            // something went wrong. Can't talk to server
-//        }
         String message = Messages.sendingKartInfo;
         PacketSender.sendPacket(message, ServerDetails.getAddress(), ServerDetails.port, udpClientCommunicationSocket.socket);
         udpClientCommunicationSocket.sendKart(kart, ServerDetails.getAddress(), ServerDetails.port);
-
     }
 
     public int getOpponentSpeed() {

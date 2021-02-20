@@ -1,5 +1,8 @@
 import go_kart_go.MainWindow;
 import go_kart_go.NetworkCommunicationManager;
+import go_kart_go_network.PacketSender;
+import go_kart_go_network.ServerDetails;
+import go_kart_go_network.UDPCommunicationSocket;
 
 public class Main {
 
