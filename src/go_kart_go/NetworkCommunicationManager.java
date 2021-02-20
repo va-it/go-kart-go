@@ -51,8 +51,6 @@ public class NetworkCommunicationManager {
         String opponentSpeed = udpClientCommunicationSocket.getMessage();
 
         if (!opponentSpeed.isBlank()) {
-            // ideally the answer is something like: player_X_speed:XX
-            // and we parse it here?
             return Integer.parseInt(opponentSpeed);
         } else {
             // something went wrong. Can't talk to server
@@ -65,8 +63,6 @@ public class NetworkCommunicationManager {
         String opponentImageIndex = udpClientCommunicationSocket.getMessage();
 
         if (!opponentImageIndex.isBlank()) {
-            // ideally the answer is something like: player_X_index:XX
-            // and we parse it here?
             return Integer.parseInt(opponentImageIndex);
         } else {
             // something went wrong. Can't talk to server
@@ -75,10 +71,12 @@ public class NetworkCommunicationManager {
     }
 
     public void sendStartRace() {
+        // this maybe it's best sent through TCP?
         udpClientCommunicationSocket.sendMessage(Messages.startRace);
     }
 
     public void sendStopRace() {
+        // this maybe it's best sent through TCP?
         udpClientCommunicationSocket.sendMessage(Messages.stopRace);
     }
 
