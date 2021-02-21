@@ -42,11 +42,24 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-        udpClientCommunicationSocket.sendKart(kart);
-        udpClientCommunicationSocket.sendKart(kart);
-        // server won't acknowledge so we don't listen for a response
+//        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+//        // udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+//        // udpClientCommunicationSocket.sendKart(kart);
+//        udpClientCommunicationSocket.sendKart(kart);
+//        // server won't acknowledge so we don't listen for a response
+
+        String serverResponse;
+        tcpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+        serverResponse = tcpClientCommunicationSocket.getMessage();
+        if (!serverResponse.isBlank()) {
+            if (serverResponse.equals(Messages.sendingKartInfo)) {
+                // all good, send the kart
+                tcpClientCommunicationSocket.sendKart(kart);
+                serverResponse = tcpClientCommunicationSocket.getMessage();
+            }
+        } else {
+            // something went wrong. Can't talk to server
+        }
     }
 
     public int getOpponentSpeed() {
