@@ -5,18 +5,18 @@ import go_kart_go_network.*;
 public class NetworkCommunicationManager {
 
     public UDPClientCommunicationSocket udpClientCommunicationSocket;
-    public TCPClientCommunicationSocket tcpClientCommunicationSocket;
+    public TCPClient tcpClient;
 
     public NetworkCommunicationManager() {
 
         udpClientCommunicationSocket = new UDPClientCommunicationSocket();
-        tcpClientCommunicationSocket = new TCPClientCommunicationSocket();
+        tcpClient = new TCPClient();
     }
 
     public int getPlayerNumber() {
         String serverResponse = null;
-        tcpClientCommunicationSocket.sendMessage(Messages.getPlayerNumber);
-        serverResponse = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.getPlayerNumber);
+        serverResponse = tcpClient.getResponse();
 
         if (!serverResponse.isBlank()) {
             return Integer.parseInt(serverResponse);
@@ -28,9 +28,8 @@ public class NetworkCommunicationManager {
 
     public boolean connectToServer() {
         String serverResponse = null;
-
-        tcpClientCommunicationSocket.sendMessage(Messages.establishConnection);
-        serverResponse = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.establishConnection);
+        serverResponse = tcpClient.getResponse();
 
         if (!serverResponse.isBlank()) {
             if (serverResponse.equals(Messages.connectionSuccessful)) {
@@ -43,13 +42,13 @@ public class NetworkCommunicationManager {
 
     public void sendKartInfo(Kart kart) {
         String serverResponse;
-        tcpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-        serverResponse = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.sendingKartInfo);
+        serverResponse = tcpClient.getResponse();
         if (!serverResponse.isBlank()) {
             if (serverResponse.equals(Messages.readyToReceiveKart)) {
                 // all good, send the kart
-                tcpClientCommunicationSocket.sendKart(kart);
-                serverResponse = tcpClientCommunicationSocket.getMessage();
+                tcpClient.sendObject(kart);
+                serverResponse = tcpClient.getResponse();
                 if (!serverResponse.isBlank()) {
                     if (serverResponse.equals(Messages.kartInfoReceived)) {
                         // all good, kart received
@@ -64,9 +63,8 @@ public class NetworkCommunicationManager {
     }
 
     public int getOpponentSpeed() {
-        // udpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
-        tcpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
-        String opponentSpeed = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.getOpponentSpeed);
+        String opponentSpeed = tcpClient.getResponse();
 
         if (!opponentSpeed.isBlank()) {
             return Integer.parseInt(opponentSpeed);
@@ -77,8 +75,8 @@ public class NetworkCommunicationManager {
     }
 
     public int getOpponentImageIndex() {
-        tcpClientCommunicationSocket.sendMessage(Messages.getOpponentIndex);
-        String opponentImageIndex = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.getOpponentIndex);
+        String opponentImageIndex = tcpClient.getResponse();
 
         if (!opponentImageIndex.isBlank()) {
             return Integer.parseInt(opponentImageIndex);
@@ -89,16 +87,16 @@ public class NetworkCommunicationManager {
     }
 
     public void sendStartRace() {
-        tcpClientCommunicationSocket.sendMessage(Messages.startRace);
-        String confirmation = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.startRace);
+        String confirmation = tcpClient.getResponse();
         if (confirmation.isBlank()) {
             System.err.println("Cannot reach server");
         }
     }
 
     public void sendStopRace() {
-        tcpClientCommunicationSocket.sendMessage(Messages.stopRace);
-        String confirmation = tcpClientCommunicationSocket.getMessage();
+        tcpClient.sendRequest(Messages.stopRace);
+        String confirmation = tcpClient.getResponse();
         if (confirmation.isBlank()) {
             System.err.println("Cannot reach server");
         }
