@@ -42,15 +42,15 @@ public class NetworkCommunicationManager {
 
     public void sendKartInfo(Kart kart) {
         String serverResponse;
-        tcpClient.sendRequest(Messages.sendingKartInfo);
+        tcpClient.sendRequest(Messages.sendingKartInfo(kart.getPlayer()));
         serverResponse = tcpClient.getResponse();
         if (!serverResponse.isBlank()) {
-            if (serverResponse.equals(Messages.readyToReceiveKart)) {
+            if (serverResponse.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
                 // all good, send the kart
                 tcpClient.sendObject(kart);
                 serverResponse = tcpClient.getResponse();
                 if (!serverResponse.isBlank()) {
-                    if (serverResponse.equals(Messages.kartInfoReceived)) {
+                    if (serverResponse.equals(Messages.kartInfoReceived(kart.getPlayer()))) {
                         // all good, kart received
                     }
                 } else {
@@ -62,8 +62,8 @@ public class NetworkCommunicationManager {
         }
     }
 
-    public int getOpponentSpeed() {
-        tcpClient.sendRequest(Messages.getOpponentSpeed);
+    public int getOpponentSpeed(int player) {
+        tcpClient.sendRequest(Messages.getOpponentSpeed(player));
         String opponentSpeed = tcpClient.getResponse();
 
         if (!opponentSpeed.isBlank()) {
@@ -74,8 +74,8 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public int getOpponentImageIndex() {
-        tcpClient.sendRequest(Messages.getOpponentIndex);
+    public int getOpponentImageIndex(int player) {
+        tcpClient.sendRequest(Messages.getOpponentIndex(player));
         String opponentImageIndex = tcpClient.getResponse();
 
         if (!opponentImageIndex.isBlank()) {

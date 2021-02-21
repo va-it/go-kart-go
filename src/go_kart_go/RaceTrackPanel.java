@@ -117,12 +117,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
                 networkCommunicationManager.sendKartInfo(redKart);
-                blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed());
-                blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex());
+                blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
             } else {
                 networkCommunicationManager.sendKartInfo(blueKart);
-                redKart.setSpeed(networkCommunicationManager.getOpponentSpeed());
-                redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex());
+                redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
             }
             // **************************************************************
 

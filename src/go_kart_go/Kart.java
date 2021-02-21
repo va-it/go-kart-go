@@ -18,6 +18,10 @@ public class Kart implements Serializable {
     public static final int NUMBER_OF_IMAGES = 16;
     public final int IMAGE_SIZE = 50;
 
+    public Kart() {
+        player = 0; // used by server when object obtained is corrupted
+    }
+
     public Kart(String colour, int player) {
         // capitalise the first letter of the string (https://stackoverflow.com/a/3904607)
         String colourUppercase = colour.substring(0, 1).toUpperCase() + colour.substring(1);
