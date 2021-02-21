@@ -63,9 +63,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(raceTrack.redKartLap);
         add(raceTrack.blueKartLap);
 
-
-        networkCommunicationManager = new NetworkCommunicationManager();
-
         raceTrack.setRaceLightsImage(0);
         raceTrack.setUpRaceLights();
         add(raceTrack.raceLightsLabel);
