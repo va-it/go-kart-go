@@ -86,8 +86,8 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public void sendStartRace() {
-        tcpClient.sendRequest(Messages.startRace);
+    public void sendReady() {
+        tcpClient.sendRequest(Messages.ready);
         String confirmation = tcpClient.getResponse();
         if (confirmation.isBlank()) {
             System.err.println("Cannot reach server");

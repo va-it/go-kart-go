@@ -34,6 +34,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.player = player;
         this.networkCommunicationManager = networkCommunicationManager;
+        // we can tell the server that we are ready to start
+        this.networkCommunicationManager.sendReady();
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
@@ -68,7 +70,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(raceTrack.raceLightsLabel);
 
         startRaceTimer = new Timer(1000, startRaceCountDown());
-        startRaceTimer.start();
 
         // Place central message roughly in the centre..
         HelperClass helperClass = new HelperClass();
@@ -96,6 +97,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             }
             switch (secondsElapsed) {
                 case 4:
+                    // this tells the server to start the race
                     this.startRace();
                     break;
                 case 5: // let the lights display for an extra second
@@ -113,6 +115,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         raceTrack.renderTrack(g);
 
         if (animationTimer.isRunning()) {
+
+            // only if the timer isn't running already
+            if (secondsElapsed == 0) {
+                // this should start only when both client have pressed enter
+                // ask server if we can start
+                startRaceTimer.start();
+            }
 
             // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
@@ -194,8 +203,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     public void startRace() {
         this.RACE_IN_PROGRESS = true;
-        //  inform the server
-        networkCommunicationManager.sendStartRace();
     }
 
     public void stopRace() {
