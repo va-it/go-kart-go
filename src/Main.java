@@ -16,7 +16,7 @@ public class Main {
                 MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
                 mainWindow.setVisible(true);
             } else {
-                System.err.println("Connection error");
+                System.err.println("Something went wrong");
             }
         } else {
             System.err.println("Connection error");
