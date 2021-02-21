@@ -42,20 +42,21 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-//        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-//        // udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-//        // udpClientCommunicationSocket.sendKart(kart);
-//        udpClientCommunicationSocket.sendKart(kart);
-//        // server won't acknowledge so we don't listen for a response
-
         String serverResponse;
         tcpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
         serverResponse = tcpClientCommunicationSocket.getMessage();
         if (!serverResponse.isBlank()) {
-            if (serverResponse.equals(Messages.sendingKartInfo)) {
+            if (serverResponse.equals(Messages.readyToReceiveKart)) {
                 // all good, send the kart
                 tcpClientCommunicationSocket.sendKart(kart);
                 serverResponse = tcpClientCommunicationSocket.getMessage();
+                if (!serverResponse.isBlank()) {
+                    if (serverResponse.equals(Messages.kartInfoReceived)) {
+                        // all good, kart received
+                    }
+                } else {
+                    // something went wrong. Can't talk to server
+                }
             }
         } else {
             // something went wrong. Can't talk to server
@@ -63,8 +64,9 @@ public class NetworkCommunicationManager {
     }
 
     public int getOpponentSpeed() {
-        udpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
-        String opponentSpeed = udpClientCommunicationSocket.getMessage();
+        // udpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
+        tcpClientCommunicationSocket.sendMessage(Messages.getOpponentSpeed);
+        String opponentSpeed = tcpClientCommunicationSocket.getMessage();
 
         if (!opponentSpeed.isBlank()) {
             return Integer.parseInt(opponentSpeed);
@@ -75,8 +77,8 @@ public class NetworkCommunicationManager {
     }
 
     public int getOpponentImageIndex() {
-        udpClientCommunicationSocket.sendMessage(Messages.getOpponentIndex);
-        String opponentImageIndex = udpClientCommunicationSocket.getMessage();
+        tcpClientCommunicationSocket.sendMessage(Messages.getOpponentIndex);
+        String opponentImageIndex = tcpClientCommunicationSocket.getMessage();
 
         if (!opponentImageIndex.isBlank()) {
             return Integer.parseInt(opponentImageIndex);
