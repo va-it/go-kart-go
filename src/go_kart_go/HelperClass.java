@@ -54,14 +54,6 @@ public class HelperClass {
         return new ImageIcon(HelperClass.class.getResource(images + "windowImage.png"));
     }
 
-    public static String returnKartColour(int player) {
-        if (player == 1) {
-            return HelperClass.playerOneColour;
-        } else {
-            return HelperClass.playerTwoColour;
-        }
-    }
-
     public static int getOpponentPlayerNumber(int player) {
         if (player == 1) {
             return 2;

@@ -1,2 +1,2 @@
 # go-kart-go
-A Distributed Multi-Player Racing Game
+A Distributed Multi-Client Racing Game

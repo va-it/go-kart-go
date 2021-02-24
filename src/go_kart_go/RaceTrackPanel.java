@@ -89,18 +89,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         // replaced new ActionListener() { @Override actionPerformed ... } with lambda expression
         ActionListener actionListener = e -> {
             if (secondsElapsed == 0) {
-                // Only if the race is not already in progress and the countdown hasn't started
-                if (RACE_IN_PROGRESS == false) {
-                    // we can tell the server that we are ready to start
-                    // and we wait for an answer. If the other client is also
-                    // ready then the server will respond with a START RACE message
-                    boolean raceCanStart = networkCommunicationManager.sendReadyAndWaitForStart();
-                    if (raceCanStart) {
-                        raceTrack.playCountDownSound();
-                        centralMessage.setText(""); // clear waiting for message
-                        add(raceTrack.raceLightsLabel);
-                    }
-                }
+                raceTrack.playCountDownSound();
+                centralMessage.setText(""); // clear waiting for message
+                add(raceTrack.raceLightsLabel);
             }
             secondsElapsed += 1;
             if (secondsElapsed < 5) {
@@ -127,14 +118,26 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         if (animationTimer.isRunning()) {
 
+            if (RACE_IN_PROGRESS == false && secondsElapsed == 0) {
+                // we can tell the server that we are ready to start
+                // and we wait for an answer. If the other client is also
+                // ready then the server will respond with a START RACE message
+                networkCommunicationManager.sendReady();
+                if(networkCommunicationManager.requestToStart()) {
+                    startRaceTimer.start();
+                }
+            }
+
             // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
                 networkCommunicationManager.sendKartInfo(redKart);
                 blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                System.out.println(networkCommunicationManager.getOpponentSpeed(player));
                 blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
             } else {
                 networkCommunicationManager.sendKartInfo(blueKart);
                 redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                System.out.println(networkCommunicationManager.getOpponentSpeed(player));
                 redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
             }
             // **************************************************************
