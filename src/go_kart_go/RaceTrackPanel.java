@@ -34,8 +34,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.player = player;
         this.networkCommunicationManager = networkCommunicationManager;
-        // we can tell the server that we are ready to start
-        this.networkCommunicationManager.sendReady();
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
@@ -65,30 +63,44 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         add(raceTrack.redKartLap);
         add(raceTrack.blueKartLap);
 
-        raceTrack.setRaceLightsImage(0);
-        raceTrack.setUpRaceLights();
-        add(raceTrack.raceLightsLabel);
-
-        startRaceTimer = new Timer(1000, startRaceCountDown());
-
         // Place central message roughly in the centre..
         HelperClass helperClass = new HelperClass();
         centralMessage.setFont(helperClass.font);
         centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 100, 200, 300, 250);
         add(centralMessage);
 
+        // shows Waiting for opponent until server sends start_race response
+        centralMessage.setText(getWaitingMessage());
+
+        // set up race lights, but don't add them yet. Not until other player is ready
+        raceTrack.setRaceLightsImage(0);
+        raceTrack.setUpRaceLights();
+
+        // create swing timer for showing the lights and running the countdown
+        startRaceTimer = new Timer(1000, startRaceCountDown());
+        startRaceTimer.start();
+
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
     }
 
-    // this needs to happen when both client are connected to server and both pressed enter to start
     public ActionListener startRaceCountDown() {
         // replaced new ActionListener() { @Override actionPerformed ... } with lambda expression
         ActionListener actionListener = e -> {
             if (secondsElapsed == 0) {
-                // only play countdown sound the first time
-                raceTrack.playCountDownSound();
+                // Only if the race is not already in progress and the countdown hasn't started
+                if (RACE_IN_PROGRESS == false) {
+                    // we can tell the server that we are ready to start
+                    // and we wait for an answer. If the other client is also
+                    // ready then the server will respond with a START RACE message
+                    boolean raceCanStart = networkCommunicationManager.sendReadyAndWaitForStart();
+                    if (raceCanStart) {
+                        raceTrack.playCountDownSound();
+                        centralMessage.setText(""); // clear waiting for message
+                        add(raceTrack.raceLightsLabel);
+                    }
+                }
             }
             secondsElapsed += 1;
             if (secondsElapsed < 5) {
@@ -97,7 +109,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             }
             switch (secondsElapsed) {
                 case 4:
-                    // this tells the server to start the race
                     this.startRace();
                     break;
                 case 5: // let the lights display for an extra second
@@ -115,13 +126,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         raceTrack.renderTrack(g);
 
         if (animationTimer.isRunning()) {
-
-            // only if the timer isn't running already
-            if (secondsElapsed == 0) {
-                // this should start only when both client have pressed enter
-                // ask server if we can start
-                startRaceTimer.start();
-            }
 
             // ***************** SEND/RETRIEVE KART INFO ********************
             if (player == 1) {
@@ -221,7 +225,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         redKart.stopSpeedSound();
     }
 
-
+    private String getWaitingMessage() {
+        return "WAITING FOR PLAYER " + HelperClass.getOpponentPlayerNumber(player) + " ...";
+    }
 
     @Override
     public void actionPerformed(ActionEvent ae) {

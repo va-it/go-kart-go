@@ -86,12 +86,17 @@ public class NetworkCommunicationManager {
         return 0;
     }
 
-    public void sendReady() {
+    public boolean sendReadyAndWaitForStart() {
         tcpClient.sendRequest(Messages.ready);
         String confirmation = tcpClient.getResponse();
-        if (confirmation.isBlank()) {
+        if (!confirmation.isBlank()) {
+            if (confirmation.equals(Messages.startRace)) {
+                return true;
+            }
+        } else {
             System.err.println("Cannot reach server");
         }
+        return false;
     }
 
     public void sendStopRace() {

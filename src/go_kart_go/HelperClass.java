@@ -61,4 +61,12 @@ public class HelperClass {
             return HelperClass.playerTwoColour;
         }
     }
+
+    public static int getOpponentPlayerNumber(int player) {
+        if (player == 1) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
 }
