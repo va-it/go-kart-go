@@ -27,6 +27,8 @@ public class NetworkCommunicationManager {
     }
 
     public boolean connectToServer() {
+        // can improve this by putting a timeout maybe
+        // try for 5 seconds, then give up and print message?
         String serverResponse = null;
         tcpClient.sendRequest(Messages.establishConnection);
         serverResponse = tcpClient.getResponse();
@@ -41,25 +43,38 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        String serverResponse;
-        tcpClient.sendRequest(Messages.sendingKartInfo);
-        serverResponse = tcpClient.getResponse();
-        if (!serverResponse.isBlank()) {
-            if (serverResponse.equals(Messages.readyToReceiveKart)) {
-                // all good, send the kart
-                tcpClient.sendObject(kart);
-                serverResponse = tcpClient.getResponse();
-                if (!serverResponse.isBlank()) {
-                    if (serverResponse.equals(Messages.kartInfoReceived)) {
-                        // all good, kart received
-                    }
-                } else {
-                    // something went wrong. Can't talk to server
-                }
-            }
-        } else {
-            // something went wrong. Can't talk to server
+        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
+        String message = udpClientCommunicationSocket.getMessage();
+        if (message.equals(Messages.readyToReceiveKart)) {
+            udpClientCommunicationSocket.sendKart(kart);
         }
+
+        // CODE BELOW IS TO SEND KART VIA TCP -
+        // FOR SOME REASON THE KART SENT THIS WAY ALWAYS HAS A SPEED OF ZERO
+        // I AM NOT SURE WHY, MAYBE SOME SORT OF DELAY? NO IDEA
+        // SPENT HOURS DEBUGGING WITH NO LUCK
+        // SAME OBJECT SENT VIA UDP WORKS FINE...
+
+//        System.out.println(kart.getSpeed());
+//        String serverResponse;
+//        tcpClient.sendRequest(Messages.sendingKartInfo);
+//        serverResponse = tcpClient.getResponse();
+//        if (!serverResponse.isBlank()) {
+//            if (serverResponse.equals(Messages.readyToReceiveKart)) {
+//                // all good, send the kart
+//                tcpClient.sendObject(kart);
+//                serverResponse = tcpClient.getResponse();
+//                if (!serverResponse.isBlank()) {
+//                    if (serverResponse.equals(Messages.kartInfoReceived)) {
+//                        // all good, kart received
+//                    }
+//                } else {
+//                    // something went wrong. Can't talk to server
+//                }
+//            }
+//        } else {
+//            // something went wrong. Can't talk to server
+//        }
     }
 
     public int getOpponentSpeed(int player) {
