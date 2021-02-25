@@ -43,11 +43,11 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        udpClientSocket.sendMessage(Messages.sendingKartInfo(kart.getPlayer()));
-        String message = udpClientSocket.getMessage();
-        if (message.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
-            udpClientSocket.sendKart(kart);
-        }
+//        udpClientSocket.sendMessage(Messages.sendingKartInfo(kart.getPlayer()));
+//        String message = udpClientSocket.getMessage();
+//        if (message.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
+//            udpClientSocket.sendKart(kart);
+//        }
 
         // CODE BELOW IS TO SEND KART VIA TCP -
         // FOR SOME REASON THE KART SENT THIS WAY ALWAYS HAS A SPEED OF ZERO
@@ -55,26 +55,26 @@ public class NetworkCommunicationManager {
         // SPENT HOURS DEBUGGING WITH NO LUCK
         // SAME OBJECT SENT VIA UDP WORKS FINE...
 
-//        System.out.println(kart.getSpeed());
-//        String serverResponse;
-//        tcpClient.sendRequest(Messages.sendingKartInfo);
-//        serverResponse = tcpClient.getResponse();
-//        if (!serverResponse.isBlank()) {
-//            if (serverResponse.equals(Messages.readyToReceiveKart)) {
-//                // all good, send the kart
-//                tcpClient.sendObject(kart);
+        System.out.println(kart.getSpeed());
+        String serverResponse;
+        tcpClient.sendRequest(Messages.sendingKartInfo(kart.getPlayer()));
+        serverResponse = tcpClient.getResponse();
+        if (!serverResponse.isBlank()) {
+            if (serverResponse.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
+                // all good, send the kart
+                tcpClient.sendObject(kart);
 //                serverResponse = tcpClient.getResponse();
 //                if (!serverResponse.isBlank()) {
-//                    if (serverResponse.equals(Messages.kartInfoReceived)) {
+//                    if (serverResponse.equals(Messages.kartInfoReceived(kart.getPlayer()))) {
 //                        // all good, kart received
 //                    }
 //                } else {
 //                    // something went wrong. Can't talk to server
 //                }
-//            }
-//        } else {
-//            // something went wrong. Can't talk to server
-//        }
+            }
+        } else {
+            // something went wrong. Can't talk to server
+        }
     }
 
     public int getOpponentSpeed(int player) {
