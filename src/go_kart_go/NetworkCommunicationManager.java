@@ -116,12 +116,17 @@ public class NetworkCommunicationManager {
     public boolean requestToStart() {
         tcpClient.sendRequest(Messages.requestToStart);
         String confirmation = tcpClient.getResponse();
-        if (!confirmation.isBlank()) {
+        if (confirmation.isBlank()) {
+            System.err.println("Cannot reach server");
+        } else {
             if (confirmation.equals(Messages.startRace)) {
                 return true;
+            } else {
+                // need to wait
+                if (confirmation.equals(Messages.wait)) {
+                    System.out.println("waiting");
+                }
             }
-        } else {
-            System.err.println("Cannot reach server");
         }
         return false;
     }

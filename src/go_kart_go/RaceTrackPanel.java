@@ -78,7 +78,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         // create swing timer for showing the lights and running the countdown
         startRaceTimer = new Timer(1000, startRaceCountDown());
-        startRaceTimer.start();
 
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
@@ -128,48 +127,50 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                 }
             }
 
-            // ***************** SEND/RETRIEVE KART INFO ********************
-            if (player == 1) {
-                networkCommunicationManager.sendKartInfo(redKart);
-                blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
-                blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
-            } else {
-                networkCommunicationManager.sendKartInfo(blueKart);
-                redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
-                redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
+            if (RACE_IN_PROGRESS) {
+                // ***************** SEND/RETRIEVE KART INFO ********************
+                if (player == 1) {
+                    networkCommunicationManager.sendKartInfo(redKart);
+                    blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                    blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
+                } else {
+                    networkCommunicationManager.sendKartInfo(blueKart);
+                    redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+                    redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
+                }
+                // **************************************************************
+
+
+                // ====================== DETECT COLLISIONS =====================
+                raceTrack.detectCollisionWithTrack(redKart);
+                raceTrack.detectCollisionWithTrack(blueKart);
+
+                stopGameIfBothKartsAreCrashed();
+
+                detectCollisionBetweenKarts();
+
+                raceTrack.updateSpeedInformation(redKart, blueKart);
+                // ==============================================================
+
+                blueKart.setNextXPosition();
+                blueKart.setNextYPosition();
+
+                blueKart.updateCheckpoint();
+
+                blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getXPosition(), blueKart.getYPosition());
+
+                redKart.setNextXPosition();
+                redKart.setNextYPosition();
+
+                redKart.updateCheckpoint();
+
+                redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getXPosition(), redKart.getYPosition());
+
+                raceTrack.updateLapInformation(redKart, blueKart);
+
+                checkAndDeclareWinner(redKart);
+                checkAndDeclareWinner(blueKart);
             }
-            // **************************************************************
-
-
-            // ====================== DETECT COLLISIONS =====================
-            raceTrack.detectCollisionWithTrack(redKart);
-            raceTrack.detectCollisionWithTrack(blueKart);
-
-            stopGameIfBothKartsAreCrashed();
-
-            detectCollisionBetweenKarts();
-
-            raceTrack.updateSpeedInformation(redKart, blueKart);
-            // ==============================================================
-
-            blueKart.setNextXPosition();
-            blueKart.setNextYPosition();
-
-            blueKart.updateCheckpoint();
-
-            blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getXPosition(), blueKart.getYPosition());
-
-            redKart.setNextXPosition();
-            redKart.setNextYPosition();
-
-            redKart.updateCheckpoint();
-
-            redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getXPosition(), redKart.getYPosition());
-
-            raceTrack.updateLapInformation(redKart, blueKart);
-
-            checkAndDeclareWinner(redKart);
-            checkAndDeclareWinner(blueKart);
         }
     }
 
