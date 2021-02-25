@@ -12,8 +12,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private int secondsElapsed = 0;
 
     // 30 times a second
-    // private static final int delay = 1000 / 30;
-    private static final int delay = 2000;
+     private static final int delay = 1000 / 30;
+    //private static final int delay = 2000;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
@@ -83,6 +83,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         // create swing timer with 100ms delay and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
+
+        // we can tell the server that we are ready to start
+        networkCommunicationManager.sendReady();
     }
 
     public ActionListener startRaceCountDown() {
@@ -118,11 +121,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         if (animationTimer.isRunning()) {
 
-            if (RACE_IN_PROGRESS == false && secondsElapsed == 0) {
-                // we can tell the server that we are ready to start
-                // and we wait for an answer. If the other client is also
-                // ready then the server will respond with a START RACE message
-                networkCommunicationManager.sendReady();
+            if (RACE_IN_PROGRESS == false && !startRaceTimer.isRunning()) {
+                // we constantly ask the server if we can start
+                // if they reply positevely then we start the timer etc.
                 if(networkCommunicationManager.requestToStart()) {
                     startRaceTimer.start();
                 }
