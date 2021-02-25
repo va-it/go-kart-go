@@ -55,7 +55,9 @@ public class NetworkCommunicationManager {
         // SPENT HOURS DEBUGGING WITH NO LUCK
         // SAME OBJECT SENT VIA UDP WORKS FINE...
 
-        System.out.println(kart.getSpeed());
+        // WHY IS SPEED ZERO WHEN THE OBJECT IS RECEIVED???
+        // PRINT AND DEBUG HERE SHOWS CORRECT NUMBER !!!!!!!!!!!!!!!!!!!!
+
         String serverResponse;
         tcpClient.sendRequest(Messages.sendingKartInfo(kart.getPlayer()));
         serverResponse = tcpClient.getResponse();
@@ -63,72 +65,65 @@ public class NetworkCommunicationManager {
             if (serverResponse.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
                 // all good, send the kart
                 tcpClient.sendObject(kart);
-//                serverResponse = tcpClient.getResponse();
-//                if (!serverResponse.isBlank()) {
-//                    if (serverResponse.equals(Messages.kartInfoReceived(kart.getPlayer()))) {
-//                        // all good, kart received
-//                    }
-//                } else {
-//                    // something went wrong. Can't talk to server
-//                }
             }
         } else {
             // something went wrong. Can't talk to server
+            System.err.println("Unable to contact server to send kart info");
         }
     }
 
     public int getOpponentSpeed(int player) {
-        udpClientSocket.sendMessage(Messages.getOpponentSpeed(player));
-        String opponentSpeed = udpClientSocket.getMessage();
-
-        if (!opponentSpeed.isBlank()) {
-            try {
-                return Integer.parseInt(opponentSpeed);
-            } catch (final NumberFormatException e) {
-                System.err.println("speed is not a number: " + e);
-            }
-        } else {
-            // something went wrong. Can't talk to server
-            System.err.println("connection error when requesting speed");
-        }
-        return 0;
-
-//        tcpClient.sendRequest(Messages.getOpponentSpeed(player));
-//        String opponentSpeed = tcpClient.getResponse();
+//        udpClientSocket.sendMessage(Messages.getOpponentSpeed(player));
+//        String opponentSpeed = udpClientSocket.getMessage();
 //
 //        if (!opponentSpeed.isBlank()) {
-//            return Integer.parseInt(opponentSpeed);
+//            try {
+//                return Integer.parseInt(opponentSpeed);
+//            } catch (final NumberFormatException e) {
+//                System.err.println("speed is not a number: " + e);
+//            }
 //        } else {
 //            // something went wrong. Can't talk to server
+//            System.err.println("connection error when requesting speed");
 //        }
 //        return 0;
+
+        tcpClient.sendRequest(Messages.getOpponentSpeed(player));
+        String opponentSpeed = tcpClient.getResponse();
+
+        if (!opponentSpeed.isBlank()) {
+            return Integer.parseInt(opponentSpeed);
+        } else {
+            // something went wrong. Can't talk to server
+        }
+        return 0;
     }
 
     public int getOpponentImageIndex(int player) {
-        udpClientSocket.sendMessage(Messages.getOpponentIndex(player));
-        String opponentIndex = udpClientSocket.getMessage();
-
-        if (!opponentIndex.isBlank()) {
-            try {
-                return Integer.parseInt(opponentIndex);
-            } catch (final NumberFormatException e) {
-                System.err.println("index is not a number: " + e);
-            }
-        } else {
-            // something went wrong. Can't talk to server
-            System.err.println("connection error when requesting index");
-        }
-        return 0;
-
-//        tcpClient.sendRequest(Messages.getOpponentIndex(player));
-//        String opponentImageIndex = tcpClient.getResponse();
+//        udpClientSocket.sendMessage(Messages.getOpponentIndex(player));
+//        String opponentIndex = udpClientSocket.getMessage();
 //
-//        if (!opponentImageIndex.isBlank()) {
-//            return Integer.parseInt(opponentImageIndex);
+//        if (!opponentIndex.isBlank()) {
+//            try {
+//                return Integer.parseInt(opponentIndex);
+//            } catch (final NumberFormatException e) {
+//                System.err.println("index is not a number: " + e);
+//            }
 //        } else {
 //            // something went wrong. Can't talk to server
+//            System.err.println("connection error when requesting index");
 //        }
 //        return 0;
+
+        tcpClient.sendRequest(Messages.getOpponentIndex(player));
+        String opponentImageIndex = tcpClient.getResponse();
+
+        if (!opponentImageIndex.isBlank()) {
+            return Integer.parseInt(opponentImageIndex);
+        } else {
+            // something went wrong. Can't talk to server
+        }
+        return 0;
     }
 
     public void sendReady() {

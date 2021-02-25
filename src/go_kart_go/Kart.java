@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.io.Serializable;
 
 public class Kart implements Serializable {
-    private int speed;
+    private int speed = 0;
     private int xPosition;
     private int yPosition;
     private final int player;
@@ -27,7 +27,6 @@ public class Kart implements Serializable {
         String colourUppercase = colour.substring(0, 1).toUpperCase() + colour.substring(1);
         String image = "kart" + colourUppercase;
 
-        this.speed = 0;
         this.player = player;
 
         // load images into an array
