@@ -4,12 +4,12 @@ import go_kart_go_network.*;
 
 public class NetworkCommunicationManager {
 
-    public UDPClientCommunicationSocket udpClientCommunicationSocket;
+    public UDPClientSocket udpClientSocket;
     public TCPClient tcpClient;
 
     public NetworkCommunicationManager() {
 
-        udpClientCommunicationSocket = new UDPClientCommunicationSocket();
+        udpClientSocket = new UDPClientSocket();
         tcpClient = new TCPClient();
     }
 
@@ -43,10 +43,10 @@ public class NetworkCommunicationManager {
     }
 
     public void sendKartInfo(Kart kart) {
-        udpClientCommunicationSocket.sendMessage(Messages.sendingKartInfo);
-        String message = udpClientCommunicationSocket.getMessage();
+        udpClientSocket.sendMessage(Messages.sendingKartInfo);
+        String message = udpClientSocket.getMessage();
         if (message.equals(Messages.readyToReceiveKart)) {
-            udpClientCommunicationSocket.sendKart(kart);
+            udpClientSocket.sendKart(kart);
         }
 
         // CODE BELOW IS TO SEND KART VIA TCP -
