@@ -15,14 +15,14 @@ public class MainWindow extends JFrame implements KeyListener {
     private final MainMenuPanel mainMenuPanel;
 
     private int player;
-    private NetworkCommunicationManager networkCommunicationManager;
+    private NetComManager netComManager;
 
-    public MainWindow(int player, NetworkCommunicationManager networkCommunicationManager) {
+    public MainWindow(int player, NetComManager netComManager) {
         // call constructor of JFrame
         super();
 
         this.player = player;
-        this.networkCommunicationManager = networkCommunicationManager;
+        this.netComManager = netComManager;
 
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
@@ -43,7 +43,7 @@ public class MainWindow extends JFrame implements KeyListener {
     }
 
     public void instantiateRaceTrackPanel() {
-        raceTrackPanel = new RaceTrackPanel(player, networkCommunicationManager);
+        raceTrackPanel = new RaceTrackPanel(player, netComManager);
         raceTrackPanel.setLayout(null);
         pane.add(raceTrackPanel);
     }

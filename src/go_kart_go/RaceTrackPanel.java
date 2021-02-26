@@ -12,8 +12,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private int secondsElapsed = 0;
 
     // 30 times a second
-    private static final int delay = 1000 / 30;
-    //private static final int delay = 2000;
+    //private static final int delay = 1000 / 30;
+    private static final int delay = 2000;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
@@ -28,13 +28,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private int player;
 
-    private NetworkCommunicationManager networkCommunicationManager;
+    private NetComManager netComManager;
 
-    public RaceTrackPanel(int player, NetworkCommunicationManager networkCommunicationManager) {
+    public RaceTrackPanel(int player, NetComManager netComManager) {
         super();
 
         this.player = player;
-        this.networkCommunicationManager = networkCommunicationManager;
+        this.netComManager = netComManager;
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
@@ -85,7 +85,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         animationTimer.start();
 
         // we can tell the server that we are ready to start
-        networkCommunicationManager.sendReady();
+        netComManager.sendReady();
     }
 
     public ActionListener startRaceCountDown() {
@@ -124,7 +124,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             if (RACE_IN_PROGRESS == false && !startRaceTimer.isRunning()) {
                 // we constantly ask the server if we can start
                 // if they reply positevely then we start the timer etc.
-                if(networkCommunicationManager.requestToStart()) {
+                if(netComManager.requestToStart()) {
                     startRaceTimer.start();
                 }
             }
@@ -135,13 +135,15 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
                 // ***************** SEND/RETRIEVE KART INFO ********************
                 if (player == 1) {
-                    networkCommunicationManager.sendKartInfo(redKart);
-                    blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
-                    blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
+                    netComManager.sendKartInfo(redKart);
+                    blueKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
+//                    blueKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+//                    blueKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
                 } else {
-                    networkCommunicationManager.sendKartInfo(blueKart);
-                    redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
-                    redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
+                    netComManager.sendKartInfo(blueKart);
+                    redKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
+//                    redKart.setSpeed(networkCommunicationManager.getOpponentSpeed(player));
+//                    redKart.setImageIndex(networkCommunicationManager.getOpponentImageIndex(player));
                 }
                 // **************************************************************
 
@@ -222,7 +224,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
         // inform the server
-        networkCommunicationManager.sendStopRace();
+        netComManager.sendStopRace();
     }
 
     public void stopAllSounds() {

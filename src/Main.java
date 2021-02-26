@@ -1,5 +1,5 @@
 import go_kart_go.MainWindow;
-import go_kart_go.NetworkCommunicationManager;
+import go_kart_go.NetComManager;
 
 public class Main {
 
@@ -7,19 +7,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-        NetworkCommunicationManager networkCommunicationManager = new NetworkCommunicationManager();
+        NetComManager netComManager = new NetComManager();
 
-        if (networkCommunicationManager.connectToServer()) {
+        try {
+            netComManager.connectToServer();
             // ask server for the player number
-            player = networkCommunicationManager.getPlayerNumber();
+            player = netComManager.getPlayerNumber();
             if (player == 1 || player == 2) {
-                MainWindow mainWindow = new MainWindow(player, networkCommunicationManager);
+                MainWindow mainWindow = new MainWindow(player, netComManager);
                 mainWindow.setVisible(true);
             } else {
-                System.err.println("Something went wrong");
+                System.err.println("Server cannot determine player number");
             }
-        } else {
-            System.err.println("Connection error");
+        } catch (NullPointerException e) {
+            System.err.println("Cannot reach the server");
         }
     }
 }
