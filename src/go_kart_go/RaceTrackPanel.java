@@ -12,8 +12,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private int secondsElapsed = 0;
 
     // 30 times a second
-    // private static final int delay = 1000 / 30;
-    private static final int delay = 2000;
+    private static final int delay = 1000 / 30;
+    //private static final int delay = 2000;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
@@ -130,6 +130,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             }
 
             if (RACE_IN_PROGRESS) {
+
+                // networkCommunicationManager.sendRunning();
+
                 // ***************** SEND/RETRIEVE KART INFO ********************
                 if (player == 1) {
                     networkCommunicationManager.sendKartInfo(redKart);
