@@ -8,7 +8,6 @@ public class NetComManager {
     public TCPClient tcpClient;
 
     public NetComManager() {
-
         udpClientSocket = new UDPClientSocket();
         tcpClient = new TCPClient();
     }
@@ -42,39 +41,9 @@ public class NetComManager {
         return false;
     }
 
-    public void sendRunning() {
-        // keep talking to TCP server so it doesn't hang waiting
-        tcpClient.sendRequest(Messages.running);
-    }
-
     public void sendKartInfo(Kart kart) {
         udpClientSocket.sendMessage(Messages.sendingKartInfo);
-        // String message = udpClientSocket.getMessage();
-        //if (message.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
-            udpClientSocket.sendKart(kart);
-        //}
-
-        // CODE BELOW IS TO SEND KART VIA TCP -
-        // FOR SOME REASON THE KART SENT THIS WAY ALWAYS HAS A SPEED OF ZERO
-        // I AM NOT SURE WHY, MAYBE SOME SORT OF DELAY? NO IDEA
-        // SPENT HOURS DEBUGGING WITH NO LUCK
-        // SAME OBJECT SENT VIA UDP WORKS FINE...
-
-        // WHY IS SPEED ZERO WHEN THE OBJECT IS RECEIVED???
-        // PRINT AND DEBUG HERE SHOWS CORRECT NUMBER !!!!!!!!!!!!!!!!!!!!
-
-//        String serverResponse;
-//        tcpClient.sendRequest(Messages.sendingKartInfo(kart.getPlayer()));
-//        serverResponse = tcpClient.getResponse();
-//        if (!serverResponse.isBlank()) {
-//            if (serverResponse.equals(Messages.readyToReceiveKart(kart.getPlayer()))) {
-//                // all good, send the kart
-//                tcpClient.sendObject(kart);
-//            }
-//        } else {
-//            // something went wrong. Can't talk to server
-//            System.err.println("Unable to contact server to send kart info");
-//        }
+        udpClientSocket.sendKart(kart);
     }
 
     public Kart getOpponentKartInfo(int player) {
@@ -86,61 +55,6 @@ public class NetComManager {
         }
         return new Kart();
     }
-
-//    public int getOpponentSpeed(int player) {
-//        udpClientSocket.sendMessage(Messages.getOpponentSpeed);
-//
-//        String opponentSpeed = udpClientSocket.getMessage();
-//
-//        if (!opponentSpeed.isBlank() && !opponentSpeed.equals(Messages.timeout)) {
-//            try {
-//                return Integer.parseInt(opponentSpeed);
-//            } catch (final NumberFormatException e) {
-//                System.err.println("speed is not a number: " + e);
-//            }
-//        } else {
-//            // something went wrong. Can't talk to server
-//            System.err.println("connection error when requesting speed");
-//        }
-//        return 0;
-//
-////        tcpClient.sendRequest(Messages.getOpponentSpeed(player));
-////        String opponentSpeed = tcpClient.getResponse();
-////
-////        if (!opponentSpeed.isBlank()) {
-////            return Integer.parseInt(opponentSpeed);
-////        } else {
-////            // something went wrong. Can't talk to server
-////        }
-////        return 0;
-//    }
-//
-//    public int getOpponentImageIndex(int player) {
-//        udpClientSocket.sendMessage(Messages.getOpponentIndex);
-//        String opponentIndex = udpClientSocket.getMessage();
-//
-//        if (!opponentIndex.isBlank() && !opponentIndex.equals(Messages.timeout)) {
-//            try {
-//                return Integer.parseInt(opponentIndex);
-//            } catch (final NumberFormatException e) {
-//                System.err.println("index is not a number: " + e);
-//            }
-//        } else {
-//            // something went wrong. Can't talk to server
-//            System.err.println("connection error when requesting index");
-//        }
-//        return 0;
-//
-////        tcpClient.sendRequest(Messages.getOpponentIndex(player));
-////        String opponentImageIndex = tcpClient.getResponse();
-////
-////        if (!opponentImageIndex.isBlank()) {
-////            return Integer.parseInt(opponentImageIndex);
-////        } else {
-////            // something went wrong. Can't talk to server
-////        }
-////        return 0;
-//    }
 
     public void sendReady() {
         tcpClient.sendRequest(Messages.ready);
