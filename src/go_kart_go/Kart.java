@@ -16,7 +16,7 @@ public class Kart implements Serializable {
     private transient SoundsManager soundsManager; // ignored when object is serialised
     private transient final ImageIcon[] images = new ImageIcon[NUMBER_OF_IMAGES];
     public static final int NUMBER_OF_IMAGES = 16;
-    public final int IMAGE_SIZE = 50;
+    public final int IMAGE_SIZE = HelperClass.IMAGE_SIZE;
 
     public Kart() {
         player = 0; // used by server when object obtained is corrupted

@@ -49,7 +49,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.redKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE);
         // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
         this.blueKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
-        this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + this.redKart.IMAGE_SIZE);
+        this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + HelperClass.IMAGE_SIZE);
 
         add(raceTrack.player1Label);
         add(raceTrack.player2Label);
@@ -134,61 +134,56 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                 // ***************** SEND/RETRIEVE KART INFO ********************
                 Kart receivedKart;
                 if (player == 1) {
-                    netComManager.sendKartInfo(redKart);
-                    receivedKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
-                    if (receivedKart != null) {
-                        blueKart.setSpeed(receivedKart.getSpeed());
-                        blueKart.setImageIndex(receivedKart.getImageIndex());
-                    }
+                    sendAndReceiveKartInfo(redKart, blueKart);
                 } else {
-                    netComManager.sendKartInfo(blueKart);
-                    receivedKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
-                    if (receivedKart != null) {
-                        redKart.setSpeed(receivedKart.getSpeed());
-                        redKart.setImageIndex(receivedKart.getImageIndex());
-                    }
+                    sendAndReceiveKartInfo(blueKart, redKart);
                 }
                 // **************************************************************
 
-
                 // ====================== DETECT COLLISIONS =====================
-                if (redKart != null) {
-                    raceTrack.detectCollisionWithTrack(redKart);
-                }
+                raceTrack.detectCollisionWithTrack(redKart);
 
-                if (blueKart != null) {
-                    raceTrack.detectCollisionWithTrack(blueKart);
-                }
+                raceTrack.detectCollisionWithTrack(blueKart);
 
                 stopGameIfBothKartsAreCrashed();
 
                 detectCollisionBetweenKarts();
 
-                if (redKart != null && blueKart != null) {
-                    raceTrack.updateSpeedInformation(redKart, blueKart);
-                }
+                raceTrack.updateSpeedInformation(redKart, blueKart);
                 // ==============================================================
 
-                if (blueKart != null) {
-                    blueKart.setNextXPosition();
-                    blueKart.setNextYPosition();
-                    blueKart.updateCheckpoint();
-                    blueKart.getImageAtCurrentIndex().paintIcon(this, g, blueKart.getXPosition(), blueKart.getYPosition());
-                }
-                if (redKart != null) {
-                    redKart.setNextXPosition();
-                    redKart.setNextYPosition();
-                    redKart.updateCheckpoint();
-                    redKart.getImageAtCurrentIndex().paintIcon(this, g, redKart.getXPosition(), redKart.getYPosition());
-                }
+                blueKart.setNextXPosition();
+                blueKart.setNextYPosition();
+                blueKart.updateCheckpoint();
+                blueKart.getImageAtCurrentIndex().paintIcon(
+                        this, g, blueKart.getXPosition(), blueKart.getYPosition()
+                );
 
-                if (redKart != null && blueKart != null) {
-                    raceTrack.updateLapInformation(redKart, blueKart);
-                }
+                redKart.setNextXPosition();
+                redKart.setNextYPosition();
+                redKart.updateCheckpoint();
+                redKart.getImageAtCurrentIndex().paintIcon(
+                        this, g, redKart.getXPosition(), redKart.getYPosition()
+                );
+
+                raceTrack.updateLapInformation(redKart, blueKart);
 
                 checkAndDeclareWinner(redKart);
                 checkAndDeclareWinner(blueKart);
             }
+        }
+    }
+
+    private void sendAndReceiveKartInfo(Kart kartToSend, Kart kartToReceive) {
+        Kart receivedKart;
+        netComManager.sendKartInfo(kartToSend);
+        receivedKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
+        if (receivedKart != null) {
+            // cannot simply copy the object received because that one doesn't have images
+            kartToReceive.setSpeed(receivedKart.getSpeed());
+            kartToReceive.setImageIndex(receivedKart.getImageIndex());
+            kartToReceive.setXPosition(receivedKart.getXPosition());
+            kartToReceive.setYPosition(receivedKart.getYPosition());
         }
     }
 
@@ -213,16 +208,14 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     public void stopGameIfBothKartsAreCrashed() {
-        if (redKart != null && blueKart != null) {
-            if (redKart.isCrashed() && blueKart.isCrashed()) {
-                this.centralMessage.setText(gameOverMessage);
-                this.stopRace();
-            }
+        if (redKart.isCrashed() && blueKart.isCrashed()) {
+            this.centralMessage.setText(gameOverMessage);
+            this.stopRace();
         }
     }
 
     private void checkAndDeclareWinner(Kart kart) {
-        if (kart != null && kart.isWinner()) {
+        if (kart.isWinner()) {
             this.stopRace();
             this.centralMessage.setText("<html>PLAYER " + kart.getPlayer() + " WINS !!!<br>" + endGameMessage + "</html>");
             raceTrack.playCheeringSound();
@@ -234,12 +227,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     public void stopRace() {
-        if (redKart != null) {
-            this.redKart.stop(); // stop to change speed and sound
-        }
-        if (blueKart != null) {
-            this.blueKart.stop();
-        }
+        this.redKart.stop(); // stop to change speed and sound
+        this.blueKart.stop();
         this.animationTimer.stop();
         this.RACE_IN_PROGRESS = false;
         // inform the server
@@ -249,12 +238,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     public void stopAllSounds() {
         // stop any sound that might be playing
         raceTrack.stopAllSounds();
-        if (redKart != null) {
-            redKart.stopSpeedSound();
-        }
-        if (blueKart != null) {
-            blueKart.stopSpeedSound();
-        }
+        redKart.stopSpeedSound();
+        blueKart.stopSpeedSound();
     }
 
     private String getWaitingMessage() {

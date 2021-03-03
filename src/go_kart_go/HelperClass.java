@@ -15,6 +15,7 @@ public class HelperClass {
     public static final String fonts = resources + "/fonts/";
     public static final String playerOneColour = "red";
     public static final String playerTwoColour = "blue";
+    public static final int IMAGE_SIZE = 50;
 
 
     public HelperClass() {
