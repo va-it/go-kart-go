@@ -18,8 +18,9 @@ public class Kart implements Serializable {
     public static final int NUMBER_OF_IMAGES = 16;
     public final int IMAGE_SIZE = HelperClass.IMAGE_SIZE;
 
+    // used by server when object obtained is corrupted
     public Kart() {
-        player = 0; // used by server when object obtained is corrupted
+        player = 0;
     }
 
     public Kart(String colour, int player) {
