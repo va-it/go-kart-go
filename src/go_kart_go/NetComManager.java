@@ -20,7 +20,7 @@ public class NetComManager {
         if (!serverResponse.isBlank()) {
             return Integer.parseInt(serverResponse);
         } else {
-            // something went wrong. Can't talk to server
+            System.err.println("Cannot reach server");
         }
         return 0;
     }
@@ -36,8 +36,9 @@ public class NetComManager {
             if (serverResponse.equals(Messages.connectionSuccessful)) {
                 return true;
             }
+        } else {
+            System.err.println("Cannot reach server");
         }
-        // something went wrong. Can't talk to server
         return false;
     }
 
@@ -59,31 +60,20 @@ public class NetComManager {
     public void sendReady() {
         tcpClient.sendRequest(Messages.ready);
         String confirmation = tcpClient.getResponse();
-        if (!confirmation.isBlank()) {
-            if (confirmation.equals(Messages.readyReceived)) {
-                // all good
-            }
-        } else {
+        if (!confirmation.isBlank() || !confirmation.equals(Messages.readyReceived)) {
             System.err.println("Cannot reach server");
         }
     }
 
-    public boolean requestToStart() {
+    public String requestToStart() {
         tcpClient.sendRequest(Messages.requestToStart);
         String confirmation = tcpClient.getResponse();
         if (confirmation.isBlank()) {
             System.err.println("Cannot reach server");
         } else {
-            if (confirmation.equals(Messages.startRace)) {
-                return true;
-            } else {
-                // need to wait
-                if (confirmation.equals(Messages.wait)) {
-                    System.out.println("waiting");
-                }
-            }
+            return confirmation;
         }
-        return false;
+        return Messages.error;
     }
 
     public void sendStopRace() {
@@ -94,23 +84,15 @@ public class NetComManager {
         }
     }
 
-    public boolean isOpponentConnected() {
+    public String getOpponentConnectionStatus() {
         tcpClient.sendRequest(Messages.checkOpponentConnection);
         String confirmation = tcpClient.getResponse();
         if (confirmation.isBlank()) {
             System.err.println("Cannot reach server");
+            return Messages.error;
         } else {
-            if (confirmation.equals(Messages.opponentConnected)) {
-                // all good, opponent still connected
-                return true;
-            } else {
-                if (confirmation.equals(Messages.opponentQuit)) {
-                    // the opponent quit. Stop race, show message etc.
-                    return false;
-                }
-            }
+            return confirmation;
         }
-        return false;
     }
 
 }

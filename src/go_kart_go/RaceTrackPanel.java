@@ -1,5 +1,7 @@
 package go_kart_go;
 
+import go_kart_go_network.Messages;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -13,11 +15,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     // 30 times a second
     private static final int delay = 1000 / 30;
-    // private static final int delay = 250;
+    //private static final int delay = 1000;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
     private final String gameOverMessage = "<html>GAME OVER<br>" + endGameMessage + "</html>";
+    private final String errorMessage = "<html> *** GAME ERROR *** <br><br> PRESS ESC TO QUIT</html>";
 
     public Kart redKart;
     public Kart blueKart;
@@ -69,9 +72,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         centralMessage.setFont(helperClass.font);
         centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 100, 200, 300, 250);
         add(centralMessage);
-
-        // shows Waiting for opponent until server sends start_race response
-        centralMessage.setText(getWaitingMessage());
 
         // set up race lights, but don't add them yet. Not until other player is ready
         raceTrack.setRaceLightsImage(0);
@@ -127,18 +127,32 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         if (animationTimer.isRunning()) {
 
             if (RACE_IN_PROGRESS == false && !startRaceTimer.isRunning()) {
+
+                String requestToStart = netComManager.requestToStart();
+
                 // we constantly ask the server if we can start
                 // if they reply positevely then we start the timer etc.
-                if(netComManager.requestToStart()) {
+                if(requestToStart.equals(Messages.startRace)) {
                     startRaceTimer.start();
+                } else {
+                    if (requestToStart.equals(Messages.wait)) {
+                        // shows Waiting for opponent until server sends start_race response
+                        centralMessage.setText(getWaitingMessage());
+                    } else {
+
+                        if (requestToStart.equals(Messages.wait)) {
+                            centralMessage.setText(errorMessage);
+                        }
+                    }
                 }
             }
 
             if (RACE_IN_PROGRESS) {
 
                 // Here ask if opponent has quit. If so then display message
+                String opponentConnectionStatus = netComManager.getOpponentConnectionStatus();
 
-                if (netComManager.isOpponentConnected()) {
+                if (opponentConnectionStatus.equals(Messages.opponentConnected)) {
 
                     // ***************** SEND/RETRIEVE KART INFO ********************
                     if (player == 1) {
@@ -179,8 +193,14 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                     checkAndDeclareWinner(blueKart);
 
                 } else {
+                    if (opponentConnectionStatus.equals(Messages.opponentNotConnected)) {
+                        this.centralMessage.setText(getWaitingMessage());
+                    } else {
+                        if (opponentConnectionStatus.equals(Messages.error)) {
+                            this.centralMessage.setText(errorMessage);
+                        }
+                    }
                     this.stopRace();
-                    this.centralMessage.setText(getWaitingMessage());
                 }
             }
         }
@@ -199,6 +219,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
             kartToReceive.setImageIndex(receivedKart.getImageIndex());
             kartToReceive.setXPosition(receivedKart.getXPosition());
             kartToReceive.setYPosition(receivedKart.getYPosition());
+            kartToReceive.setWinner(receivedKart.isWinner());
+            kartToReceive.setCheckPoint(receivedKart.getCheckPoint());
+            kartToReceive.setLap(receivedKart.getLap());
+            kartToReceive.setCrashed(receivedKart.isCrashed());
         }
     }
 
@@ -215,8 +239,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                 blueKart.stop();
                 redKart.setCrashed(true);
                 blueKart.setCrashed(true);
-                animationTimer.stop();
                 this.stopRace();
+                animationTimer.stop();
                 this.centralMessage.setText(gameOverMessage);
             }
         }
@@ -232,7 +256,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private void checkAndDeclareWinner(Kart kart) {
         if (kart.isWinner()) {
             this.stopRace();
-            this.centralMessage.setText("<html>PLAYER " + kart.getPlayer() + " WINS !!!<br>" + endGameMessage + "</html>");
+            this.centralMessage.setText(getWinnerMessage(kart.getPlayer()));
             raceTrack.playCheeringSound();
         }
     }
@@ -259,6 +283,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private String getWaitingMessage() {
         return "WAITING FOR PLAYER " + HelperClass.getOpponentPlayerNumber(player) + " ...";
+    }
+
+    private String getWinnerMessage(int player) {
+        return "<html>PLAYER " + player + " WINS !!!<br>" + endGameMessage + "</html>";
     }
 
     @Override

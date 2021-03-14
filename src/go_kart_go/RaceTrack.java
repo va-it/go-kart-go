@@ -156,7 +156,7 @@ public class RaceTrack {
         raceLightsLabel.setIcon(raceLights);
     }
 
-    public boolean detectCollision(Kart kart) {
+    public static boolean detectCollision(Kart kart) {
         // store values in variables to avoid having to call the getters multiple times
         int xPosition = kart.getXPosition();
         int yPosition = kart.getYPosition();
