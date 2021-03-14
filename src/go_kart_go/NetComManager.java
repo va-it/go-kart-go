@@ -94,4 +94,23 @@ public class NetComManager {
         }
     }
 
+    public boolean isOpponentConnected() {
+        tcpClient.sendRequest(Messages.checkOpponentConnection);
+        String confirmation = tcpClient.getResponse();
+        if (confirmation.isBlank()) {
+            System.err.println("Cannot reach server");
+        } else {
+            if (confirmation.equals(Messages.opponentConnected)) {
+                // all good, opponent still connected
+                return true;
+            } else {
+                if (confirmation.equals(Messages.opponentQuit)) {
+                    // the opponent quit. Stop race, show message etc.
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
 }

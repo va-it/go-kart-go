@@ -88,6 +88,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         netComManager.sendReady();
     }
 
+    // NEED TO CREATE SEPARATE THREAD FOR TCP COMMUNICATION AFTER THE RACE HAS STARTED
+    // USED TO ASK IF OPPONENT HAS QUIT
+    // WHEN OPPONENT QUITS THEN DISPLAY WAITING FOR PLAYER X
+    // SEPARATE THREAD IS NEEDED OTHERWISE APPLICATION IS STUCK WAITING FOR TCP MESSAGE
+
     public ActionListener startRaceCountDown() {
         // replaced new ActionListener() { @Override actionPerformed ... } with lambda expression
         ActionListener actionListener = e -> {
@@ -131,48 +136,52 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             if (RACE_IN_PROGRESS) {
 
-//                if(netComManager.requestToStart()) {
-//                    startRaceTimer.start();
-//                }
+                // Here ask if opponent has quit. If so then display message
 
-                // ***************** SEND/RETRIEVE KART INFO ********************
-                Kart receivedKart;
-                if (player == 1) {
-                    sendAndReceiveKartInfo(redKart, blueKart);
+                if (netComManager.isOpponentConnected()) {
+
+                    // ***************** SEND/RETRIEVE KART INFO ********************
+                    if (player == 1) {
+                        sendAndReceiveKartInfo(redKart, blueKart);
+                    } else {
+                        sendAndReceiveKartInfo(blueKart, redKart);
+                    }
+                    // **************************************************************
+
+                    // ====================== DETECT COLLISIONS =====================
+                    raceTrack.detectCollisionWithTrack(redKart);
+                    raceTrack.detectCollisionWithTrack(blueKart);
+
+                    stopGameIfBothKartsAreCrashed();
+
+                    detectCollisionBetweenKarts();
+
+                    raceTrack.updateSpeedInformation(redKart, blueKart);
+                    // ==============================================================
+
+                    blueKart.setNextXPosition();
+                    blueKart.setNextYPosition();
+                    blueKart.updateCheckpoint();
+                    blueKart.getImageAtCurrentIndex().paintIcon(
+                            this, g, blueKart.getXPosition(), blueKart.getYPosition()
+                    );
+
+                    redKart.setNextXPosition();
+                    redKart.setNextYPosition();
+                    redKart.updateCheckpoint();
+                    redKart.getImageAtCurrentIndex().paintIcon(
+                            this, g, redKart.getXPosition(), redKart.getYPosition()
+                    );
+
+                    raceTrack.updateLapInformation(redKart, blueKart);
+
+                    checkAndDeclareWinner(redKart);
+                    checkAndDeclareWinner(blueKart);
+
                 } else {
-                    sendAndReceiveKartInfo(blueKart, redKart);
+                    this.stopRace();
+                    this.centralMessage.setText(getWaitingMessage());
                 }
-                // **************************************************************
-
-                // ====================== DETECT COLLISIONS =====================
-                raceTrack.detectCollisionWithTrack(redKart);
-                raceTrack.detectCollisionWithTrack(blueKart);
-
-                stopGameIfBothKartsAreCrashed();
-
-                detectCollisionBetweenKarts();
-
-                raceTrack.updateSpeedInformation(redKart, blueKart);
-                // ==============================================================
-
-                blueKart.setNextXPosition();
-                blueKart.setNextYPosition();
-                blueKart.updateCheckpoint();
-                blueKart.getImageAtCurrentIndex().paintIcon(
-                        this, g, blueKart.getXPosition(), blueKart.getYPosition()
-                );
-
-                redKart.setNextXPosition();
-                redKart.setNextYPosition();
-                redKart.updateCheckpoint();
-                redKart.getImageAtCurrentIndex().paintIcon(
-                        this, g, redKart.getXPosition(), redKart.getYPosition()
-                );
-
-                raceTrack.updateLapInformation(redKart, blueKart);
-
-                checkAndDeclareWinner(redKart);
-                checkAndDeclareWinner(blueKart);
             }
         }
     }
