@@ -53,7 +53,7 @@ public class NetComManager {
         } catch (ClassCastException e) {
             System.err.println("Error casting object received from server: " + e);
         }
-        return new Kart();
+        return null;
     }
 
     public void sendReady() {

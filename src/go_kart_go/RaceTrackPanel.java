@@ -12,8 +12,8 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     private int secondsElapsed = 0;
 
     // 30 times a second
-    //private static final int delay = 1000 / 30;
-    private static final int delay = 2000;
+    private static final int delay = 1000 / 30;
+    // private static final int delay = 250;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
@@ -177,7 +177,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         Kart receivedKart;
         netComManager.sendKartInfo(kartToSend);
         receivedKart = netComManager.getOpponentKartInfo(HelperClass.getOpponentPlayerNumber(player));
-        if (receivedKart != null) {
+        // if the kart received is indeed the opponent's one
+        // Due to the speed at which the objects are sent and read
+        // it can happen that they get mixed (e.g. kart read is not the opponent's but own)
+        if (receivedKart != null && receivedKart.getPlayer() != kartToSend.getPlayer()) {
             // cannot simply copy the object received because that one doesn't have images
             kartToReceive.setSpeed(receivedKart.getSpeed());
             kartToReceive.setImageIndex(receivedKart.getImageIndex());
