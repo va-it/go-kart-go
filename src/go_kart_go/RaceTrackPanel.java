@@ -131,6 +131,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
             if (RACE_IN_PROGRESS) {
 
+//                if(netComManager.requestToStart()) {
+//                    startRaceTimer.start();
+//                }
+
                 // ***************** SEND/RETRIEVE KART INFO ********************
                 Kart receivedKart;
                 if (player == 1) {
