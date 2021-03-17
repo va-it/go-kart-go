@@ -163,12 +163,54 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
                 if (opponentConnectionStatus.equals(Messages.opponentConnected)) {
 
+
                     // ************* TO IMPROVE ***********
                     // ask server status of race (or if other is ready)
                     // if not then stop race
                     String raceInProgress = netComManager.getRaceStatus();
                     if (raceInProgress.equals(Messages.raceInProgress)) {
                         // good
+
+                        // ***************** SEND/RETRIEVE KART INFO ********************
+                        sendAndReceiveKarts();
+                        // **************************************************************
+
+                        // ====================== DETECT COLLISIONS =====================
+                        raceTrack.detectCollisionWithTrack(redKart);
+                        raceTrack.detectCollisionWithTrack(blueKart);
+
+                        stopGameIfBothKartsAreCrashed();
+
+                        detectCollisionBetweenKarts();
+
+                        raceTrack.updateSpeedInformation(redKart, blueKart);
+                        // ==============================================================
+
+                        if (player == 1) {
+                            redKart.setNextXPosition();
+                            redKart.setNextYPosition();
+                            redKart.updateCheckpoint();
+                        }
+                        redKart.getImageAtCurrentIndex().paintIcon(
+                                this, g, redKart.getXPosition(), redKart.getYPosition()
+                        );
+
+                        if (player == 2) {
+                            blueKart.setNextXPosition();
+                            blueKart.setNextYPosition();
+                            blueKart.updateCheckpoint();
+                        }
+                        blueKart.getImageAtCurrentIndex().paintIcon(
+                                this, g, blueKart.getXPosition(), blueKart.getYPosition()
+                        );
+
+                        raceTrack.updateLapInformation(redKart, blueKart);
+
+                        checkAndDeclareWinner(redKart);
+                        checkAndDeclareWinner(blueKart);
+
+
+
                     } else {
                         if (raceInProgress.equals(Messages.stopRace)) {
                             sendAndReceiveKarts();
@@ -181,45 +223,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                         }
                     }
                     // **************************************
-
-                    // ***************** SEND/RETRIEVE KART INFO ********************
-                    sendAndReceiveKarts();
-                    // **************************************************************
-
-                    // ====================== DETECT COLLISIONS =====================
-                    raceTrack.detectCollisionWithTrack(redKart);
-                    raceTrack.detectCollisionWithTrack(blueKart);
-
-                    stopGameIfBothKartsAreCrashed();
-
-                    detectCollisionBetweenKarts();
-
-                    raceTrack.updateSpeedInformation(redKart, blueKart);
-                    // ==============================================================
-
-                    if (player == 1) {
-                        redKart.setNextXPosition();
-                        redKart.setNextYPosition();
-                        redKart.updateCheckpoint();
-                    }
-                    redKart.getImageAtCurrentIndex().paintIcon(
-                            this, g, redKart.getXPosition(), redKart.getYPosition()
-                    );
-
-                    if (player == 2) {
-                        blueKart.setNextXPosition();
-                        blueKart.setNextYPosition();
-                        blueKart.updateCheckpoint();
-                    }
-                    blueKart.getImageAtCurrentIndex().paintIcon(
-                            this, g, blueKart.getXPosition(), blueKart.getYPosition()
-                    );
-
-                    raceTrack.updateLapInformation(redKart, blueKart);
-
-                    checkAndDeclareWinner(redKart);
-                    checkAndDeclareWinner(blueKart);
-
                 } else {
                     if (opponentConnectionStatus.equals(Messages.opponentNotConnected)) {
                         this.centralMessage.setText(getWaitingMessage());
@@ -300,6 +303,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     public void startRace() {
+        // in case there is a delay with server and karts are still crashed...
+        this.initialiseKartsPositions();
+        this.redKart.setInitialIndex();
+        this.blueKart.setInitialIndex();
+
         this.RACE_IN_PROGRESS = true;
     }
 

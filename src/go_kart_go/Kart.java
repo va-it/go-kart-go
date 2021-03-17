@@ -31,6 +31,11 @@ public class Kart implements Serializable {
                     getClass().getResource(HelperClass.images + image + i + ".png")
             );
         }
+
+        this.setInitialIndex();
+    }
+
+    public void setInitialIndex() {
         // initial direction of the car is pointing left
         this.imageIndex = 12;
     }
@@ -279,4 +284,13 @@ public class Kart implements Serializable {
         return this.getXPosition() <= RaceTrack.OUTER_RIGHT_EDGE && this.getXPosition() >= RaceTrack.INNER_RIGHT_EDGE;
     }
 
+    public void setInitialPosition() {
+        if (player == 1) {
+            this.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+            this.setYPosition(RaceTrack.INNER_BOTTOM_EDGE);
+        } else {
+            this.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+            this.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + HelperClass.IMAGE_SIZE);
+        }
+    }
 }

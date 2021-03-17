@@ -62,4 +62,12 @@ public class HelperClass {
             return 1;
         }
     }
+
+    public static String getColourFromPlayerNumber(int player) {
+        if (player == 1) {
+            return HelperClass.playerOneColour;
+        } else {
+            return HelperClass.playerTwoColour;
+        }
+    }
 }
