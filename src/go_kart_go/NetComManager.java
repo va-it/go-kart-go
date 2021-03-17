@@ -95,4 +95,15 @@ public class NetComManager {
         }
     }
 
+    public String getRaceStatus() {
+        tcpClient.sendRequest(Messages.requestRaceStatus);
+        String status = tcpClient.getResponse();
+        if (status.isBlank()) {
+            System.err.println("Cannot reach server");
+            return Messages.error;
+        } else {
+            return status;
+        }
+    }
+
 }

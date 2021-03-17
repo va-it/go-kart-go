@@ -31,7 +31,7 @@ public class Kart implements Serializable {
                     getClass().getResource(HelperClass.images + image + i + ".png")
             );
         }
-        // initial position of the car is pointing left
+        // initial direction of the car is pointing left
         this.imageIndex = 12;
     }
 

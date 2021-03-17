@@ -41,18 +41,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         this.setBounds(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
 
-        this.redKart = new Kart(HelperClass.playerOneColour, 1);
-        this.blueKart = new Kart(HelperClass.playerTwoColour, 2);
+        initialiseKarts();
 
         this.redKart.playSpeedSound();
         this.blueKart.playSpeedSound();
 
-        // set initial karts position to be just before the starting line
-        this.redKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
-        this.redKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE);
-        // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
-        this.blueKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
-        this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + HelperClass.IMAGE_SIZE);
+        // create the kart objects and set their initial positions
+        initialiseKartsPositions();
 
         add(raceTrack.player1Label);
         add(raceTrack.player2Label);
@@ -86,6 +81,20 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
         // we can tell the server that we are ready to start
         netComManager.sendReady();
+    }
+
+    private void initialiseKarts() {
+        this.redKart = new Kart(HelperClass.playerOneColour, 1);
+        this.blueKart = new Kart(HelperClass.playerTwoColour, 2);
+    }
+
+    private void initialiseKartsPositions() {
+        // set initial karts position to be just before the starting line
+        this.redKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+        this.redKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE);
+        // displace blue kart of 50 pixels (image size) down so it looks below the red kart (other lane)
+        this.blueKart.setXPosition(RaceTrack.START_LINE_RIGHT_EDGE);
+        this.blueKart.setYPosition(RaceTrack.INNER_BOTTOM_EDGE + HelperClass.IMAGE_SIZE);
     }
 
     // NEED TO CREATE SEPARATE THREAD FOR TCP COMMUNICATION AFTER THE RACE HAS STARTED
@@ -154,12 +163,27 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
                 if (opponentConnectionStatus.equals(Messages.opponentConnected)) {
 
-                    // ***************** SEND/RETRIEVE KART INFO ********************
-                    if (player == 1) {
-                        sendAndReceiveKartInfo(redKart, blueKart);
+                    // ************* TO IMPROVE ***********
+                    // ask server status of race (or if other is ready)
+                    // if not then stop race
+                    String raceInProgress = netComManager.getRaceStatus();
+                    if (raceInProgress.equals(Messages.raceInProgress)) {
+                        // good
                     } else {
-                        sendAndReceiveKartInfo(blueKart, redKart);
+                        if (raceInProgress.equals(Messages.stopRace)) {
+                            sendAndReceiveKarts();
+                            // check things and set appropriate messages
+                            stopRace();
+                        } else {
+                            if (opponentConnectionStatus.equals(Messages.error)) {
+                                this.centralMessage.setText(errorMessage);
+                            }
+                        }
                     }
+                    // **************************************
+
+                    // ***************** SEND/RETRIEVE KART INFO ********************
+                    sendAndReceiveKarts();
                     // **************************************************************
 
                     // ====================== DETECT COLLISIONS =====================
@@ -173,18 +197,22 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                     raceTrack.updateSpeedInformation(redKart, blueKart);
                     // ==============================================================
 
-                    blueKart.setNextXPosition();
-                    blueKart.setNextYPosition();
-                    blueKart.updateCheckpoint();
-                    blueKart.getImageAtCurrentIndex().paintIcon(
-                            this, g, blueKart.getXPosition(), blueKart.getYPosition()
-                    );
-
-                    redKart.setNextXPosition();
-                    redKart.setNextYPosition();
-                    redKart.updateCheckpoint();
+                    if (player == 1) {
+                        redKart.setNextXPosition();
+                        redKart.setNextYPosition();
+                        redKart.updateCheckpoint();
+                    }
                     redKart.getImageAtCurrentIndex().paintIcon(
                             this, g, redKart.getXPosition(), redKart.getYPosition()
+                    );
+
+                    if (player == 2) {
+                        blueKart.setNextXPosition();
+                        blueKart.setNextYPosition();
+                        blueKart.updateCheckpoint();
+                    }
+                    blueKart.getImageAtCurrentIndex().paintIcon(
+                            this, g, blueKart.getXPosition(), blueKart.getYPosition()
                     );
 
                     raceTrack.updateLapInformation(redKart, blueKart);
@@ -204,6 +232,16 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                 }
             }
         }
+    }
+
+    private void sendAndReceiveKarts() {
+        // ***************** SEND/RETRIEVE KART INFO ********************
+        if (player == 1) {
+            sendAndReceiveKartInfo(redKart, blueKart);
+        } else {
+            sendAndReceiveKartInfo(blueKart, redKart);
+        }
+        // **************************************************************
     }
 
     private void sendAndReceiveKartInfo(Kart kartToSend, Kart kartToReceive) {
@@ -239,9 +277,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                 blueKart.stop();
                 redKart.setCrashed(true);
                 blueKart.setCrashed(true);
-                this.stopRace();
                 animationTimer.stop();
                 this.centralMessage.setText(gameOverMessage);
+                this.stopRace();
             }
         }
     }
@@ -255,9 +293,9 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private void checkAndDeclareWinner(Kart kart) {
         if (kart.isWinner()) {
-            this.stopRace();
             this.centralMessage.setText(getWinnerMessage(kart.getPlayer()));
             raceTrack.playCheeringSound();
+            this.stopRace();
         }
     }
 
@@ -272,6 +310,12 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.RACE_IN_PROGRESS = false;
         // inform the server
         netComManager.sendStopRace();
+
+        // here we reset the positions of the karts, otherwise
+        // when the race is restarted the positions might still be wrong
+        // if there is a delay between the clients (which would reset it) and the server
+        this.initialiseKartsPositions();
+        this.sendAndReceiveKarts();
     }
 
     public void stopAllSounds() {
