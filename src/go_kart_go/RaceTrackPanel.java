@@ -212,15 +212,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
 
                     } else {
-                        if (raceInProgress.equals(Messages.stopRace)) {
-                            sendAndReceiveKarts();
-                            // check things and set appropriate messages
-                            stopRace();
-                        } else {
-                            if (opponentConnectionStatus.equals(Messages.error)) {
-                                this.centralMessage.setText(errorMessage);
-                            }
-                        }
+                        sendAndReceiveKarts();
+                        stopRace();
+                        // WORKS, BUT OPPONENT WINS IS NEVER DISPLAYED
+                        // KART ON SERVER SEEMS TO NEVER BE SET AS WINNER. INVESTIGATE
+                        this.centralMessage.setText(buildMessageFromServerResponse(raceInProgress));
                     }
                     // **************************************
                 } else {
@@ -318,12 +314,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         this.RACE_IN_PROGRESS = false;
         // inform the server
         netComManager.sendStopRace();
-
-        // here we reset the positions of the karts, otherwise
-        // when the race is restarted the positions might still be wrong
-        // if there is a delay between the clients (which would reset it) and the server
-        this.initialiseKartsPositions();
-        this.sendAndReceiveKarts();
     }
 
     public void stopAllSounds() {
@@ -339,6 +329,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private String getWinnerMessage(int player) {
         return "<html>PLAYER " + player + " WINS !!!<br>" + endGameMessage + "</html>";
+    }
+
+    private String buildMessageFromServerResponse(String response) {
+        return "<html>" + response + "<br>" + endGameMessage + "</html>";
     }
 
     @Override
