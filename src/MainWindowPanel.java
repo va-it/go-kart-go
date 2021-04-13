@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.ImageIcon;
-import java.io.File;
-
 
 class MainWindowPanel extends JPanel implements ActionListener {
 
@@ -45,19 +43,17 @@ class MainWindowPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void paintComponent( Graphics g )
-    {
-        super.paintComponent( g ); // call superclass paintComponent
-        blueKart[currentImage].paintIcon( this, g, 0, 0 );
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); // call superclass paintComponent
 
-        redKart[currentImage].paintIcon( this, g, 60, 0 );
+        blueKart[currentImage].paintIcon(this, g, 0, 0);
+        redKart[currentImage].paintIcon(this, g, 60, 0);
 
         if (animationTimer.isRunning()) {
             // increase by 1 to show next image
             // % ensures that the first image is prepared when we display the last one
-            currentImage = ( currentImage + 1 ) % NUMBER_OF_IMAGES;
+            currentImage = (currentImage + 1) % NUMBER_OF_IMAGES;
         }
-
     }
 
     @Override
