@@ -15,7 +15,6 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     // 30 times a second
     private static final int delay = 1000 / 30;
-    //private static final int delay = 1000;
 
     private final JLabel centralMessage = new JLabel("", JLabel.CENTER);
     private final String endGameMessage = "<br> PRESS ENTER TO RESTART <br><br> PRESS ESC TO QUIT";
@@ -163,12 +162,10 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
                 if (opponentConnectionStatus.equals(Messages.opponentConnected)) {
 
-
-                    // ************* TO IMPROVE ***********
                     // ask server status of race (or if other is ready)
                     // if not then stop race
-                    String raceInProgress = netComManager.getRaceStatus();
-                    if (raceInProgress.equals(Messages.raceInProgress)) {
+                    String raceStatus = netComManager.getRaceStatus();
+                    if (raceStatus.equals(Messages.raceInProgress)) {
                         // good
 
                         // ***************** SEND/RETRIEVE KART INFO ********************
@@ -216,7 +213,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
                         stopRace();
                         // WORKS, BUT OPPONENT WINS IS NEVER DISPLAYED
                         // KART ON SERVER SEEMS TO NEVER BE SET AS WINNER. INVESTIGATE
-                        this.centralMessage.setText(buildMessageFromServerResponse(raceInProgress));
+                        this.centralMessage.setText(buildMessageFromServerResponse(raceStatus));
                     }
                     // **************************************
                 } else {
@@ -234,13 +231,11 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     private void sendAndReceiveKarts() {
-        // ***************** SEND/RETRIEVE KART INFO ********************
         if (player == 1) {
             sendAndReceiveKartInfo(redKart, blueKart);
         } else {
             sendAndReceiveKartInfo(blueKart, redKart);
         }
-        // **************************************************************
     }
 
     private void sendAndReceiveKartInfo(Kart kartToSend, Kart kartToReceive) {
@@ -292,6 +287,16 @@ class RaceTrackPanel extends JPanel implements ActionListener {
 
     private void checkAndDeclareWinner(Kart kart) {
         if (kart.isWinner()) {
+
+            do {
+                /* keep sending this kart info until we are sure the server knows who won
+                it's a workaround needed since karts UDP objects seem to be often corrupted
+                and only sending it once might not be enough
+                */
+                netComManager.sendKartInfo(kart);
+            }
+            while (!netComManager.requestWinnerStatus().equals(Messages.winnerStatusSet));
+
             this.centralMessage.setText(getWinnerMessage(kart.getPlayer()));
             raceTrack.playCheeringSound();
             this.stopRace();
@@ -332,7 +337,13 @@ class RaceTrackPanel extends JPanel implements ActionListener {
     }
 
     private String buildMessageFromServerResponse(String response) {
-        return "<html>" + response + "<br>" + endGameMessage + "</html>";
+        switch (response) {
+            case Messages.gameOver:
+                return this.gameOverMessage;
+            case Messages.opponentWins:
+                return this.getWinnerMessage(HelperClass.getOpponentPlayerNumber(player));
+        }
+        return null;
     }
 
     @Override

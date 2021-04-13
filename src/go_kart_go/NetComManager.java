@@ -106,4 +106,15 @@ public class NetComManager {
         }
     }
 
+    public String requestWinnerStatus() {
+        tcpClient.sendRequest(Messages.requestWinnerStatus);
+        String winner = tcpClient.getResponse();
+        if (winner.isBlank()) {
+            System.err.println("Cannot reach server");
+            return Messages.error;
+        } else {
+            return winner;
+        }
+    }
+
 }
