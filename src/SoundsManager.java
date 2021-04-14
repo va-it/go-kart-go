@@ -25,7 +25,6 @@ public class SoundsManager {
             System.out.println("ERROR: File cannot be played");
             ex.printStackTrace();
         }
-
     }
 
     public void playSound() {

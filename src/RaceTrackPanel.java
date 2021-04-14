@@ -64,7 +64,7 @@ class RaceTrackPanel extends JPanel implements ActionListener {
         centralMessage.setBounds(RaceTrack.START_LINE_LEFT_EDGE - 100, 200, 300, 250);
         add(centralMessage);
 
-        // create swing timer with 100ms delay and start it
+        // create swing timer and start it
         animationTimer = new Timer(delay, this);
         animationTimer.start();
     }

@@ -277,5 +277,4 @@ public class Kart {
     public boolean kartIsOnRightRoad() {
         return this.getXPosition() <= RaceTrack.OUTER_RIGHT_EDGE && this.getXPosition() >= RaceTrack.INNER_RIGHT_EDGE;
     }
-
 }
