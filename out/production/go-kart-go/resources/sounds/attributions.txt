@@ -1,6 +1,1 @@
-menu select: https://freesound.org/people/pumodi/sounds/150222/
-accident: https://freesound.org/people/HoBoTrails/sounds/426021/
-8-bit racing: https://freesound.org/people/Breviceps/sounds/467250/
-race-start-ready-go: https://freesound.org/people/steel2008/sounds/231277/
-arcade-music-loop: https://freesound.org/people/joshuaempyre/sounds/251461/
-cheering: https://freesound.org/people/Johanneskristjansson/sounds/371339/
+menu select: https://freesound.org/people/pumodi/sounds/150222/accident: https://freesound.org/people/HoBoTrails/sounds/426021/speed: https://freesound.org/people/Breviceps/sounds/467250/race-start-ready-go: https://freesound.org/people/steel2008/sounds/231277/arcade-music-loop: https://freesound.org/people/joshuaempyre/sounds/251461/cheering: https://freesound.org/people/Johanneskristjansson/sounds/371339/
